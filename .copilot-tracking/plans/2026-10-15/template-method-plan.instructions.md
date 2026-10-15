@@ -29,7 +29,7 @@ Execution model: direct implementation; no subagents
 
 * [x] P01: Generate unchanged copy, run 41 tests, and commit it as `c812e07`.
 * [x] P02: Add the template algorithm and tests; preserve S23 hooks.
-* [ ] P03: Complete README/diff/map, review, refactor commit, progress, and tag.
+* [x] P03: Complete README/diff/map, review, refactor commit, progress, and tag.
 
 ## Validation and success criteria
 

@@ -42,4 +42,4 @@ The shared report algorithm now lives in `ReportExporter`; the subclasses provid
 
 ## Remaining work
 
-Commit the reviewed Template Method changes locally, update progress with both hashes, create `template-method-v1`, and continue with Chain of Responsibility. Do not push.
+The reviewed Template Method changes are committed as `ca45636`; the unchanged copy is `c812e07`; local tag `template-method-v1` points to `ca45636f581e14d3a096fd7475635648871291c5`. The progress row is Done. Continue with Chain of Responsibility. Do not push.

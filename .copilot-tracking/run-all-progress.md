@@ -12,7 +12,7 @@
 | decorator | Done | Conformant with justified divergence | b5c83ac, 660b5ca | decorator-v1 |
 | state | Done | Conformant with justified divergence | 419ff5d, df825b1 | state-v1 |
 | builder | Done | Conformant with justified divergence | 2fcb8e5, 16bfda1 | builder-v1 |
-| template-method | In progress | Pending | c812e07 | - |
+| template-method | Done | Conformant with justified divergence | c812e07, ca45636 | template-method-v1 |
 | chain-of-responsibility | Not started | Pending | - | - |
 | command | Not started | Pending | - | - |
 | composite | Not started | Pending | - | - |

@@ -46,4 +46,4 @@ The root README already linked Template Method and was left unchanged. `DIFF.md`
 
 ## Release summary
 
-Unchanged-copy commit: `c812e07`. The refactor commit and local `template-method-v1` tag are recorded in run-all progress after review.
+Unchanged-copy commit: `c812e07`. Refactor commit: `ca45636`. Local tag: `template-method-v1` at `ca45636f581e14d3a096fd7475635648871291c5`. No push was made.
