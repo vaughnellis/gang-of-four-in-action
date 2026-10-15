@@ -37,10 +37,22 @@ Plan only the work in this task's brief. Treat the project brief's Decisions as 
 
 Read the plan and its critique in `.copilot-tracking/`. If the critique says Revise, ask `/rpi-plan` to address it before moving on.
 
+Exact file names depend on the HVE Core version, so use the paths the agent reports at the end of planning. With the version used to build this repo, a task produces:
+
+```text
+.copilot-tracking/
+├── plans/<date>/<task slug>-plan.instructions.md
+├── plans/logs/<date>/<task slug>-log.md
+├── plans/critiques/<date>/<task slug>-critique.md
+├── details/<date>/<task slug>-details.md
+├── changes/<date>/<task slug>-changes.md
+└── reviews/<date>/<task slug>-plan-review.md
+```
+
 **2. Implement, one phase at a time**
 
 ```text
-/rpi-implement plan=.copilot-tracking/plans/<date>/<task slug>-plan.md task=P01
+/rpi-implement plan=<plan path reported by the agent> task=P01
 ```
 
 Repeat for `P02`, `P03` and so on. Check the change record after each phase.
@@ -68,7 +80,7 @@ RPI Agent starts in manual mode. Choose Full Auto only for pattern briefs after 
 
 ## Research
 
-Skip `/rpi-research` by default. The project brief settles the main decisions. Use it only if the plan critique or the agent flags a real evidence gap, for example how to configure Verify to write to a shared path.
+Skip `/rpi-research` by default. The project brief settles the main decisions. Use it only if the plan critique or the agent flags a real evidence gap, for example a package or SDK behaviour that changed after the briefs were written.
 
 ## Adding a pattern brief
 

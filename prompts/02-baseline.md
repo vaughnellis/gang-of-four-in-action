@@ -32,8 +32,8 @@ This is the most important task in the repo. Every pattern solution is a copy of
 ### Scenario and golden master
 
 - **FR-012** Write `scenarios/trading-day.json` so the day exercises every smell site at least once, including: both regions (AU and NZ), all three payment types, every shipping method, every add-on, a nested category walk, a bundle and a nested bundle attempt, variant creation, at least two promo rules, a cart undo, widget updates, each validation rule failing at least once, every back-office action including one unauthorised attempt, a cancel, a refund, an illegal order transition attempt, both report exports, and every line item type.
-- **FR-013** Write `GoldenMasterTests` that locates the repo root by walking up to `GangOfFour.slnx`, runs `scenarios/trading-day.json` through `ScenarioRunner.Run`, and compares the output with `scenarios/expected/baseline.txt` using Verify (D-08). The test file must contain no baseline-specific paths, so it works unchanged in every copy.
-- **FR-014** Generate and approve `scenarios/expected/baseline.txt`.
+- **FR-013** Write `GoldenMasterTests` that locates the repo root by walking up to `GangOfFour.slnx`, runs `scenarios/trading-day.json` through `ScenarioRunner.Run`, and compares the output with `scenarios/expected/baseline.txt` as a plain string comparison (D-08). On mismatch it writes the actual output to `scenarios/expected/baseline.received.txt` and fails with a short summary of the first differing line. When `GOLDEN_MASTER_APPROVE=1` is set, it writes `baseline.txt` instead of comparing. The test file must contain no baseline-specific paths, so it works unchanged in every copy.
+- **FR-014** Generate and approve `scenarios/expected/baseline.txt` once, in the final scenario phase, using `GOLDEN_MASTER_APPROVE=1`. Add `*.received.txt` to `.gitignore`.
 
 ### Docs and tools
 

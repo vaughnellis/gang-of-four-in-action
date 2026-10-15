@@ -40,7 +40,7 @@ A companion blog will explain each pattern using its folder in this repo. The re
 | D-05 | Naming: project and namespace names are identical in every copy (`CornerStore`, `CornerStore.Tests`). Only the solution file name differs (`Facade.slnx`, `Strategy.slnx`). |
 | D-06 | Solution format: `.slnx`. Shared settings in `Directory.Build.props`; package versions in `Directory.Packages.props` (Central Package Management). |
 | D-07 | Build settings: nullable enabled, warnings as errors, implicit usings enabled. |
-| D-08 | Tests: xUnit. Golden master via Verify, with the approved transcript stored at the shared path `scenarios/expected/baseline.txt`. |
+| D-08 | Tests: xUnit v3. The golden master is a plain comparison with the shared file `scenarios/expected/baseline.txt` (no Verify or other snapshot library). On mismatch the test writes the actual transcript to `scenarios/expected/baseline.received.txt` (git-ignored) and fails. The approved file is written only when the environment variable `GOLDEN_MASTER_APPROVE=1` is set, and only the baseline task may do that. |
 | D-09 | Determinism: no `DateTime.Now`, `Guid.NewGuid()` or unseeded `Random` in app code. Time comes from a `TimeProvider` set to the scenario's `startTime`; IDs are sequential; `Random` is seeded from the scenario; formatting uses invariant culture. |
 | D-10 | Workflow per pattern: two commits. Commit 1 copies the baseline unchanged; commit 2 applies the refactor. The human makes both commits; the agent stops after the copy step so the first commit can be made. |
 | D-11 | Baseline is frozen at tag `baseline-v1` before any pattern folder is created. |
