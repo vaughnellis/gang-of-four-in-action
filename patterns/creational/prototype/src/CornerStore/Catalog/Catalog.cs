@@ -138,22 +138,7 @@ internal class Catalog
             return "sku " + sku + " already exists";
         }
 
-        // SMELL S04: the variant is built by copying the parent's fields one by one
-        var variant = new PhysicalProduct
-        {
-            Sku = sku,
-            Name = parent.Name + " (" + size + ", " + colour + ")",
-            Price = parent.Price,
-            CategoryName = parent.CategoryName,
-            Brand = parent.Brand,
-            Manufacturer = parent.Manufacturer,
-            WeightKg = parent.WeightKg,
-            Size = size,
-            Colour = colour,
-            Material = parent.Material,
-            Description = parent.Description,
-        };
-
+        var variant = parent.Clone(sku, size, colour);
         Register(categories[parent.CategoryName], variant);
         return null;
     }
