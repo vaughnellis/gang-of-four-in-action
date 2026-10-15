@@ -47,4 +47,4 @@ FR-001 to FR-014 are fulfilled by the baseline projects, deterministic app, 23 m
 * PowerShell scripts require version 5.1 rather than 7.0 to honor settled PD-12. Both scripts were executed under Windows PowerShell 5.1 and PowerShell 7.6.7.
 * PSScriptAnalyzer is not installed in the environment. Both scripts were parsed and exercised by successful runs in both supported editions.
 
-No unresolved findings remain. The baseline is ready for the local commit and `baseline-v1` tag. Do not push.
+No unresolved findings remain. Commit `79da1bac67bc277d66de86bd7610ba9a84c6ce16` is tagged `baseline-v1`. Do not push. The run-all checkpoint now awaits human review before pattern copies begin.

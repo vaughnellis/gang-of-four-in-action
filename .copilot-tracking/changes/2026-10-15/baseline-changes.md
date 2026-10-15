@@ -8,7 +8,7 @@ Date started: 2026-10-15
 
 ## Summary
 
-P11 of 11 complete: the baseline, 75-step scenario, approved golden master, smells catalog and copy/diff tooling are implemented. Review is complete and conformant with justified divergence; the local commit and tag are pending.
+P11 of 11 complete: the baseline, 75-step scenario, approved golden master, smells catalog and copy/diff tooling are implemented. Review is conformant with justified divergence; commit `79da1bac67bc277d66de86bd7610ba9a84c6ce16` is tagged `baseline-v1`.
 
 ## Phase P01: App shell and determinism
 
@@ -497,4 +497,4 @@ SMELL markers planted in P11
 
 ## Baseline review complete
 
-P01-P11 and the final acceptance checks are complete. The review outcome is Conformant with justified divergence. The local commit and `baseline-v1` tag remain before the run-all human checkpoint.
+P01-P11 and the final acceptance checks are complete. The review outcome is Conformant with justified divergence. Commit `79da1bac67bc277d66de86bd7610ba9a84c6ce16` is tagged `baseline-v1`; the run-all human checkpoint is now active.

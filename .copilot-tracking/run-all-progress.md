@@ -3,7 +3,7 @@
 
 | Task | Status | Review outcome | Commit hashes | Tag |
 | --- | --- | --- | --- | --- |
-| baseline | In progress | Pending | Pending | Pending |
+| baseline | Done | Conformant with justified divergence | 79da1bac67bc277d66de86bd7610ba9a84c6ce16 | baseline-v1 |
 | facade | Not started | Pending | - | - |
 | strategy | Not started | Pending | - | - |
 | observer | Not started | Pending | - | - |
