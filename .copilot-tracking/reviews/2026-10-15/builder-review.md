@@ -42,4 +42,4 @@ Outcome: Conformant with justified divergence
 
 ## Remaining work
 
-Commit the reviewed Builder changes locally, update progress with both hashes, create `builder-v1`, and continue with Template Method. Do not push.
+The reviewed Builder changes are committed as `16bfda1`; the unchanged copy is `2fcb8e5`; local tag `builder-v1` points to `16bfda1bd6e06aa1289f7a54dc29a437fa0d5486`. The progress row is Done. Continue with Template Method. Do not push.

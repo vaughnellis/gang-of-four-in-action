@@ -45,4 +45,4 @@ The root README already linked Builder and was left unchanged. `DIFF.md` include
 
 ## Release summary
 
-Unchanged-copy commit: `2fcb8e5`. The refactor commit and local `builder-v1` tag are recorded in run-all progress after review.
+Unchanged-copy commit: `2fcb8e5`. Refactor commit: `16bfda1`. Local tag: `builder-v1` at `16bfda1bd6e06aa1289f7a54dc29a437fa0d5486`. No push was made.

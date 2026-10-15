@@ -29,7 +29,7 @@ Execution model: direct implementation; no subagents
 
 * [x] P01: Generate unchanged copy, run 41 tests, and commit it as `2fcb8e5`.
 * [x] P02: Add fluent builders and validation tests.
-* [ ] P03: Complete README/diff/map, review, refactor commit, progress, and local tag.
+* [x] P03: Complete README/diff/map, review, refactor commit, progress, and local tag.
 
 ## Validation and success criteria
 
