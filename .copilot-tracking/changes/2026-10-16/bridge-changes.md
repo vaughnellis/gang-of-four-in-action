@@ -53,4 +53,4 @@ The root README already contained the Bridge link and was left unchanged. `DIFF.
 
 ## Release summary
 
-Unchanged-copy commit: `6f8c853`. Refactor commit: pending. Local tag: pending.
+Unchanged-copy commit: `6f8c853`. Refactor commit: `27e8507`. Local tag: `bridge-v1` at `27e8507`. No push was made.

@@ -37,4 +37,4 @@ No unresolved findings.
 
 ## Remaining work
 
-Commit the reviewed refactor, create the local `bridge-v1` tag, record commit hashes and tag in the run-all progress file, then continue with Mediator. Do not push.
+The unchanged copy is `6f8c853`; the refactor is `27e8507`, tagged `bridge-v1`. Progress is recorded. Continue with Mediator. Do not push.
