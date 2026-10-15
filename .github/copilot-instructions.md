@@ -24,3 +24,4 @@ This repository showcases the 23 Gang of Four design patterns in C# on .NET 10. 
 - READMEs and docs: plain, direct prose. No em dashes.
 - Never reproduce text or diagrams from the GoF book. Paraphrase intents and cite the chapter.
 - Diagrams in Mermaid.
+- Markdown files use a plain H1 and no YAML frontmatter, except files under `prompts/` and `.copilot-tracking/`.
