@@ -1,7 +1,6 @@
 using System.Globalization;
 using System.Text;
 using System.Text.Json;
-using System.Xml.Linq;
 
 namespace CornerStore;
 
@@ -20,8 +19,7 @@ internal class StoreConsole
     private readonly AnalyticsService analytics = new();
     private readonly OrderService orderService;
     private readonly BackOffice backOffice;
-    private readonly OrderValidator orderValidator;
-    private readonly ShipFastClient shipFastClient;
+    private readonly CheckoutFacade checkoutFacade;
     private readonly ReportService reports;
     private readonly Dictionary<string, Customer> customers = [];
     private readonly Dictionary<string, Cart> carts = [];
@@ -48,8 +46,12 @@ internal class StoreConsole
             loyalty,
             analytics);
         backOffice = new BackOffice(inventory, orderService);
-        orderValidator = new OrderValidator(inventory, new FraudScorer());
-        shipFastClient = new ShipFastClient(Ids);
+        checkoutFacade = new CheckoutFacade(
+            pricing,
+            new OrderValidator(inventory, new FraudScorer()),
+            orderService,
+            inventory,
+            new ShipFastClient(Ids));
         reports = new ReportService(orderService);
     }
 
@@ -387,7 +389,6 @@ internal class StoreConsole
         Log.Info(backOffice.Cancel(customer, order));
     }
 
-    // SMELL S10: the console coordinates every checkout subsystem in a fixed order
     private void Checkout(JsonElement step)
     {
         var cart = FindCart(step);
@@ -396,101 +397,8 @@ internal class StoreConsole
             return;
         }
 
-        if (cart.Lines.Count == 0)
-        {
-            Log.Info("checkout rejected: cart is empty");
-            return;
-        }
-
         var customer = customers[cart.CustomerId];
-        var quote = pricing.BuildQuote(cart, customer);
-        var error = orderValidator.Validate(customer, cart, quote);
-        if (error is not null)
-        {
-            Log.Info("checkout rejected: " + error);
-            return;
-        }
-
-        var paymentType = Text(step, "payment");
-        if (!ChargePayment(paymentType, customer, quote.Total))
-        {
-            Log.Info("checkout rejected: unknown payment type " + paymentType);
-            return;
-        }
-
-        var order = orderService.Create(customer, cart, quote, paymentType);
-        var reservedLines = new List<CartLine>();
-        foreach (var line in order.Lines)
-        {
-            if (!inventory.ReserveStock(line.Product.Sku, line.Quantity))
-            {
-                foreach (var reservedLine in reservedLines)
-                {
-                    inventory.AdjustStock(reservedLine.Product.Sku, reservedLine.Quantity);
-                }
-
-                Log.Info("checkout rejected: stock changed for " + line.Product.Sku);
-                return;
-            }
-
-            reservedLines.Add(line);
-        }
-
-        order.StockReserved = true;
-        order.TrackingNumber = BookShipment(order);
-        var payError = orderService.Pay(order);
-        if (payError is not null)
-        {
-            foreach (var reservedLine in reservedLines)
-            {
-                inventory.AdjustStock(reservedLine.Product.Sku, reservedLine.Quantity);
-            }
-
-            order.StockReserved = false;
-            Log.Info("checkout rejected: " + payError);
-            return;
-        }
-
-        Log.Info("checkout placed " + order.Id);
-    }
-
-    // SMELL S03: payment processor construction is selected by a switch in checkout
-    private static bool ChargePayment(string paymentType, Customer customer, decimal amount)
-    {
-        IPaymentProcessor? processor = null;
-        switch (paymentType)
-        {
-            case "card":
-                processor = new CardProcessor();
-                break;
-            case "paypal":
-                processor = new PayPalProcessor();
-                break;
-            case "afterpay":
-                processor = new AfterpayProcessor();
-                break;
-        }
-
-        if (processor is null)
-        {
-            return false;
-        }
-
-        processor.Charge(customer, amount);
-        return true;
-    }
-
-    // SMELL S06: checkout calls the courier client with XML and parses its response directly
-    private string BookShipment(Order order)
-    {
-        var cents = Math.Round(order.Quote.Total * 100m, 0, MidpointRounding.AwayFromZero)
-            .ToString("0", CultureInfo.InvariantCulture);
-        var name = System.Security.SecurityElement.Escape(order.Customer.Name) ?? "";
-        var address = System.Security.SecurityElement.Escape(order.Customer.Address) ?? "";
-        var request = "<shipment><orderId>" + order.Id + "</orderId><recipient>" + name
-            + "</recipient><address>" + address + "</address><amountCents>" + cents + "</amountCents></shipment>";
-        var response = shipFastClient.CreateConsignmentFromXml(request);
-        return XDocument.Parse(response).Root?.Element("tracking")?.Value ?? "";
+        Log.Info(checkoutFacade.PlaceOrder(cart, customer, Text(step, "payment")));
     }
 
     private void ReportCsv(JsonElement step)
