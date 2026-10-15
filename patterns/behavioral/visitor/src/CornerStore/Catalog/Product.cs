@@ -9,4 +9,6 @@ internal abstract class Product
     public decimal Price { get; init; }
 
     public string CategoryName { get; init; } = "";
+
+    internal abstract void Accept(ILineItemVisitor visitor);
 }

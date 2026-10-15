@@ -15,4 +15,9 @@ internal class PhysicalProduct : Product
     public string Material { get; init; } = "";
 
     public string Description { get; init; } = "";
+
+    internal override void Accept(ILineItemVisitor visitor)
+    {
+        visitor.Visit(this);
+    }
 }
