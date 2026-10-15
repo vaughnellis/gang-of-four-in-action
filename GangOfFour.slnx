@@ -4,7 +4,10 @@
     <Project Path="baseline/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
   </Folder>
   <Folder Name="/patterns/creational/" />
-  <Folder Name="/patterns/structural/" />
+  <Folder Name="/patterns/structural/">
+    <Project Path="patterns/structural/facade/src/CornerStore/CornerStore.csproj" />
+    <Project Path="patterns/structural/facade/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
   <Folder Name="/patterns/behavioral/" />
   <Folder Name="/capstone/" />
 </Solution>
