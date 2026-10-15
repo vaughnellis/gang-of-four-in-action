@@ -42,7 +42,7 @@ A companion blog will explain each pattern using its folder in this repo. The re
 | D-07 | Build settings: nullable enabled, warnings as errors, implicit usings enabled. |
 | D-08 | Tests: xUnit v3. The golden master is a plain comparison with the shared file `scenarios/expected/baseline.txt` (no Verify or other snapshot library). On mismatch the test writes the actual transcript to `scenarios/expected/baseline.received.txt` (git-ignored) and fails. The approved file is written only when the environment variable `GOLDEN_MASTER_APPROVE=1` is set, and only the baseline task may do that. |
 | D-09 | Determinism: no `DateTime.Now`, `Guid.NewGuid()` or unseeded `Random` in app code. Time comes from a `TimeProvider` set to the scenario's `startTime`; IDs are sequential; `Random` is seeded from the scenario; formatting uses invariant culture. |
-| D-10 | Workflow per pattern: two commits. Commit 1 copies the baseline unchanged; commit 2 applies the refactor. The human makes both commits; the agent stops after the copy step so the first commit can be made. |
+| D-10 | Workflow per pattern: two commits. Commit 1 copies the baseline unchanged; commit 2 applies the refactor. The human makes both commits; the agent stops after the copy step so the first commit can be made. In the automatic run (`05-run-all.md`) the agent makes both commits locally. |
 | D-11 | Baseline is frozen at tag `baseline-v1` before any pattern folder is created. |
 | D-12 | No text or diagrams reproduced from the GoF book. Paraphrase intents and cite the chapter. |
 
@@ -217,5 +217,5 @@ Fit: **Natural** means the pattern fixes a smell the domain has anyway. **Extens
 - Never change project or namespace names in a copy.
 - Never edit `scenarios/expected/baseline.txt` from a pattern task.
 - Never edit `prompts/`, `.github/copilot-instructions.md` or `.github/instructions/`. Propose changes in the change record.
-- Never push, tag, or create releases. Stop and hand back to the human for anything externally visible.
+- Never push, tag, or create releases. Stop and hand back to the human for anything externally visible. Exception: during the automatic run in `prompts/05-run-all.md`, local commits and local tags are allowed as that brief describes. Pushing is never allowed.
 - Prose in READMEs and docs: plain, direct, no em dashes.

@@ -11,7 +11,7 @@ This repository showcases the 23 Gang of Four design patterns in C# on .NET 10. 
 - **Determinism.** No `DateTime.Now`, `DateTime.UtcNow`, `Guid.NewGuid()`, unseeded `Random` or `Thread.Sleep` in app code. Use the injected `TimeProvider`, sequential IDs, the seeded `Random` and invariant culture.
 - **Transcript content.** The transcript records business outcomes only, never timings, memory, call counts or hash codes.
 - **Hands off the process files.** Do not edit `prompts/`, this file or `.github/instructions/`. Propose changes in the RPI change record instead.
-- **No pushing or tagging.** Commits, pushes, tags and releases are made by the maintainer.
+- **No pushing.** Commits, tags and releases are made by the maintainer, except during the automatic run in `prompts/05-run-all.md`, which allows local commits and local tags. Pushing is always the maintainer's job.
 
 ## C# conventions
 
@@ -24,4 +24,3 @@ This repository showcases the 23 Gang of Four design patterns in C# on .NET 10. 
 - READMEs and docs: plain, direct prose. No em dashes.
 - Never reproduce text or diagrams from the GoF book. Paraphrase intents and cite the chapter.
 - Diagrams in Mermaid.
-- Markdown files use a plain H1 and no YAML frontmatter, except files under `prompts/` and `.copilot-tracking/`.
