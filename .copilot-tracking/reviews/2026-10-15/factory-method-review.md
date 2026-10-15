@@ -41,4 +41,4 @@ S03 construction now uses a Factory Method creator hierarchy. The console select
 
 ## Remaining work
 
-Commit the reviewed refactor locally, update progress with both hashes, create `factory-method-v1`, and continue with Adapter. Do not push.
+The reviewed refactor is committed as `c4b1706`; the unchanged copy is `ba5b4ff`; local tag `factory-method-v1` points to `c4b170652b2b5fbe7ce637b2cfca06abd73168ca`. The progress row is Done. Continue with Adapter. Do not push.

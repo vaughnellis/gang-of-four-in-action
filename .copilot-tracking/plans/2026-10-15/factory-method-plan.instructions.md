@@ -29,7 +29,7 @@ Execution model: direct implementation; no subagents
 
 * [x] P01: Generate unchanged copy, run 41 tests, and commit it as `ba5b4ff`.
 * [x] P02: Add creator hierarchy, route payment charging, and add focused tests.
-* [ ] P03: Complete docs/diff/map, review, refactor commit, progress, and local tag.
+* [x] P03: Complete docs/diff/map, review, refactor commit, progress, and local tag.
 
 ## Validation and success criteria
 

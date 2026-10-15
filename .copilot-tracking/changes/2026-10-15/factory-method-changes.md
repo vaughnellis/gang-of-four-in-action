@@ -47,4 +47,4 @@ The root README already contained the Factory Method link and was left unchanged
 
 ## Release summary
 
-Unchanged-copy commit: `ba5b4ff`. The refactor commit and local `factory-method-v1` tag are recorded in run-all progress after review.
+Unchanged-copy commit: `ba5b4ff`. Refactor commit: `c4b1706`. Local tag: `factory-method-v1` at `c4b170652b2b5fbe7ce637b2cfca06abd73168ca`. No push was made.

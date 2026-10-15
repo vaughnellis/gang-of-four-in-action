@@ -7,7 +7,7 @@
 | facade | Done | Conformant with justified divergence | ca016f9, 5ccd08b | facade-v1 |
 | strategy | Done | Conformant with justified divergence | da5088a, cc230d0 | strategy-v1 |
 | observer | Done | Conformant with justified divergence | 8470705, 5ec2583 | observer-v1 |
-| factory-method | In progress | Pending | ba5b4ff | - |
+| factory-method | Done | Conformant with justified divergence | ba5b4ff, c4b1706 | factory-method-v1 |
 | adapter | Not started | Pending | - | - |
 | decorator | Not started | Pending | - | - |
 | state | Not started | Pending | - | - |
