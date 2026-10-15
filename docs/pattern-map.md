@@ -19,7 +19,7 @@ Each of the 23 patterns is paired with one smell in the CornerStore baseline. Fi
 | S06 | Adapter | `adapter` | Checkout calls the `ShipFastClient` SDK directly: XML strings, prices in cents, mismatched method names | `IShippingProvider` with a `ShipFastAdapter` | Natural | Done |
 | S07 | Bridge | `bridge` | Class explosion: `OrderConfirmedEmail`, `OrderConfirmedSms`, `OrderShippedEmail`, `OrderShippedSms` | Message abstraction bridged to an `IChannel` implementation | Natural | Not started |
 | S08 | Composite | `composite` | Bundles priced through a separate path with `is Bundle` checks; bundles cannot nest | `ICatalogItem` shared by `Product` and `Bundle` | Natural | Not started |
-| S09 | Decorator | `decorator` | Add-ons as boolean flags and an if-chain in the price calculation | `GiftWrap` and `Insurance` decorators around a base price component | Natural | Not started |
+| S09 | Decorator | `decorator` | Add-ons as boolean flags and an if-chain in the price calculation | `GiftWrap` and `Insurance` decorators around a base price component | Natural | Done |
 | S10 | Facade | `facade` | The console flow calls inventory, pricing, payment, shipping and notifications directly in a fixed order | `CheckoutFacade.PlaceOrder()` | Natural | Done |
 | S11 | Flyweight | `flyweight` | Bulk import of 100,000 listings, each holding its own copy of brand, manufacturer and spec text | Shared `ProductSpec` flyweights from a factory, with a BenchmarkDotNet memory comparison | Extension | Not started |
 | S12 | Proxy | `proxy` | Slow `InventoryService` called repeatedly with no caching; admin-only stock changes unchecked | Caching proxy and protection proxy behind `IInventoryService` | Natural | Not started |

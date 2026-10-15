@@ -632,7 +632,6 @@ internal class StoreConsole
         var name = Text(step, "addon");
         var on = !step.TryGetProperty("on", out var flag) || flag.ValueKind != JsonValueKind.False;
 
-        // SMELL S09: the console has to know each add-on flag by name to set it
         if (name == "giftwrap")
         {
             cart.GiftWrap = on;
