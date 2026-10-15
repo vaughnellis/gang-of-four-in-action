@@ -5,4 +5,9 @@
     <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="CornerStore.Tests" />
+    <InternalsVisibleTo Include="CornerStore.Benchmarks" />
+  </ItemGroup>
+
 </Project>

@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/benchmarks/">
+    <Project Path="benchmarks/CornerStore.Benchmarks/CornerStore.Benchmarks.csproj" />
+  </Folder>
   <Project Path="src/CornerStore/CornerStore.csproj" />
   <Project Path="tests/CornerStore.Tests/CornerStore.Tests.csproj" />
 </Solution>
