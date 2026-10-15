@@ -26,4 +26,4 @@
 | singleton | Done | Conformant | 496cfa0, f1c190b | singleton-v1 |
 | prototype | Done | Conformant | afd5fe0, d284c52 | prototype-v1 |
 | flyweight | Done | Conformant with justified divergence | b8459d3, 74b9d1d | flyweight-v1 |
-| interpreter | Not started | Pending | - | - |
+| interpreter | Done | Conformant with justified divergence | 0cd28fb, 71d1cea | interpreter-v1 |
