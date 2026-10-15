@@ -19,7 +19,9 @@ Execution model: direct implementation
 ## Context and constraints
 
 * `prompts/00-project-brief.md` maps S08 to bundle pricing and cart type checks.
-* `prompts/patterns/structural-composite.md` defines the detailed task.
+* The Composite target is the S08 description in
+  `prompts/00-project-brief.md`; the pattern task remains blocked by the
+  immutable transcript outcome described in the review.
 * Keep S04 variant construction and S16 category recursion unchanged.
 * Preserve simple-product and existing one-level bundle pricing and cart lines.
 * Permit nested bundles while rejecting recursive component cycles.
