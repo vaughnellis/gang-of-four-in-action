@@ -4,7 +4,7 @@
 | Task | Status | Review outcome | Commit hashes | Tag |
 | --- | --- | --- | --- | --- |
 | baseline | Done | Conformant with justified divergence | 79da1bac67bc277d66de86bd7610ba9a84c6ce16 | baseline-v1 |
-| facade | In progress | Pending | ca016f9 | - |
+| facade | Done | Conformant with justified divergence | ca016f9, 5ccd08b | facade-v1 |
 | strategy | Not started | Pending | - | - |
 | observer | Not started | Pending | - | - |
 | factory-method | Not started | Pending | - | - |

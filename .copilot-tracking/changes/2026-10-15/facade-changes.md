@@ -52,4 +52,4 @@ The root `README.md` already linked `patterns/structural/facade/` and needed no 
 
 ## Release summary
 
-Unchanged-copy commit: `ca016f9`. The refactor commit and `facade-v1` tag are recorded in run-all progress after review.
+Unchanged-copy commit: `ca016f9`. Refactor commit: `5ccd08b`. Local tag: `facade-v1` at `5ccd08b7a084384b1f5da53decf4a4af09ad6fbc`. No push was made.

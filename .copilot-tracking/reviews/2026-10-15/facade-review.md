@@ -46,4 +46,4 @@ The S10 orchestration is behind `CheckoutFacade.PlaceOrder`; the console delegat
 
 ## Remaining work
 
-Commit the reviewed refactor locally, record the commit and `facade-v1` tag in `.copilot-tracking/run-all-progress.md`, then continue with Strategy. Do not push.
+The reviewed refactor is committed as `5ccd08b`; the unchanged copy is `ca016f9`; local tag `facade-v1` points to `5ccd08b7a084384b1f5da53decf4a4af09ad6fbc`. The run-all progress row is Done. Continue with Strategy. Do not push.
