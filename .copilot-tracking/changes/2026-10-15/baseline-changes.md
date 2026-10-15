@@ -8,7 +8,7 @@ Date started: 2026-10-15
 
 ## Summary
 
-P04 of 11 complete (P01 to P03 committed by the human): regions, tax, weight, shipping, add-ons and promo rules (S01, S09, S15, S21, S23 tax and weight sites) with the matching scenario steps. Nothing pushed or tagged by the agent.
+P11 of 11 complete: the baseline, 75-step scenario, approved golden master, smells catalog and copy/diff tooling are implemented. Review is complete and conformant with justified divergence; the local commit and tag are pending.
 
 ## Phase P01: App shell and determinism
 
@@ -227,7 +227,274 @@ SMELL markers planted in P04
 
 Existing S18 sites extended (markers unchanged): `StoreConsole.cs` lines 242 (`CartAdd`), 271 (`CartRemove`), 304 (`CartUndo`), 451 (`CopyLines`). The caller now also copies and restores the two add-on flags.
 
+## Phase P05: Cart widgets
+
+Added
+
+* `baseline/src/CornerStore/Widgets/ItemListWidget.cs`, `PromoBoxWidget.cs`, `ShippingSelectorWidget.cs`, `TotalsPanelWidget.cs`
+* Four widgets are connected directly to one another per customer. Each change entry point refreshes its own view and calls its peers' `Refresh` methods in a fixed order. No mediator, coordinator or events were added.
+* `CartScenarioTests.CartAdd_RefreshesWidgetsInTheirDirectCallOrder` verifies item list, promo, shipping and totals output order.
+
+Modified
+
+* `baseline/src/CornerStore/StoreConsole.cs`: register and connect the widgets; route cart add/remove/show, promo, shipping, add-on and quote operations through the relevant widget
+* `scenarios/trading-day.json`: append a cart add and undo pair (steps 45 and 46), exercising refreshes while returning cu-1 to its prior cart state
+* `.copilot-tracking/plans/2026-10-15/baseline-plan.instructions.md`: mark P05 complete
+
+Removed
+
+* None
+
+Deviations and decisions
+
+* S18 remains caller-managed in `StoreConsole`: the existing saved-line, promo, shipping and add-on copies are still captured before add/remove and restored by undo. Widget refresh output runs before the established operation-result lines.
+* `CartShow` now renders through `ItemListWidget`; the pricing result remains in `TotalsPanelWidget.ShowQuote` with the same business values and formatting.
+* Transcript review corrected `TotalsPanelWidget.Refresh` to show the full quote total rather than subtotal; it shows zero for an empty cart.
+
+Validation (Release)
+
+* `dotnet restore GangOfFour.slnx`: succeeded
+* `dotnet build GangOfFour.slnx --no-restore -c Release -warnaserror`: succeeded, 0 warnings and 0 errors
+* `dotnet test GangOfFour.slnx --no-build -c Release`: 34 passed, 0 failed
+* `fc.exe /b` on two runs of `scenarios/trading-day.json`: no differences
+* `git diff --check`: succeeded; editor diagnostics: no errors in changed C# files
+* Pattern-leak scan: `StringBuilder` in `StoreConsole.cs` (BCL type) and `state` in the S18 marker comment; no pattern is applied
+* `baseline/src`, excluding `bin` and `obj`: 32 C# files, 1,405 lines
+
+SMELL markers planted in P05
+
+| ID | File and line | Member | Shape |
+| --- | --- | --- | --- |
+| S17 | `baseline/src/CornerStore/Widgets/ItemListWidget.cs` line 48 | `RefreshAfterChange` | Item list directly refreshes the promo, shipping and totals widgets |
+| S17 | `baseline/src/CornerStore/Widgets/PromoBoxWidget.cs` line 38 | `RefreshAfterChange` | Promo widget directly refreshes the item list, shipping and totals widgets |
+| S17 | `baseline/src/CornerStore/Widgets/ShippingSelectorWidget.cs` line 33 | `RefreshAfterChange` | Shipping widget directly refreshes the item list, promo and totals widgets |
+| S17 | `baseline/src/CornerStore/Widgets/TotalsPanelWidget.cs` line 25 | `RefreshAfterChange` | Totals widget directly refreshes the item list, promo and shipping widgets |
+
+Every S17 marker is an intentional direct reference and refresh call; no mediator or event system is present. Existing S18 markers and copy/restore behavior are unchanged.
+
+## Phase P06: Notifications and inventory
+
+Added
+
+* `baseline/src/CornerStore/Notifications/EmailSender.cs` and `SmsSender.cs`, in-process transcript fakes
+* `baseline/src/CornerStore/Notifications/OrderConfirmedEmail.cs`, `OrderConfirmedSms.cs`, `OrderShippedEmail.cs` and `OrderShippedSms.cs` (S07)
+* `baseline/src/CornerStore/Inventory/InventoryService.cs`: deterministic stock values, uncached lookups with a private simulated cost, and an unguarded stock adjustment method (S12)
+
+Modified
+
+* `.copilot-tracking/plans/2026-10-15/baseline-plan.instructions.md`: mark P06 complete
+
+Removed
+
+* None
+
+Validation
+
+* `dotnet test baseline/CornerStore.Baseline.slnx -c Release`: 34 passed, 0 failed; P06 source compiles
+* Notification and stock behavior will be exercised by P07/P08 scenario steps
+
+SMELL markers planted in P06
+
+| ID | File and line | Member | Shape |
+| --- | --- | --- | --- |
+| S07 | `baseline/src/CornerStore/Notifications/OrderConfirmedEmail.cs` line 5 | `Send` | Confirmation text and email sender call in a message/channel-specific class |
+| S07 | `baseline/src/CornerStore/Notifications/OrderConfirmedSms.cs` line 5 | `Send` | Confirmation text and SMS sender call in a message/channel-specific class |
+| S07 | `baseline/src/CornerStore/Notifications/OrderShippedEmail.cs` line 5 | `Send` | Shipping text and email sender call in a message/channel-specific class |
+| S07 | `baseline/src/CornerStore/Notifications/OrderShippedSms.cs` line 5 | `Send` | Shipping text and SMS sender call in a message/channel-specific class |
+| S12 | `baseline/src/CornerStore/Inventory/InventoryService.cs` line 24 | `GetStock` | Every lookup increments a private cost and reads stock without caching |
+| S12 | `baseline/src/CornerStore/Inventory/InventoryService.cs` line 31 | `AdjustStock` | Stock can be changed without a role check |
+
+## Phase P07: Orders, lifecycle and back office
+
+Added
+
+* `baseline/src/CornerStore/Orders/Order.cs` and `Invoice.cs`, each constructed with eleven positional parameters (S02)
+* `baseline/src/CornerStore/Orders/OrderService.cs`: string status guards for pay, ship, deliver, cancel and refund (S20); direct notification, stock lookup, loyalty and analytics calls after transitions (S19)
+* `baseline/src/CornerStore/Orders/LoyaltyService.cs` and `AnalyticsService.cs`
+* `baseline/src/CornerStore/Orders/BackOffice.cs`: inline stock, lookup, refund and cancel actions with repeated caller-side staff checks (S12, S14)
+* `baseline/tests/CornerStore.Tests/OrderScenarioTests.cs`: authorized staff stock updates and lookups; customer attempts are rejected
+
+Modified
+
+* `baseline/src/CornerStore/StoreConsole.cs`: order and admin operation dispatch, order/customer lookup, and service wiring
+* `scenarios/trading-day.json`: add authorized and denied stock adjustment and lookup steps; the staff adjustment sets `KETTLE-1L` to zero for checkout validation in P08
+* `.copilot-tracking/plans/2026-10-15/baseline-plan.instructions.md`: mark P07 complete
+
+Removed
+
+* None
+
+Deviations and decisions
+
+* The order transitions are implemented but cannot yet be reached through the scenario because checkout is P08. P08 will create orders and exercise shipping, delivery, cancellation, refund and illegal transitions.
+* `BackOffice.LookupStock` performs two uncached reads of the same SKU, keeping simulated lookup cost internal and out of the transcript.
+
+Validation
+
+* `dotnet test baseline/CornerStore.Baseline.slnx -c Release`: 35 passed, 0 failed
+* Editor diagnostics: no errors in changed C# files
+
+SMELL markers planted in P07
+
+| ID | File and line | Member | Shape |
+| --- | --- | --- | --- |
+| S02 | `baseline/src/CornerStore/Orders/OrderService.cs` line 18 | `Create` | Eleven positional order arguments, including null optional message, note, tracking and cancellation fields |
+| S02 | `baseline/src/CornerStore/Orders/OrderService.cs` line 31 | `CreateInvoice` | Eleven positional invoice arguments with a null note |
+| S12 | `baseline/src/CornerStore/Orders/BackOffice.cs` lines 8, 22, 36, 49 | `AdjustStock`, `LookupStock`, `Refund`, `Cancel` | Each caller checks the staff role inline |
+| S14 | `baseline/src/CornerStore/Orders/BackOffice.cs` lines 7, 21, 35, 48 | Back-office methods | Actions execute inline without command objects or an audit queue |
+| S19 | `baseline/src/CornerStore/Orders/OrderService.cs` line 122 | `RecordStatusChange` | Order service directly calls inventory, message, loyalty and analytics services |
+| S20 | `baseline/src/CornerStore/Orders/OrderService.cs` lines 46, 59, 73, 86, 104 | `Pay`, `Ship`, `Deliver`, `Cancel`, `Refund` | Transition guards compare the `Status` string directly |
+
+## Phase P08: Checkout
+
+Added
+
+* `baseline/src/CornerStore/Checkout/IPaymentProcessor.cs`, `CardProcessor.cs`, `PayPalProcessor.cs` and `AfterpayProcessor.cs`
+* `baseline/src/CornerStore/Checkout/ShipFastClient.cs`, accepting XML and prices in cents
+* `baseline/src/CornerStore/Checkout/FraudScorer.cs` and `OrderValidator.cs` with ordered nested validation for stock, address, fraud and credit
+* `baseline/tests/CornerStore.Tests/CheckoutScenarioTests.cs`: successful card checkout and missing-address rejection without payment
+
+Modified
+
+* `baseline/src/CornerStore/StoreConsole.cs`: checkout operation coordinates validation, payment, order creation, stock reservation, courier booking and payment status; payment processor selection is a switch; courier calls and XML stay in the console
+* `baseline/src/CornerStore/Orders/OrderService.cs`: retain the ShipFast tracking number when the paid order later transitions to Shipped
+* `scenarios/trading-day.json`: exercise all validation failures, all payment types, both notification channels at checkout and shipping, cancellation, refund, delivery and illegal transitions
+* `.copilot-tracking/plans/2026-10-15/baseline-plan.instructions.md`: mark P08 complete
+
+Removed
+
+* None
+
+Deviations and decisions
+
+* `Checkout` calculates the quote before calling `OrderValidator.Validate`, because the planned validation signature takes a `Quote`. Validation still occurs before payment, order creation, stock reservation and shipment booking.
+* The post-checkout `order.ship` operation retains the tracking identifier already returned by ShipFast instead of assigning a second one.
+* Final review found that separate plain and bundle lines could request more of one SKU than inventory held. `OrderValidator` now aggregates requested quantities by SKU, with a regression test proving payment is not taken.
+
+Validation
+
+* `dotnet build baseline/CornerStore.Baseline.slnx -c Release -warnaserror`: succeeded, 0 warnings and 0 errors
+* `dotnet test baseline/CornerStore.Baseline.slnx --no-build -c Release`: 37 passed, 0 failed
+* Scenario coverage assertions found out-of-stock, missing-address, fraud and credit failures; card, PayPal and Afterpay charges; email and SMS confirmation and shipping; cancellation, refund, delivery and both illegal transitions
+* Editor diagnostics: no errors in changed C# files
+
+SMELL markers planted in P08
+
+| ID | File and line | Member | Shape |
+| --- | --- | --- | --- |
+| S03 | `baseline/src/CornerStore/StoreConsole.cs` line 449 | `ChargePayment` | Switch constructs a processor for each payment string |
+| S06 | `baseline/src/CornerStore/StoreConsole.cs` line 475 | `BookShipment` | Console sends XML and parses the courier response directly |
+| S10 | `baseline/src/CornerStore/StoreConsole.cs` line 382 | `Checkout` | Console calls each checkout subsystem in sequence |
+| S13 | `baseline/src/CornerStore/Checkout/OrderValidator.cs` line 9 | `Validate` | Nested stock, address, fraud and credit checks in one method |
+
+The baseline intentionally retains the payment product interface required for the later Factory Method pattern. No other pattern is applied at these sites.
+
+## Phase P09: Reporting
+
+Added
+
+* `baseline/src/CornerStore/Reporting/ReportService.cs`, `CsvReportExporter.cs` and `JsonReportExporter.cs`
+* Both exporters independently load, filter and aggregate orders, switch on physical/digital/gift-card line types, and write their format (S22, S23)
+* `baseline/tests/CornerStore.Tests/ReportingScenarioTests.cs`: physical, digital and gift-card totals in both formats
+
+Modified
+
+* `baseline/src/CornerStore/Orders/OrderService.cs`: expose orders in stable ID order for reports
+* `baseline/src/CornerStore/StoreConsole.cs`: add `report.csv` and `report.json` operations
+* `scenarios/trading-day.json`: append both report operations after orders of each line-item type exist
+* `.copilot-tracking/plans/2026-10-15/baseline-plan.instructions.md`: mark P09 complete
+
+Removed
+
+* None
+
+Validation
+
+* `dotnet test baseline/CornerStore.Baseline.slnx -c Release`: 38 passed, 0 failed
+* Full scenario output includes Physical 543.32, Digital 7.50 and GiftCard 25.00 in both formats
+* Editor diagnostics: no errors in changed C# files
+
+SMELL markers planted in P09
+
+| ID | File and line | Member | Shape |
+| --- | --- | --- | --- |
+| S22 | `baseline/src/CornerStore/Reporting/CsvReportExporter.cs` line 10 | `Export` | CSV exporter duplicates the common load, filter, aggregate and write flow |
+| S22 | `baseline/src/CornerStore/Reporting/JsonReportExporter.cs` line 10 | `Export` | JSON exporter duplicates the same flow |
+| S23 | `baseline/src/CornerStore/Reporting/CsvReportExporter.cs` line 20 | `Export` | CSV rendering switches on physical, digital and gift-card product types |
+| S23 | `baseline/src/CornerStore/Reporting/JsonReportExporter.cs` line 20 | `Export` | JSON rendering switches on the same product types |
+
+## Phase P10: Scenario and golden master
+
+Added
+
+* `baseline/tests/CornerStore.Tests/RepositoryRoot.cs`, `GoldenMasterTests.cs` and `DeterminismTests.cs`
+* `scenarios/expected/baseline.txt`, approved from the reviewed 75-step trading-day transcript
+
+Modified
+
+* `.copilot-tracking/plans/2026-10-15/baseline-plan.instructions.md`: mark P10 complete
+
+Removed
+
+* The generated, ignored `scenarios/expected/baseline.received.txt` after approval and mismatch-path verification
+
+Review and independent arithmetic
+
+* Ava: subtotal 271.66 - discount 27.17 + add-ons 9.39 + express shipping 22.00 + tax 24.45 = A$300.33
+* Ben: subtotal 116.74 - discount 5.84 + standard shipping 12.20 + tax 13.07 = NZ$136.17; pickup plus insurance gives NZ$129.19
+* Jo: gift card 25.00 + ebook 7.50 + shipping 8.00 + tax 1.13 = NZ$41.63
+* Report totals: physical 271.66 x 2 = 543.32; digital 7.50; gift card 25.00
+
+Validation
+
+* `GOLDEN_MASTER_APPROVE` was unset before the initial comparison. The test failed only because the approved transcript was absent and wrote the received candidate.
+* After manual review and arithmetic checks, the test approved `baseline.txt` with `GOLDEN_MASTER_APPROVE=1`; the final full Release build and test run passed, 41 tests total
+* `baseline.txt`: 14,887 bytes, UTF-8 without BOM, LF only, final LF present
+* After changing the first expected character, `GoldenMasterTests` reported line 1 and wrote the received output; after restoring it, the focused test passed
+* The received file is ignored by `.gitignore` and was removed
+* `DeterminismTests` compares two complete scenario runs
+
 ## Follow-on and open items
 
-* `pwsh` still not found on this machine (critique C-14). P11-S1a re-checks.
-* After this commit the human can also commit `foundations-log.md` and `baseline-log.md`, now visible to git.
+* PowerShell 7 was found at `C:\Users\echau\AppData\Local\Microsoft\WindowsApps\pwsh.exe` during P11-S1a and both PowerShell editions passed AC-007.
+* The baseline review is recorded at `.copilot-tracking/reviews/2026-10-15/baseline-review.md`; run-all permits the local baseline commit and tag, but never a push.
+
+## Phase P11: Catalog, tools and CI
+
+Added
+
+* `tools/new-pattern.ps1`: copies source and tests without `bin`/`obj`, creates the pattern solution and README stub, and updates `GangOfFour.slnx` through XML APIs
+* `tools/diff-baseline.ps1`: writes a stable file summary and unified diff for source and tests, excluding build output
+* 23 smell entries in `docs/smells-catalog.md`, each with locations, impact and scenario steps
+
+Modified
+
+* `.github/workflows/ci.yml`: regenerate each pattern `DIFF.md` with PowerShell 7 and fail if tracked pattern files differ
+* `README.md`: describe the complete baseline, approved transcript and copy/diff tooling
+* `.copilot-tracking/plans/2026-10-15/baseline-plan.instructions.md`: mark P11 complete
+
+Removed
+
+* The temporary `patterns/structural/scratch-check/` copy and its umbrella solution entries after AC-007 passed
+
+Deviations and decisions
+
+* The PowerShell instruction asks for `#Requires -Version 7.0`, while settled PD-12 requires both scripts to run under Windows PowerShell 5.1 and PowerShell 7. The scripts require 5.1 and use syntax supported by both editions.
+* Git autocrlf warnings from temporary diff trees are avoided with per-command `core.autocrlf=false` and `core.safecrlf=false`; repository configuration is unchanged.
+
+Validation
+
+* `pwsh --version`: PowerShell 7.6.7 at `WindowsApps/pwsh.exe`
+* Under both `pwsh` and `powershell.exe`, `new-pattern.ps1 -Category structural -Name scratch-check` created a copy that passed `dotnet test`, 40 passed including the golden master
+* Under both editions, `diff-baseline.ps1` produced one `None` summary row and `No differences from the baseline.`
+* A temporary added-file probe produced `Added | CornerStore/DiffProbe.txt | 1 | 0`; it was removed and the clean diff regenerated
+* The CI diff loop passed locally; the smell catalog contains exactly 23 entries
+* `dotnet build GangOfFour.slnx -c Release -warnaserror`: succeeded after removing scratch solution entries
+
+SMELL markers planted in P11
+
+* None
+
+## Baseline review complete
+
+P01-P11 and the final acceptance checks are complete. The review outcome is Conformant with justified divergence. The local commit and `baseline-v1` tag remain before the run-all human checkpoint.

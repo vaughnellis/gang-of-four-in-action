@@ -141,59 +141,59 @@ Every phase ends with the same closing step, written once here: run restore, bui
 
 ### Phase P05: Cart widgets (S17) <!-- parallelizable: false -->
 
-* [ ] P05-S1 `ItemListWidget`, `PromoBoxWidget`, `ShippingSelectorWidget`, `TotalsPanelWidget`, referencing and updating each other directly (S17)
-* [ ] P05-S2 Route the cart ops from P03 and P04 through the widgets; extend the scenario
-* [ ] P05-S3 Closing step. STOP
+* [x] P05-S1 `ItemListWidget`, `PromoBoxWidget`, `ShippingSelectorWidget`, `TotalsPanelWidget`, referencing and updating each other directly (S17)
+* [x] P05-S2 Route the cart ops from P03 and P04 through the widgets; extend the scenario
+* [x] P05-S3 Closing step. STOP
 
 ### Phase P06: Notifications and inventory (S07, S12) <!-- parallelizable: false -->
 
-* [ ] P06-S1 `EmailSender`, `SmsSender` fakes and the four message classes (S07)
-* [ ] P06-S2 `InventoryService` with a simulated, uncached lookup cost and an unguarded stock mutator (S12)
-* [ ] P06-S3 Closing step. STOP
+* [x] P06-S1 `EmailSender`, `SmsSender` fakes and the four message classes (S07)
+* [x] P06-S2 `InventoryService` with a simulated, uncached lookup cost and an unguarded stock mutator (S12)
+* [x] P06-S3 Closing step. STOP
 
 ### Phase P07: Orders, lifecycle and back office (S02, S12, S14, S19, S20) <!-- parallelizable: false -->
 
-* [ ] P07-S1 `Order` and `Invoice` with 11-parameter constructors (S02)
-* [ ] P07-S2 `OrderService`: string `Status`, if/else transitions (S20), direct calls to email, stock, loyalty and analytics after each change (S19); `LoyaltyService`, `AnalyticsService`
-* [ ] P07-S3 `BackOffice`: inline stock, refund, cancel and lookup actions (S14) with caller-side role checks (S12)
-* [ ] P07-S4 Ops `order.ship`, `order.deliver`, `admin.stock.adjust`, `admin.stock.lookup`, `admin.refund`, `admin.cancel`
-* [ ] P07-S5 Closing step. STOP
+* [x] P07-S1 `Order` and `Invoice` with 11-parameter constructors (S02)
+* [x] P07-S2 `OrderService`: string `Status`, if/else transitions (S20), direct calls to email, stock, loyalty and analytics after each change (S19); `LoyaltyService`, `AnalyticsService`
+* [x] P07-S3 `BackOffice`: inline stock, refund, cancel and lookup actions (S14) with caller-side role checks (S12)
+* [x] P07-S4 Ops `order.ship`, `order.deliver`, `admin.stock.adjust`, `admin.stock.lookup`, `admin.refund`, `admin.cancel`
+* [x] P07-S5 Closing step. STOP
 
 ### Phase P08: Checkout (S03, S06, S10, S13) <!-- parallelizable: false -->
 
-* [ ] P08-S1 `IPaymentProcessor`, `CardProcessor`, `PayPalProcessor`, `AfterpayProcessor` fakes
-* [ ] P08-S2 `ShipFastClient` fake with XML strings and prices in cents
-* [ ] P08-S3 `FraudScorer` and `OrderValidator` with one long nested-if method (S13)
-* [ ] P08-S4 `StoreConsole.Checkout`: fixed-order orchestration (S10) with a payment `switch` (S03) and a direct courier call (S06)
-* [ ] P08-S5 Op `checkout`; extend the scenario
-* [ ] P08-S6 Closing step. STOP
+* [x] P08-S1 `IPaymentProcessor`, `CardProcessor`, `PayPalProcessor`, `AfterpayProcessor` fakes
+* [x] P08-S2 `ShipFastClient` fake with XML strings and prices in cents
+* [x] P08-S3 `FraudScorer` and `OrderValidator` with one long nested-if method (S13)
+* [x] P08-S4 `StoreConsole.Checkout`: fixed-order orchestration (S10) with a payment `switch` (S03) and a direct courier call (S06)
+* [x] P08-S5 Op `checkout`; extend the scenario
+* [x] P08-S6 Closing step. STOP
 
 ### Phase P09: Reporting (S22, S23 export site) <!-- parallelizable: false -->
 
-* [ ] P09-S1 `ReportService`, `CsvReportExporter`, `JsonReportExporter` with duplicated skeletons (S22) and a line-type switch for export rows (S23)
-* [ ] P09-S2 Report totals by line item type; ops `report.csv`, `report.json`
-* [ ] P09-S3 Closing step. STOP
+* [x] P09-S1 `ReportService`, `CsvReportExporter`, `JsonReportExporter` with duplicated skeletons (S22) and a line-type switch for export rows (S23)
+* [x] P09-S2 Report totals by line item type; ops `report.csv`, `report.json`
+* [x] P09-S3 Closing step. STOP
 
 ### Phase P10: Scenario, golden master, approved transcript (FR-012 to FR-014) <!-- parallelizable: false -->
 
-* [ ] P10-S1 Complete `scenarios/trading-day.json` against the FR-012 coverage matrix in the details file
-* [ ] P10-S2 `RepositoryRoot.cs`, `GoldenMasterTests.cs` (plain string comparison, received file on mismatch, `GOLDEN_MASTER_APPROVE=1` approval, first-differing-line summary), `DeterminismTests.cs`
-* [ ] P10-S3 Run once without approval (expect failure: no approved file), review the received transcript by hand, recompute sample totals independently (PA-3), then run once with `GOLDEN_MASTER_APPROVE=1` to write `scenarios/expected/baseline.txt`, delete any received file, and run again without the variable to confirm a pass
-* [ ] P10-S4 Run twice and confirm byte-identical output (AC-002); confirm `baseline.txt` has LF endings and no BOM; mutate one transcript character temporarily to prove the mismatch path writes `baseline.received.txt` and reports the right line, then revert
-* [ ] P10-S5 Closing step. The stop report tells the human to leave `GOLDEN_MASTER_APPROVE` unset in pattern tasks (critique C-15). STOP
+* [x] P10-S1 Complete `scenarios/trading-day.json` against the FR-012 coverage matrix in the details file
+* [x] P10-S2 `RepositoryRoot.cs`, `GoldenMasterTests.cs` (plain string comparison, received file on mismatch, `GOLDEN_MASTER_APPROVE=1` approval, first-differing-line summary), `DeterminismTests.cs`
+* [x] P10-S3 Run once without approval (expect failure: no approved file), review the received transcript by hand, recompute sample totals independently (PA-3), then run once with `GOLDEN_MASTER_APPROVE=1` to write `scenarios/expected/baseline.txt`, delete any received file, and run again without the variable to confirm a pass
+* [x] P10-S4 Run twice and confirm byte-identical output (AC-002); confirm `baseline.txt` has LF endings and no BOM; mutate one transcript character temporarily to prove the mismatch path writes `baseline.received.txt` and reports the right line, then revert
+* [x] P10-S5 Closing step. The stop report tells the human to leave `GOLDEN_MASTER_APPROVE` unset in pattern tasks (critique C-15). STOP
 
 ### Phase P11: Catalog doc, tools, CI (FR-015 to FR-018, AC-007) <!-- parallelizable: false -->
 
-* [ ] P11-S1 Fill `docs/smells-catalog.md`: 23 entries with ID, pattern, file paths, why it hurts, scenario steps
-* [ ] P11-S1a Re-check `pwsh --version` (critique C-14). If it is missing, STOP and ask. Read hve-core `powershell.instructions.md`
-* [ ] P11-S2 `tools/new-pattern.ps1` and `tools/diff-baseline.ps1` (PD-12)
-* [ ] P11-S3 Extend `.github/workflows/ci.yml`: regenerate every `DIFF.md` with `pwsh` and fail on any difference
-* [ ] P11-S4 AC-007 tool check with `-Category structural -Name scratch-check`, run once under `pwsh` and once under `powershell.exe` (delete the scratch folder and revert the umbrella entries between runs); the folder must build and pass the golden master and `diff-baseline.ps1` must report no differences; finally delete the scratch folder and revert the umbrella entries
-* [ ] P11-S5 Update the README Status section; closing step. STOP
+* [x] P11-S1 Fill `docs/smells-catalog.md`: 23 entries with ID, pattern, file paths, why it hurts, scenario steps
+* [x] P11-S1a Re-check `pwsh --version` (critique C-14). If it is missing, STOP and ask. Read hve-core `powershell.instructions.md`
+* [x] P11-S2 `tools/new-pattern.ps1` and `tools/diff-baseline.ps1` (PD-12)
+* [x] P11-S3 Extend `.github/workflows/ci.yml`: regenerate every `DIFF.md` with `pwsh` and fail on any difference
+* [x] P11-S4 AC-007 tool check with `-Category structural -Name scratch-check`, run once under `pwsh` and once under `powershell.exe` (delete the scratch folder and revert the umbrella entries between runs); the folder must build and pass the golden master and `diff-baseline.ps1` must report no differences; finally delete the scratch folder and revert the umbrella entries
+* [x] P11-S5 Update the README Status section; closing step. STOP
 
 ### Review (RPI Phase 4) <!-- parallelizable: false -->
 
-* [ ] RV-S1 Check FR-001 to FR-018 and AC-001 to AC-008 with evidence; run AC-003 and AC-006 searches; independently recompute totals; write the review log; STOP so the human can commit, push and create `baseline-v1`
+* [x] RV-S1 Check FR-001 to FR-018 and AC-001 to AC-008 with evidence; run AC-003 and AC-006 searches; independently recompute totals; write the review log; run-all authorizes a local commit and `baseline-v1` tag, with no push
 
 ## Dependencies
 

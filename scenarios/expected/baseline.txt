@@ -1,0 +1,417 @@
+CornerStore trading day: trading-day (start 2026-03-02T09:00:00Z)
+[001] browse
+  Store
+    Footwear
+      Shoes
+        - SHOE-RUN-42 Runner Pro 89.95
+        - SHOE-CAS-40 Canvas Low 59.50
+        Kids
+          - SHOE-KID-30 Junior Runner 44.00
+      Socks
+        - SOCK-WOOL Wool Socks 12.00
+    Home
+      - LAMP-DESK Desk Lamp 35.00
+      - TOWEL-SET Towel Set 28.00
+      Kitchen
+        - MUG-ENAMEL Enamel Mug 14.50
+        - KETTLE-1L Kettle 1L 49.00
+    Digital
+      - EBOOK-FIT Fitness Ebook 9.99
+      - EBOOK-GARDEN Garden Ebook 7.50
+    Gift Cards
+      - GC-25 Gift Card 25 25.00
+      - GC-50 Gift Card 50 50.00
+  12 products under Store
+[002] variant parent=SHOE-RUN-42 sku=SHOE-RUN-44 size=44 colour=Blue
+  created variant SHOE-RUN-44 of SHOE-RUN-42
+[003] variant parent=EBOOK-FIT sku=EBOOK-FIT-2 size=A5 colour=None
+  rejected: EBOOK-FIT is not a physical product
+[004] browse category=Shoes
+  Shoes
+    - SHOE-RUN-42 Runner Pro 89.95
+    - SHOE-CAS-40 Canvas Low 59.50
+    - SHOE-RUN-44 Runner Pro (44, Blue) 89.95
+    Kids
+      - SHOE-KID-30 Junior Runner 44.00
+  4 products under Shoes
+[005] bundle.create sku=BUN-GIFT name=Gift set
+  created bundle BUN-GIFT
+[006] bundle.add bundle=BUN-GIFT sku=MUG-ENAMEL
+  added MUG-ENAMEL to BUN-GIFT
+  bundle BUN-GIFT price 13.05
+[007] bundle.add bundle=BUN-GIFT sku=TOWEL-SET
+  added TOWEL-SET to BUN-GIFT
+  bundle BUN-GIFT price 38.25
+[008] bundle.add bundle=BUN-GIFT sku=BUN-RUN-KIT
+  rejected: BUN-RUN-KIT is a bundle and bundles cannot nest
+[009] import count=100000
+  imported 100000 listings
+[010] register name=Ava region=AU channel=email creditLimit=800 role=customer address=1 Harbour St, Sydney
+  registered cu-1 Ava (AU, email)
+[011] register name=Ben region=NZ channel=sms creditLimit=300 role=customer
+  registered cu-2 Ben (NZ, sms)
+[012] register name=Sam region=AU channel=email creditLimit=0 role=staff address=2 Depot Rd, Sydney
+  registered cu-3 Sam (AU, email)
+[013] cart.add customer=cu-1 sku=SHOE-RUN-42 qty=2
+  - SHOE-RUN-42 Runner Pro x2 @ A$89.95 = A$179.90
+  promo none
+  shipping standard
+  totals A$206.09
+  added 2 x SHOE-RUN-42
+  cart cu-1 lines=1 subtotal=A$179.90
+[014] cart.add customer=cu-1 sku=BUN-RUN-KIT
+  - SHOE-RUN-42 Runner Pro x2 @ A$89.95 = A$179.90
+  - SHOE-RUN-42 Runner Pro x1 @ A$80.96 = A$80.96 (from BUN-RUN-KIT)
+  - SOCK-WOOL Wool Socks x1 @ A$10.80 = A$10.80 (from BUN-RUN-KIT)
+  promo none
+  shipping standard
+  totals A$308.83
+  added 1 x BUN-RUN-KIT
+  cart cu-1 lines=3 subtotal=A$271.66
+[015] cart.show customer=cu-1
+  - SHOE-RUN-42 Runner Pro x2 @ A$89.95 = A$179.90
+  - SHOE-RUN-42 Runner Pro x1 @ A$80.96 = A$80.96 (from BUN-RUN-KIT)
+  - SOCK-WOOL Wool Socks x1 @ A$10.80 = A$10.80 (from BUN-RUN-KIT)
+  promo none
+  shipping standard
+  totals A$308.83
+  cart cu-1 lines=3 subtotal=A$271.66
+[016] cart.undo customer=cu-1
+  - SHOE-RUN-42 Runner Pro x2 @ A$89.95 = A$179.90
+  promo none
+  shipping standard
+  totals A$206.09
+  undone
+  cart cu-1 lines=1 subtotal=A$179.90
+[017] cart.add customer=cu-1 sku=BUN-RUN-KIT
+  - SHOE-RUN-42 Runner Pro x2 @ A$89.95 = A$179.90
+  - SHOE-RUN-42 Runner Pro x1 @ A$80.96 = A$80.96 (from BUN-RUN-KIT)
+  - SOCK-WOOL Wool Socks x1 @ A$10.80 = A$10.80 (from BUN-RUN-KIT)
+  promo none
+  shipping standard
+  totals A$308.83
+  added 1 x BUN-RUN-KIT
+  cart cu-1 lines=3 subtotal=A$271.66
+[018] cart.remove customer=cu-1 sku=SHOE-RUN-42
+  - SHOE-RUN-42 Runner Pro x1 @ A$80.96 = A$80.96 (from BUN-RUN-KIT)
+  - SOCK-WOOL Wool Socks x1 @ A$10.80 = A$10.80 (from BUN-RUN-KIT)
+  promo none
+  shipping standard
+  totals A$107.74
+  removed SHOE-RUN-42
+  cart cu-1 lines=2 subtotal=A$91.76
+[019] cart.undo customer=cu-1
+  - SHOE-RUN-42 Runner Pro x2 @ A$89.95 = A$179.90
+  - SHOE-RUN-42 Runner Pro x1 @ A$80.96 = A$80.96 (from BUN-RUN-KIT)
+  - SOCK-WOOL Wool Socks x1 @ A$10.80 = A$10.80 (from BUN-RUN-KIT)
+  promo none
+  shipping standard
+  totals A$308.83
+  undone
+  cart cu-1 lines=3 subtotal=A$271.66
+[020] cart.undo customer=cu-1
+  nothing to undo
+[021] cart.add customer=cu-2 sku=MUG-ENAMEL qty=3
+  - MUG-ENAMEL Enamel Mug x3 @ NZ$14.50 = NZ$43.50
+  promo none
+  shipping standard
+  totals NZ$59.83
+  added 3 x MUG-ENAMEL
+  cart cu-2 lines=1 subtotal=NZ$43.50
+[022] cart.add customer=cu-2 sku=GC-25
+  - MUG-ENAMEL Enamel Mug x3 @ NZ$14.50 = NZ$43.50
+  - GC-25 Gift Card 25 x1 @ NZ$25.00 = NZ$25.00
+  promo none
+  shipping standard
+  totals NZ$84.83
+  added 1 x GC-25
+  cart cu-2 lines=2 subtotal=NZ$68.50
+[023] cart.add customer=cu-2 sku=EBOOK-FIT
+  - MUG-ENAMEL Enamel Mug x3 @ NZ$14.50 = NZ$43.50
+  - GC-25 Gift Card 25 x1 @ NZ$25.00 = NZ$25.00
+  - EBOOK-FIT Fitness Ebook x1 @ NZ$9.99 = NZ$9.99
+  promo none
+  shipping standard
+  totals NZ$96.32
+  added 1 x EBOOK-FIT
+  cart cu-2 lines=3 subtotal=NZ$78.49
+[024] cart.add customer=cu-2 sku=BUN-GIFT
+  - MUG-ENAMEL Enamel Mug x3 @ NZ$14.50 = NZ$43.50
+  - GC-25 Gift Card 25 x1 @ NZ$25.00 = NZ$25.00
+  - EBOOK-FIT Fitness Ebook x1 @ NZ$9.99 = NZ$9.99
+  - MUG-ENAMEL Enamel Mug x1 @ NZ$13.05 = NZ$13.05 (from BUN-GIFT)
+  - TOWEL-SET Towel Set x1 @ NZ$25.20 = NZ$25.20 (from BUN-GIFT)
+  promo none
+  shipping standard
+  totals NZ$142.71
+  added 1 x BUN-GIFT
+  cart cu-2 lines=5 subtotal=NZ$116.74
+[025] cart.add customer=cu-2 sku=NOPE-1
+  rejected: unknown sku NOPE-1
+[026] cart.add customer=cu-9 sku=MUG-ENAMEL
+  rejected: unknown customer cu-9
+[027] cart.show customer=cu-2
+  - MUG-ENAMEL Enamel Mug x3 @ NZ$14.50 = NZ$43.50
+  - GC-25 Gift Card 25 x1 @ NZ$25.00 = NZ$25.00
+  - EBOOK-FIT Fitness Ebook x1 @ NZ$9.99 = NZ$9.99
+  - MUG-ENAMEL Enamel Mug x1 @ NZ$13.05 = NZ$13.05 (from BUN-GIFT)
+  - TOWEL-SET Towel Set x1 @ NZ$25.20 = NZ$25.20 (from BUN-GIFT)
+  promo none
+  shipping standard
+  totals NZ$142.71
+  cart cu-2 lines=5 subtotal=NZ$116.74
+[028] cart.promo customer=cu-1 code=NOPE10
+  rejected: unknown promo NOPE10
+[029] cart.promo customer=cu-1 code=NZFRIEND
+  rejected: promo NZFRIEND does not apply to this cart
+[030] cart.promo customer=cu-1 code=SHOES10
+  promo SHOES10
+  - SHOE-RUN-42 Runner Pro x2 @ A$89.95 = A$179.90
+  - SHOE-RUN-42 Runner Pro x1 @ A$80.96 = A$80.96 (from BUN-RUN-KIT)
+  - SOCK-WOOL Wool Socks x1 @ A$10.80 = A$10.80 (from BUN-RUN-KIT)
+  shipping standard
+  totals A$278.94
+  promo SHOES10 applied (SPEND>100 AND CATEGORY=Shoes)
+[031] cart.shipping customer=cu-1 method=express
+  shipping express
+  - SHOE-RUN-42 Runner Pro x2 @ A$89.95 = A$179.90
+  - SHOE-RUN-42 Runner Pro x1 @ A$80.96 = A$80.96 (from BUN-RUN-KIT)
+  - SOCK-WOOL Wool Socks x1 @ A$10.80 = A$10.80 (from BUN-RUN-KIT)
+  promo SHOES10
+  totals A$290.94
+  shipping set to express
+[032] cart.addon customer=cu-1 addon=giftwrap
+  totals A$295.44
+  - SHOE-RUN-42 Runner Pro x2 @ A$89.95 = A$179.90
+  - SHOE-RUN-42 Runner Pro x1 @ A$80.96 = A$80.96 (from BUN-RUN-KIT)
+  - SOCK-WOOL Wool Socks x1 @ A$10.80 = A$10.80 (from BUN-RUN-KIT)
+  promo SHOES10
+  shipping express
+  giftwrap added
+[033] cart.addon customer=cu-1 addon=insurance
+  totals A$300.33
+  - SHOE-RUN-42 Runner Pro x2 @ A$89.95 = A$179.90
+  - SHOE-RUN-42 Runner Pro x1 @ A$80.96 = A$80.96 (from BUN-RUN-KIT)
+  - SOCK-WOOL Wool Socks x1 @ A$10.80 = A$10.80 (from BUN-RUN-KIT)
+  promo SHOES10
+  shipping express
+  insurance added
+[034] cart.addon customer=cu-1 addon=sparkles
+  rejected: unknown add-on sparkles
+[035] quote customer=cu-1
+  quote cu-1 (AU, express, 2.50 kg)
+  subtotal A$271.66
+  discount -A$27.17 (SHOES10)
+  add-ons A$9.39
+  shipping A$22.00
+  tax A$24.45
+  total A$300.33
+[036] cart.promo customer=cu-2 code=BIGSPEND
+  rejected: promo BIGSPEND does not apply to this cart
+[037] cart.promo customer=cu-2 code=NZFRIEND
+  promo NZFRIEND
+  - MUG-ENAMEL Enamel Mug x3 @ NZ$14.50 = NZ$43.50
+  - GC-25 Gift Card 25 x1 @ NZ$25.00 = NZ$25.00
+  - EBOOK-FIT Fitness Ebook x1 @ NZ$9.99 = NZ$9.99
+  - MUG-ENAMEL Enamel Mug x1 @ NZ$13.05 = NZ$13.05 (from BUN-GIFT)
+  - TOWEL-SET Towel Set x1 @ NZ$25.20 = NZ$25.20 (from BUN-GIFT)
+  shipping standard
+  totals NZ$136.17
+  promo NZFRIEND applied (REGION=NZ AND QTY>2)
+[038] cart.shipping customer=cu-2 method=drone
+  rejected: unknown shipping method drone
+[039] cart.shipping customer=cu-2 method=standard
+  shipping standard
+  - MUG-ENAMEL Enamel Mug x3 @ NZ$14.50 = NZ$43.50
+  - GC-25 Gift Card 25 x1 @ NZ$25.00 = NZ$25.00
+  - EBOOK-FIT Fitness Ebook x1 @ NZ$9.99 = NZ$9.99
+  - MUG-ENAMEL Enamel Mug x1 @ NZ$13.05 = NZ$13.05 (from BUN-GIFT)
+  - TOWEL-SET Towel Set x1 @ NZ$25.20 = NZ$25.20 (from BUN-GIFT)
+  promo NZFRIEND
+  totals NZ$136.17
+  shipping set to standard
+[040] quote customer=cu-2
+  quote cu-2 (NZ, standard, 2.10 kg)
+  subtotal NZ$116.74
+  discount -NZ$5.84 (NZFRIEND)
+  add-ons NZ$0.00
+  shipping NZ$12.20
+  tax NZ$13.07
+  total NZ$136.17
+[041] cart.shipping customer=cu-2 method=pickup
+  shipping pickup
+  - MUG-ENAMEL Enamel Mug x3 @ NZ$14.50 = NZ$43.50
+  - GC-25 Gift Card 25 x1 @ NZ$25.00 = NZ$25.00
+  - EBOOK-FIT Fitness Ebook x1 @ NZ$9.99 = NZ$9.99
+  - MUG-ENAMEL Enamel Mug x1 @ NZ$13.05 = NZ$13.05 (from BUN-GIFT)
+  - TOWEL-SET Towel Set x1 @ NZ$25.20 = NZ$25.20 (from BUN-GIFT)
+  promo NZFRIEND
+  totals NZ$126.97
+  shipping set to pickup
+[042] cart.addon customer=cu-2 addon=insurance
+  totals NZ$129.19
+  - MUG-ENAMEL Enamel Mug x3 @ NZ$14.50 = NZ$43.50
+  - GC-25 Gift Card 25 x1 @ NZ$25.00 = NZ$25.00
+  - EBOOK-FIT Fitness Ebook x1 @ NZ$9.99 = NZ$9.99
+  - MUG-ENAMEL Enamel Mug x1 @ NZ$13.05 = NZ$13.05 (from BUN-GIFT)
+  - TOWEL-SET Towel Set x1 @ NZ$25.20 = NZ$25.20 (from BUN-GIFT)
+  promo NZFRIEND
+  shipping pickup
+  insurance added
+[043] quote customer=cu-2
+  quote cu-2 (NZ, pickup, 2.10 kg)
+  subtotal NZ$116.74
+  discount -NZ$5.84 (NZFRIEND)
+  add-ons NZ$2.22
+  shipping NZ$3.00
+  tax NZ$13.07
+  total NZ$129.19
+[044] quote customer=cu-3
+  rejected: cart is empty
+[045] cart.add customer=cu-1 sku=SHOE-RUN-42
+  - SHOE-RUN-42 Runner Pro x3 @ A$89.95 = A$269.85
+  - SHOE-RUN-42 Runner Pro x1 @ A$80.96 = A$80.96 (from BUN-RUN-KIT)
+  - SOCK-WOOL Wool Socks x1 @ A$10.80 = A$10.80 (from BUN-RUN-KIT)
+  promo SHOES10
+  shipping express
+  totals A$394.21
+  added 1 x SHOE-RUN-42
+  cart cu-1 lines=3 subtotal=A$361.61
+[046] cart.undo customer=cu-1
+  - SHOE-RUN-42 Runner Pro x2 @ A$89.95 = A$179.90
+  - SHOE-RUN-42 Runner Pro x1 @ A$80.96 = A$80.96 (from BUN-RUN-KIT)
+  - SOCK-WOOL Wool Socks x1 @ A$10.80 = A$10.80 (from BUN-RUN-KIT)
+  promo SHOES10
+  shipping express
+  totals A$300.33
+  undone
+  cart cu-1 lines=3 subtotal=A$271.66
+[047] admin.stock.adjust customer=cu-3 sku=KETTLE-1L delta=-4
+  stock KETTLE-1L adjusted by -4, now 0
+[048] admin.stock.lookup customer=cu-3 sku=KETTLE-1L
+  stock KETTLE-1L 0
+[049] admin.stock.adjust customer=cu-1 sku=KETTLE-1L delta=4
+  rejected: staff only
+[050] admin.stock.lookup customer=cu-1 sku=KETTLE-1L
+  rejected: staff only
+[051] cart.add customer=cu-1 sku=KETTLE-1L
+  - SHOE-RUN-42 Runner Pro x2 @ A$89.95 = A$179.90
+  - SHOE-RUN-42 Runner Pro x1 @ A$80.96 = A$80.96 (from BUN-RUN-KIT)
+  - SOCK-WOOL Wool Socks x1 @ A$10.80 = A$10.80 (from BUN-RUN-KIT)
+  - KETTLE-1L Kettle 1L x1 @ A$49.00 = A$49.00
+  promo SHOES10
+  shipping express
+  totals A$354.12
+  added 1 x KETTLE-1L
+  cart cu-1 lines=4 subtotal=A$320.66
+[052] checkout customer=cu-1 payment=card
+  checkout rejected: out of stock KETTLE-1L
+[053] cart.remove customer=cu-1 sku=KETTLE-1L
+  - SHOE-RUN-42 Runner Pro x2 @ A$89.95 = A$179.90
+  - SHOE-RUN-42 Runner Pro x1 @ A$80.96 = A$80.96 (from BUN-RUN-KIT)
+  - SOCK-WOOL Wool Socks x1 @ A$10.80 = A$10.80 (from BUN-RUN-KIT)
+  promo SHOES10
+  shipping express
+  totals A$300.33
+  removed KETTLE-1L
+  cart cu-1 lines=3 subtotal=A$271.66
+[054] checkout customer=cu-2 payment=card
+  checkout rejected: address required
+[055] config.set key=fraudThreshold value=-1
+  fraudThreshold set to -1
+[056] checkout customer=cu-1 payment=card
+  checkout rejected: fraud score 88 exceeds threshold
+[057] config.set key=fraudThreshold value=100
+  fraudThreshold set to 100
+[058] cart.add customer=cu-3 sku=MUG-ENAMEL
+  - MUG-ENAMEL Enamel Mug x1 @ A$14.50 = A$14.50
+  promo none
+  shipping standard
+  totals A$21.55
+  added 1 x MUG-ENAMEL
+  cart cu-3 lines=1 subtotal=A$14.50
+[059] checkout customer=cu-3 payment=card
+  checkout rejected: total exceeds credit limit
+[060] checkout customer=cu-1 payment=card
+  card charged A$300.33 for Ava
+  ShipFast booked SF-0001 for o-1001 (30033 cents)
+  email to Ava: order o-1001 confirmed, total A$300.33
+  loyalty updated for Ava (Paid)
+  analytics order o-1001 Paid
+  checkout placed o-1001
+[061] admin.cancel customer=cu-3 order=o-1001
+  loyalty updated for Ava (Cancelled)
+  analytics order o-1001 Cancelled
+  cancelled o-1001
+[062] order.ship order=o-1001
+  rejected: cannot ship from Cancelled
+[063] register name=Jo region=NZ channel=sms creditLimit=800 role=customer address=8 Pine Rd, Auckland
+  registered cu-4 Jo (NZ, sms)
+[064] cart.add customer=cu-4 sku=GC-25
+  - GC-25 Gift Card 25 x1 @ NZ$25.00 = NZ$25.00
+  promo none
+  shipping standard
+  totals NZ$33.00
+  added 1 x GC-25
+  cart cu-4 lines=1 subtotal=NZ$25.00
+[065] cart.add customer=cu-4 sku=EBOOK-GARDEN
+  - GC-25 Gift Card 25 x1 @ NZ$25.00 = NZ$25.00
+  - EBOOK-GARDEN Garden Ebook x1 @ NZ$7.50 = NZ$7.50
+  promo none
+  shipping standard
+  totals NZ$41.63
+  added 1 x EBOOK-GARDEN
+  cart cu-4 lines=2 subtotal=NZ$32.50
+[066] checkout customer=cu-4 payment=paypal
+  PayPal charged NZ$41.63 for Jo
+  ShipFast booked SF-0002 for o-1002 (4163 cents)
+  sms to Jo: order o-1002 confirmed, total NZ$41.63
+  loyalty updated for Jo (Paid)
+  analytics order o-1002 Paid
+  checkout placed o-1002
+[067] order.ship order=o-1002
+  sms to Jo: order o-1002 shipped, tracking SF-0002
+  loyalty updated for Jo (Shipped)
+  analytics order o-1002 Shipped
+  order o-1002 shipped
+[068] order.deliver order=o-1002
+  loyalty updated for Jo (Delivered)
+  analytics order o-1002 Delivered
+  order o-1002 delivered
+[069] admin.refund customer=cu-3 order=o-1002
+  loyalty updated for Jo (Refunded)
+  analytics order o-1002 Refunded
+  refunded o-1002
+[070] checkout customer=cu-1 payment=afterpay
+  Afterpay charged A$300.33 for Ava
+  ShipFast booked SF-0003 for o-1003 (30033 cents)
+  email to Ava: order o-1003 confirmed, total A$300.33
+  loyalty updated for Ava (Paid)
+  analytics order o-1003 Paid
+  checkout placed o-1003
+[071] order.deliver order=o-1003
+  rejected: cannot deliver from Paid
+[072] order.ship order=o-1003
+  email to Ava: order o-1003 shipped, tracking SF-0003
+  loyalty updated for Ava (Shipped)
+  analytics order o-1003 Shipped
+  order o-1003 shipped
+[073] order.deliver order=o-1003
+  loyalty updated for Ava (Delivered)
+  analytics order o-1003 Delivered
+  order o-1003 delivered
+[074] report.csv status=all
+  CSV report (all)
+  type,total
+  Physical,543.32
+  Digital,7.50
+  GiftCard,25.00
+[075] report.json status=all
+  JSON report (all)
+  {
+    "totals": [
+      { "type": "Physical", "total": 543.32 },
+      { "type": "Digital", "total": 7.50 },
+      { "type": "GiftCard", "total": 25.00 }
+    ]
+  }

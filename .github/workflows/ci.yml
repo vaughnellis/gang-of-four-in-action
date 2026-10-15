@@ -31,3 +31,27 @@ jobs:
 
       - name: Test
         run: dotnet test GangOfFour.slnx --no-build -c Release
+
+      - name: Verify pattern diffs
+        shell: pwsh
+        run: |
+          $categories = Get-ChildItem -LiteralPath patterns -Directory
+          foreach ($categoryDirectory in $categories) {
+            $patternDirectories = Get-ChildItem -LiteralPath $categoryDirectory.FullName -Directory
+            foreach ($patternDirectory in $patternDirectories) {
+              $solution = Get-ChildItem -LiteralPath $patternDirectory.FullName -Filter '*.slnx' -File | Select-Object -First 1
+              if ($null -eq $solution) {
+                continue
+              }
+
+              & ./tools/diff-baseline.ps1 -Category $categoryDirectory.Name -Name $patternDirectory.Name
+              if ($LASTEXITCODE -ne 0) {
+                exit $LASTEXITCODE
+              }
+            }
+          }
+
+          git diff --exit-code -- patterns
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }

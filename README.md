@@ -8,7 +8,7 @@ A companion blog explains each pattern using its folder in this repository.
 
 ## Status
 
-The repository is being built in stages. This commit holds the skeleton only: build settings, folder layout, docs stubs and CI. The baseline and the pattern folders arrive in later tasks, so the folder links in the pattern index below do not resolve yet.
+The baseline, approved trading-day transcript and copy/diff tooling are complete. Pattern solutions are added one at a time by their tasks; the index below tracks all 23.
 
 ## How the repository is organised
 

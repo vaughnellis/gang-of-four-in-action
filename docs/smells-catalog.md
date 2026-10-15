@@ -1,6 +1,29 @@
 # Smells catalog
 
-The baseline task fills this catalog with the 23 smells planted in CornerStore, one row per smell.
+Each row identifies a planted baseline smell, why its current shape hurts, and the trading-day steps that exercise it.
 
-| Smell | Pattern | Location | What is wrong |
-| --- | --- | --- | --- |
+| Smell | Pattern | Location | What is wrong | Scenario steps |
+| --- | --- | --- | --- | --- |
+| S01 | Abstract Factory | `baseline/src/CornerStore/Pricing/TaxCalculator.cs`, `ShippingCalculator.cs`, `MoneyFormatter.cs` | Region branches are scattered across tax, shipping and currency formatting. Nothing keeps the selected regional rules together. | 35, 40, 43, 60, 66, 70 |
+| S02 | Builder | `baseline/src/CornerStore/Orders/Order.cs`, `Invoice.cs`, `OrderService.cs` | Order and invoice creation pass eleven positional arguments, including null optional values. Call sites are hard to read and easy to misorder. | 60, 66, 70 |
+| S03 | Factory Method | `baseline/src/CornerStore/StoreConsole.cs`, `Checkout/IPaymentProcessor.cs`, `CardProcessor.cs`, `PayPalProcessor.cs`, `AfterpayProcessor.cs` | Checkout switches on a payment string and constructs a processor inline. Adding a payment type changes the checkout flow. | 60, 66, 70 |
+| S04 | Prototype | `baseline/src/CornerStore/Catalog/Catalog.cs` | Variant creation copies each product field by hand. A new product field can be forgotten when the copy logic is updated. | 2, 3 |
+| S05 | Singleton | `baseline/src/CornerStore/Config.cs`, `Log.cs`, `ScenarioRunner.cs`, `StoreConsole.cs` | Static classes expose mutable global configuration and logging state. Any caller can change values for every operation. | All steps; `config.set` at 55 and 57 |
+| S06 | Adapter | `baseline/src/CornerStore/StoreConsole.cs`, `Checkout/ShipFastClient.cs` | Checkout builds courier XML, converts money to cents and parses a mismatched response shape. The console depends directly on the vendor API. | 60, 66, 70 |
+| S07 | Bridge | `baseline/src/CornerStore/Notifications/OrderConfirmedEmail.cs`, `OrderConfirmedSms.cs`, `OrderShippedEmail.cs`, `OrderShippedSms.cs` | Message wording and delivery channel are combined in four separate classes. Each new message-channel combination adds another class. | 60, 66, 67, 70, 72 |
+| S08 | Composite | `baseline/src/CornerStore/Catalog/Catalog.cs`, `Cart/CartService.cs` | Catalog and cart code branch on whether an item is a bundle. Bundles cannot nest and take separate pricing and expansion paths. | 5-8, 14, 24 |
+| S09 | Decorator | `baseline/src/CornerStore/Cart/Cart.cs`, `Pricing/PricingService.cs`, `StoreConsole.cs` | Add-ons are boolean flags checked through an if-chain. Each add-on requires changes to cart state and pricing logic. | 32-34, 42 |
+| S10 | Facade | `baseline/src/CornerStore/StoreConsole.cs` | The console coordinates validation, pricing, payment, inventory, courier booking, order creation and notification in one fixed sequence. | 52, 54, 56, 59-60, 66, 70 |
+| S11 | Flyweight | `baseline/src/CornerStore/Catalog/Listing.cs`, `ListingImporter.cs` | Every imported listing owns copies of repeated brand, manufacturer and specification strings. A 100,000-item import duplicates shared data. | 9 |
+| S12 | Proxy | `baseline/src/CornerStore/Inventory/InventoryService.cs`, `Orders/BackOffice.cs` | Stock reads are uncached and repeatedly incur simulated lookup cost. Role checks are repeated at callers rather than guarding the service. | 47-50, 52 |
+| S13 | Chain of Responsibility | `baseline/src/CornerStore/Checkout/OrderValidator.cs` | One nested method handles stock, address, fraud and credit checks in a fixed sequence. Adding or reordering a rule expands the same method. | 52, 54, 56, 59 |
+| S14 | Command | `baseline/src/CornerStore/Orders/BackOffice.cs` | Stock changes, lookups, refunds and cancellations execute inline. There is no reusable action object, undo record or audit queue. | 47-50, 61, 69 |
+| S15 | Interpreter | `baseline/src/CornerStore/Pricing/PromoEngine.cs` | Promo rule strings are split and parsed with substring checks. The parser and evaluation rules are coupled to the current text format. | 28-30, 36-37 |
+| S16 | Iterator | `baseline/src/CornerStore/Catalog/Catalog.cs` | Tree printing, counting and SKU collection each contain a separate recursive walk. Callers repeat traversal mechanics. | 1, 4, 9 |
+| S17 | Mediator | `baseline/src/CornerStore/Widgets/ItemListWidget.cs`, `PromoBoxWidget.cs`, `ShippingSelectorWidget.cs`, `TotalsPanelWidget.cs` | Each cart widget stores peer references and refreshes other widgets directly. A change couples the widgets to one another's update order. | 13-19, 28-43, 45-46 |
+| S18 | Memento | `baseline/src/CornerStore/Cart/Cart.cs`, `StoreConsole.cs` | Cart fields are public so the caller can copy and restore every internal value for one-level undo. New cart state must be copied in multiple places. | 16, 19-20, 46 |
+| S19 | Observer | `baseline/src/CornerStore/Orders/OrderService.cs` | Order transitions directly call inventory, notifications, loyalty and analytics. Adding a side effect changes the order service. | 60-73 |
+| S20 | State | `baseline/src/CornerStore/Orders/Order.cs`, `OrderService.cs` | Transition methods compare a status string and encode legal moves with conditionals. State rules are repeated across methods. | 61-73 |
+| S21 | Strategy | `baseline/src/CornerStore/Pricing/PricingService.cs` | Shipping cost is selected by a switch on the method string. Adding a shipping method changes the pricing service. | 31, 39, 41 |
+| S22 | Template Method | `baseline/src/CornerStore/Reporting/CsvReportExporter.cs`, `JsonReportExporter.cs` | Both exporters repeat order loading, status filtering, aggregation and output structure. Shared workflow changes must be made twice. | 74-75 |
+| S23 | Visitor | `baseline/src/CornerStore/Pricing/TaxCalculator.cs`, `WeightCalculator.cs`, `Reporting/CsvReportExporter.cs`, `JsonReportExporter.cs` | Tax, weight and report logic each switch on concrete line-item types. Every new operation must repeat the type cases. | 35, 40, 43, 74-75 |

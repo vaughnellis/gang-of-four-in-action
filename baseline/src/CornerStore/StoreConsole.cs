@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text;
 using System.Text.Json;
+using System.Xml.Linq;
 
 namespace CornerStore;
 
@@ -12,8 +13,19 @@ internal class StoreConsole
     private readonly PromoEngine promos = new();
     private readonly PricingService pricing;
     private readonly ListingImporter importer = new();
+    private readonly InventoryService inventory = new();
+    private readonly EmailSender emailSender = new();
+    private readonly SmsSender smsSender = new();
+    private readonly LoyaltyService loyalty = new();
+    private readonly AnalyticsService analytics = new();
+    private readonly OrderService orderService;
+    private readonly BackOffice backOffice;
+    private readonly OrderValidator orderValidator;
+    private readonly ShipFastClient shipFastClient;
+    private readonly ReportService reports;
     private readonly Dictionary<string, Customer> customers = [];
     private readonly Dictionary<string, Cart> carts = [];
+    private readonly Dictionary<string, ItemListWidget> itemListWidgets = [];
     private readonly Dictionary<string, List<CartLine>> savedLines = [];
     private readonly Dictionary<string, string> savedPromo = [];
     private readonly Dictionary<string, string> savedShipping = [];
@@ -26,6 +38,19 @@ internal class StoreConsole
         this.clock = clock;
         cartService = new CartService(catalog);
         pricing = new PricingService(promos);
+        orderService = new OrderService(
+            Ids,
+            inventory,
+            new OrderConfirmedEmail(emailSender),
+            new OrderConfirmedSms(smsSender),
+            new OrderShippedEmail(emailSender),
+            new OrderShippedSms(smsSender),
+            loyalty,
+            analytics);
+        backOffice = new BackOffice(inventory, orderService);
+        orderValidator = new OrderValidator(inventory, new FraudScorer());
+        shipFastClient = new ShipFastClient(Ids);
+        reports = new ReportService(orderService);
     }
 
     public IdSequence Ids { get; } = new();
@@ -84,6 +109,33 @@ internal class StoreConsole
                 break;
             case "quote":
                 ShowQuote(step);
+                break;
+            case "order.ship":
+                OrderShip(step);
+                break;
+            case "order.deliver":
+                OrderDeliver(step);
+                break;
+            case "admin.stock.adjust":
+                AdminStockAdjust(step);
+                break;
+            case "admin.stock.lookup":
+                AdminStockLookup(step);
+                break;
+            case "admin.refund":
+                AdminRefund(step);
+                break;
+            case "admin.cancel":
+                AdminCancel(step);
+                break;
+            case "checkout":
+                Checkout(step);
+                break;
+            case "report.csv":
+                ReportCsv(step);
+                break;
+            case "report.json":
+                ReportJson(step);
                 break;
             default:
                 Log.Info("unknown op");
@@ -212,7 +264,18 @@ internal class StoreConsole
             Role = role == "" ? "customer" : role,
         };
         customers[id] = customer;
-        carts[id] = new Cart(id);
+        var cart = new Cart(id);
+        carts[id] = cart;
+
+        var itemListWidget = new ItemListWidget(cart, customer, cartService);
+        var promoBoxWidget = new PromoBoxWidget(cart, customer, cartService, promos);
+        var shippingSelectorWidget = new ShippingSelectorWidget(cart, pricing);
+        var totalsPanelWidget = new TotalsPanelWidget(cart, customer, pricing);
+        itemListWidget.Connect(promoBoxWidget, shippingSelectorWidget, totalsPanelWidget);
+        promoBoxWidget.Connect(itemListWidget, shippingSelectorWidget, totalsPanelWidget);
+        shippingSelectorWidget.Connect(itemListWidget, promoBoxWidget, totalsPanelWidget);
+        totalsPanelWidget.Connect(itemListWidget, promoBoxWidget, shippingSelectorWidget);
+        itemListWidgets[id] = itemListWidget;
         Log.Info("registered " + id + " " + customer.Name + " (" + customer.Region + ", " + customer.Channel + ")");
     }
 
@@ -226,6 +289,230 @@ internal class StoreConsole
         }
 
         return carts[id];
+    }
+
+    private Customer? FindCustomer(JsonElement step)
+    {
+        var id = Text(step, "customer");
+        if (!customers.TryGetValue(id, out var customer))
+        {
+            Log.Info("rejected: unknown customer " + id);
+            return null;
+        }
+
+        return customer;
+    }
+
+    private Order? FindOrder(JsonElement step)
+    {
+        var id = Text(step, "order");
+        var order = orderService.Find(id);
+        if (order is null)
+        {
+            Log.Info("rejected: unknown order " + id);
+        }
+
+        return order;
+    }
+
+    private void OrderShip(JsonElement step)
+    {
+        var order = FindOrder(step);
+        if (order is null)
+        {
+            return;
+        }
+
+        var error = orderService.Ship(order);
+        Log.Info(error is null ? "order " + order.Id + " shipped" : "rejected: " + error);
+    }
+
+    private void OrderDeliver(JsonElement step)
+    {
+        var order = FindOrder(step);
+        if (order is null)
+        {
+            return;
+        }
+
+        var error = orderService.Deliver(order);
+        Log.Info(error is null ? "order " + order.Id + " delivered" : "rejected: " + error);
+    }
+
+    private void AdminStockAdjust(JsonElement step)
+    {
+        var customer = FindCustomer(step);
+        if (customer is null)
+        {
+            return;
+        }
+
+        var sku = Text(step, "sku");
+        var amount = step.TryGetProperty("delta", out var value) && value.TryGetInt32(out var number) ? number : 0;
+        Log.Info(backOffice.AdjustStock(customer, sku, amount));
+    }
+
+    private void AdminStockLookup(JsonElement step)
+    {
+        var customer = FindCustomer(step);
+        if (customer is null)
+        {
+            return;
+        }
+
+        Log.Info(backOffice.LookupStock(customer, Text(step, "sku")));
+    }
+
+    private void AdminRefund(JsonElement step)
+    {
+        var customer = FindCustomer(step);
+        var order = FindOrder(step);
+        if (customer is null || order is null)
+        {
+            return;
+        }
+
+        Log.Info(backOffice.Refund(customer, order));
+    }
+
+    private void AdminCancel(JsonElement step)
+    {
+        var customer = FindCustomer(step);
+        var order = FindOrder(step);
+        if (customer is null || order is null)
+        {
+            return;
+        }
+
+        Log.Info(backOffice.Cancel(customer, order));
+    }
+
+    // SMELL S10: the console coordinates every checkout subsystem in a fixed order
+    private void Checkout(JsonElement step)
+    {
+        var cart = FindCart(step);
+        if (cart is null)
+        {
+            return;
+        }
+
+        if (cart.Lines.Count == 0)
+        {
+            Log.Info("checkout rejected: cart is empty");
+            return;
+        }
+
+        var customer = customers[cart.CustomerId];
+        var quote = pricing.BuildQuote(cart, customer);
+        var error = orderValidator.Validate(customer, cart, quote);
+        if (error is not null)
+        {
+            Log.Info("checkout rejected: " + error);
+            return;
+        }
+
+        var paymentType = Text(step, "payment");
+        if (!ChargePayment(paymentType, customer, quote.Total))
+        {
+            Log.Info("checkout rejected: unknown payment type " + paymentType);
+            return;
+        }
+
+        var order = orderService.Create(customer, cart, quote, paymentType);
+        var reservedLines = new List<CartLine>();
+        foreach (var line in order.Lines)
+        {
+            if (!inventory.ReserveStock(line.Product.Sku, line.Quantity))
+            {
+                foreach (var reservedLine in reservedLines)
+                {
+                    inventory.AdjustStock(reservedLine.Product.Sku, reservedLine.Quantity);
+                }
+
+                Log.Info("checkout rejected: stock changed for " + line.Product.Sku);
+                return;
+            }
+
+            reservedLines.Add(line);
+        }
+
+        order.StockReserved = true;
+        order.TrackingNumber = BookShipment(order);
+        var payError = orderService.Pay(order);
+        if (payError is not null)
+        {
+            foreach (var reservedLine in reservedLines)
+            {
+                inventory.AdjustStock(reservedLine.Product.Sku, reservedLine.Quantity);
+            }
+
+            order.StockReserved = false;
+            Log.Info("checkout rejected: " + payError);
+            return;
+        }
+
+        Log.Info("checkout placed " + order.Id);
+    }
+
+    // SMELL S03: payment processor construction is selected by a switch in checkout
+    private static bool ChargePayment(string paymentType, Customer customer, decimal amount)
+    {
+        IPaymentProcessor? processor = null;
+        switch (paymentType)
+        {
+            case "card":
+                processor = new CardProcessor();
+                break;
+            case "paypal":
+                processor = new PayPalProcessor();
+                break;
+            case "afterpay":
+                processor = new AfterpayProcessor();
+                break;
+        }
+
+        if (processor is null)
+        {
+            return false;
+        }
+
+        processor.Charge(customer, amount);
+        return true;
+    }
+
+    // SMELL S06: checkout calls the courier client with XML and parses its response directly
+    private string BookShipment(Order order)
+    {
+        var cents = Math.Round(order.Quote.Total * 100m, 0, MidpointRounding.AwayFromZero)
+            .ToString("0", CultureInfo.InvariantCulture);
+        var name = System.Security.SecurityElement.Escape(order.Customer.Name) ?? "";
+        var address = System.Security.SecurityElement.Escape(order.Customer.Address) ?? "";
+        var request = "<shipment><orderId>" + order.Id + "</orderId><recipient>" + name
+            + "</recipient><address>" + address + "</address><amountCents>" + cents + "</amountCents></shipment>";
+        var response = shipFastClient.CreateConsignmentFromXml(request);
+        return XDocument.Parse(response).Root?.Element("tracking")?.Value ?? "";
+    }
+
+    private void ReportCsv(JsonElement step)
+    {
+        var status = Text(step, "status");
+        status = status == "" ? "all" : status;
+        Log.Info("CSV report (" + status + ")");
+        foreach (var row in reports.ExportCsv(status).Split('\n', StringSplitOptions.RemoveEmptyEntries))
+        {
+            Log.Info(row);
+        }
+    }
+
+    private void ReportJson(JsonElement step)
+    {
+        var status = Text(step, "status");
+        status = status == "" ? "all" : status;
+        Log.Info("JSON report (" + status + ")");
+        foreach (var row in reports.ExportJson(status).Split('\n', StringSplitOptions.RemoveEmptyEntries))
+        {
+            Log.Info(row);
+        }
     }
 
     private void CartAdd(JsonElement step)
@@ -246,7 +533,8 @@ internal class StoreConsole
         var giftWrap = cart.GiftWrap;
         var insurance = cart.Insurance;
 
-        var error = cartService.Add(cart, sku, quantity);
+        var itemListWidget = itemListWidgets[cart.CustomerId];
+        var error = itemListWidget.Add(sku, quantity);
         if (error is not null)
         {
             Log.Info("rejected: " + error);
@@ -254,6 +542,7 @@ internal class StoreConsole
         }
 
         Remember(cart.CustomerId, lines, promo, shipping, giftWrap, insurance);
+        itemListWidget.RefreshAfterChange();
         Log.Info("added " + quantity.ToString(CultureInfo.InvariantCulture) + " x " + sku);
         Log.Info(Summary(cart));
     }
@@ -275,7 +564,8 @@ internal class StoreConsole
         var giftWrap = cart.GiftWrap;
         var insurance = cart.Insurance;
 
-        var error = cartService.Remove(cart, sku);
+        var itemListWidget = itemListWidgets[cart.CustomerId];
+        var error = itemListWidget.Remove(sku);
         if (error is not null)
         {
             Log.Info("rejected: " + error);
@@ -283,6 +573,7 @@ internal class StoreConsole
         }
 
         Remember(cart.CustomerId, lines, promo, shipping, giftWrap, insurance);
+        itemListWidget.RefreshAfterChange();
         Log.Info("removed " + sku);
         Log.Info(Summary(cart));
     }
@@ -313,6 +604,7 @@ internal class StoreConsole
         savedShipping.Remove(cart.CustomerId);
         savedGiftWrap.Remove(cart.CustomerId);
         savedInsurance.Remove(cart.CustomerId);
+        itemListWidgets[cart.CustomerId].RefreshAfterChange();
         Log.Info("undone");
         Log.Info(Summary(cart));
     }
@@ -325,15 +617,7 @@ internal class StoreConsole
             return;
         }
 
-        var region = customers[cart.CustomerId].Region;
-        foreach (var line in cart.Lines)
-        {
-            var origin = line.FromBundle == "" ? "" : " (from " + line.FromBundle + ")";
-            var amount = line.UnitPrice * line.Quantity;
-            Log.Info("- " + line.Product.Sku + " " + line.Product.Name + " x" + line.Quantity.ToString(CultureInfo.InvariantCulture)
-                + " @ " + MoneyFormatter.Format(line.UnitPrice, region) + " = " + MoneyFormatter.Format(amount, region) + origin);
-        }
-
+        itemListWidgets[cart.CustomerId].RefreshAfterChange();
         Log.Info(Summary(cart));
     }
 
@@ -363,6 +647,7 @@ internal class StoreConsole
             return;
         }
 
+        itemListWidgets[cart.CustomerId].TotalsPanel.RefreshAfterChange();
         Log.Info(name + (on ? " added" : " removed"));
     }
 
@@ -375,19 +660,21 @@ internal class StoreConsole
         }
 
         var code = Text(step, "code");
-        if (!promos.IsKnown(code))
+        var promoBoxWidget = itemListWidgets[cart.CustomerId].PromoBox;
+        if (!promoBoxWidget.IsKnown(code))
         {
             Log.Info("rejected: unknown promo " + code);
             return;
         }
 
-        if (!promos.Evaluate(code, cart, customers[cart.CustomerId], cartService.Subtotal(cart)))
+        if (!promoBoxWidget.Evaluate(code))
         {
             Log.Info("rejected: promo " + code + " does not apply to this cart");
             return;
         }
 
-        cart.PromoCode = code;
+        promoBoxWidget.Apply(code);
+        promoBoxWidget.RefreshAfterChange();
         Log.Info("promo " + code + " applied (" + promos.RuleOf(code) + ")");
     }
 
@@ -400,13 +687,15 @@ internal class StoreConsole
         }
 
         var method = Text(step, "method");
-        if (pricing.ShippingCost(method, 0m) is null)
+        var shippingSelectorWidget = itemListWidgets[cart.CustomerId].ShippingSelector;
+        if (!shippingSelectorWidget.CanSelect(method))
         {
             Log.Info("rejected: unknown shipping method " + method);
             return;
         }
 
-        cart.ShippingMethod = method;
+        shippingSelectorWidget.Select(method);
+        shippingSelectorWidget.RefreshAfterChange();
         Log.Info("shipping set to " + method);
     }
 
@@ -424,22 +713,7 @@ internal class StoreConsole
             return;
         }
 
-        var region = customers[cart.CustomerId].Region;
-        var quote = pricing.BuildQuote(cart, customers[cart.CustomerId]);
-        Log.Info("quote " + cart.CustomerId + " (" + region + ", " + cart.ShippingMethod + ", "
-            + quote.WeightKg.ToString("0.00", CultureInfo.InvariantCulture) + " kg)");
-        Log.Info("subtotal " + MoneyFormatter.Format(quote.Subtotal, region));
-        if (cart.PromoCode != "")
-        {
-            Log.Info(quote.Discount > 0m
-                ? "discount -" + MoneyFormatter.Format(quote.Discount, region) + " (" + cart.PromoCode + ")"
-                : "promo " + cart.PromoCode + " does not apply");
-        }
-
-        Log.Info("add-ons " + MoneyFormatter.Format(quote.AddOns, region));
-        Log.Info("shipping " + MoneyFormatter.Format(quote.Shipping, region));
-        Log.Info("tax " + MoneyFormatter.Format(quote.Tax, region));
-        Log.Info("total " + MoneyFormatter.Format(quote.Total, region));
+        itemListWidgets[cart.CustomerId].TotalsPanel.ShowQuote();
     }
 
     private string Summary(Cart cart)

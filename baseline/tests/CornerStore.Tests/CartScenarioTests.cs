@@ -35,6 +35,21 @@ public class CartScenarioTests : IDisposable
     }
 
     [Fact]
+    public void CartAdd_RefreshesWidgetsInTheirDirectCallOrder()
+    {
+        var transcript = RunSteps(Ava, TwoShoes);
+
+        var itemList = transcript.IndexOf("  - SHOE-RUN-42 Runner Pro x2 @ A$89.95 = A$179.90\n", StringComparison.Ordinal);
+        var promoBox = transcript.IndexOf("  promo none\n", StringComparison.Ordinal);
+        var shippingSelector = transcript.IndexOf("  shipping standard\n", StringComparison.Ordinal);
+        var totalsPanel = transcript.IndexOf("  totals A$206.09\n", StringComparison.Ordinal);
+
+        Assert.True(itemList >= 0 && itemList < promoBox);
+        Assert.True(promoBox < shippingSelector);
+        Assert.True(shippingSelector < totalsPanel);
+    }
+
+    [Fact]
     public void CartUndo_AfterAnAdd_RemovesTheAddedLines()
     {
         var transcript = RunSteps(Ava, TwoShoes, RunKit, Undo);
