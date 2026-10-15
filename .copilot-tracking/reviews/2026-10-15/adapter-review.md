@@ -41,4 +41,4 @@ S06 is isolated behind `IShippingProvider` and `ShipFastAdapter`. The adapter pr
 
 ## Remaining work
 
-Commit the reviewed Adapter changes locally, update progress with both hashes, create `adapter-v1`, and continue with Decorator. Do not push.
+The reviewed Adapter changes are committed as `1348680`; the unchanged copy is `e3af51e`; local tag `adapter-v1` points to `1348680d168593693b0fadb82f3721b892d0d211`. The progress row is Done. Continue with Decorator. Do not push.

@@ -45,4 +45,4 @@ The root README already linked the Adapter folder and was left unchanged. `DIFF.
 
 ## Release summary
 
-Unchanged-copy commit: `e3af51e`. The refactor commit and local `adapter-v1` tag are recorded in run-all progress after review.
+Unchanged-copy commit: `e3af51e`. Refactor commit: `1348680`. Local tag: `adapter-v1` at `1348680d168593693b0fadb82f3721b892d0d211`. No push was made.

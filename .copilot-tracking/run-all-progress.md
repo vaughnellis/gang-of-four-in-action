@@ -8,7 +8,7 @@
 | strategy | Done | Conformant with justified divergence | da5088a, cc230d0 | strategy-v1 |
 | observer | Done | Conformant with justified divergence | 8470705, 5ec2583 | observer-v1 |
 | factory-method | Done | Conformant with justified divergence | ba5b4ff, c4b1706 | factory-method-v1 |
-| adapter | In progress | Pending | e3af51e | - |
+| adapter | Done | Conformant with justified divergence | e3af51e, 1348680 | adapter-v1 |
 | decorator | Not started | Pending | - | - |
 | state | Not started | Pending | - | - |
 | builder | Not started | Pending | - | - |
