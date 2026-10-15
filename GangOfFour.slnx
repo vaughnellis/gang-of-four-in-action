@@ -12,6 +12,8 @@
     <Project Path="patterns/creational/abstract-factory/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
     <Project Path="patterns/creational/singleton/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/creational/singleton/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+    <Project Path="patterns/creational/prototype/src/CornerStore/CornerStore.csproj" />
+    <Project Path="patterns/creational/prototype/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
   </Folder>
   <Folder Name="/patterns/structural/">
     <Project Path="patterns/structural/facade/src/CornerStore/CornerStore.csproj" />
