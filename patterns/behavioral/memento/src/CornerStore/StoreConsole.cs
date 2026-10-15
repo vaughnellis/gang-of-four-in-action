@@ -26,11 +26,7 @@ internal class StoreConsole
     private readonly Dictionary<string, Customer> customers = [];
     private readonly Dictionary<string, Cart> carts = [];
     private readonly Dictionary<string, ItemListWidget> itemListWidgets = [];
-    private readonly Dictionary<string, List<CartLine>> savedLines = [];
-    private readonly Dictionary<string, string> savedPromo = [];
-    private readonly Dictionary<string, string> savedShipping = [];
-    private readonly Dictionary<string, bool> savedGiftWrap = [];
-    private readonly Dictionary<string, bool> savedInsurance = [];
+    private readonly Dictionary<string, CartMemento> savedMementos = [];
     private List<Listing> listings = [];
 
     public StoreConsole(ScenarioClock clock)
@@ -526,12 +522,7 @@ internal class StoreConsole
         var sku = Text(step, "sku");
         var quantity = step.TryGetProperty("qty", out var value) && value.TryGetInt32(out var number) ? number : 1;
 
-        // SMELL S18: the caller copies the cart's public internals out before the change
-        var lines = CopyLines(cart.Lines);
-        var promo = cart.PromoCode;
-        var shipping = cart.ShippingMethod;
-        var giftWrap = cart.GiftWrap;
-        var insurance = cart.Insurance;
+        var memento = cart.CreateMemento();
 
         var itemListWidget = itemListWidgets[cart.CustomerId];
         var error = itemListWidget.Add(sku, quantity);
@@ -541,7 +532,7 @@ internal class StoreConsole
             return;
         }
 
-        Remember(cart.CustomerId, lines, promo, shipping, giftWrap, insurance);
+        savedMementos[cart.CustomerId] = memento;
         itemListWidget.RefreshAfterChange();
         Log.Info("added " + quantity.ToString(CultureInfo.InvariantCulture) + " x " + sku);
         Log.Info(Summary(cart));
@@ -557,12 +548,7 @@ internal class StoreConsole
 
         var sku = Text(step, "sku");
 
-        // SMELL S18: the caller copies the cart's public internals out before the change
-        var lines = CopyLines(cart.Lines);
-        var promo = cart.PromoCode;
-        var shipping = cart.ShippingMethod;
-        var giftWrap = cart.GiftWrap;
-        var insurance = cart.Insurance;
+        var memento = cart.CreateMemento();
 
         var itemListWidget = itemListWidgets[cart.CustomerId];
         var error = itemListWidget.Remove(sku);
@@ -572,7 +558,7 @@ internal class StoreConsole
             return;
         }
 
-        Remember(cart.CustomerId, lines, promo, shipping, giftWrap, insurance);
+        savedMementos[cart.CustomerId] = memento;
         itemListWidget.RefreshAfterChange();
         Log.Info("removed " + sku);
         Log.Info(Summary(cart));
@@ -586,24 +572,14 @@ internal class StoreConsole
             return;
         }
 
-        if (!savedLines.TryGetValue(cart.CustomerId, out var lines))
+        if (!savedMementos.TryGetValue(cart.CustomerId, out var memento))
         {
             Log.Info("nothing to undo");
             return;
         }
 
-        // SMELL S18: the caller writes the saved internals straight back into the cart
-        cart.Lines = lines;
-        cart.PromoCode = savedPromo[cart.CustomerId];
-        cart.ShippingMethod = savedShipping[cart.CustomerId];
-        cart.GiftWrap = savedGiftWrap[cart.CustomerId];
-        cart.Insurance = savedInsurance[cart.CustomerId];
-
-        savedLines.Remove(cart.CustomerId);
-        savedPromo.Remove(cart.CustomerId);
-        savedShipping.Remove(cart.CustomerId);
-        savedGiftWrap.Remove(cart.CustomerId);
-        savedInsurance.Remove(cart.CustomerId);
+        cart.Restore(memento);
+        savedMementos.Remove(cart.CustomerId);
         itemListWidgets[cart.CustomerId].RefreshAfterChange();
         Log.Info("undone");
         Log.Info(Summary(cart));
@@ -720,33 +696,6 @@ internal class StoreConsole
     {
         return "cart " + cart.CustomerId + " lines=" + cart.Lines.Count.ToString(CultureInfo.InvariantCulture)
             + " subtotal=" + MoneyFormatter.Format(cartService.Subtotal(cart), customers[cart.CustomerId].Region);
-    }
-
-    // SMELL S18: the caller has to know every field of a cart line to copy it
-    private static List<CartLine> CopyLines(List<CartLine> lines)
-    {
-        var copy = new List<CartLine>();
-        foreach (var line in lines)
-        {
-            copy.Add(new CartLine
-            {
-                Product = line.Product,
-                Quantity = line.Quantity,
-                UnitPrice = line.UnitPrice,
-                FromBundle = line.FromBundle,
-            });
-        }
-
-        return copy;
-    }
-
-    private void Remember(string customerId, List<CartLine> lines, string promo, string shipping, bool giftWrap, bool insurance)
-    {
-        savedLines[customerId] = lines;
-        savedPromo[customerId] = promo;
-        savedShipping[customerId] = shipping;
-        savedGiftWrap[customerId] = giftWrap;
-        savedInsurance[customerId] = insurance;
     }
 
     private void SetConfig(JsonElement step)
