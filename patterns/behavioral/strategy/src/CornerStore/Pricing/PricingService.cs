@@ -1,7 +1,23 @@
 namespace CornerStore;
 
-internal class PricingService(PromoEngine promos)
+internal class PricingService
 {
+    private readonly PromoEngine promos;
+    private readonly IReadOnlyDictionary<string, IShippingCostStrategy> shippingStrategies;
+
+    public PricingService(
+        PromoEngine promos,
+        IReadOnlyDictionary<string, IShippingCostStrategy>? shippingStrategies = null)
+    {
+        this.promos = promos;
+        this.shippingStrategies = shippingStrategies ?? new Dictionary<string, IShippingCostStrategy>(StringComparer.Ordinal)
+        {
+            ["standard"] = new StandardShippingCostStrategy(),
+            ["express"] = new ExpressShippingCostStrategy(),
+            ["pickup"] = new PickupShippingCostStrategy(),
+        };
+    }
+
     public Quote BuildQuote(Cart cart, Customer customer)
     {
         var subtotal = 0m;
@@ -57,18 +73,9 @@ internal class PricingService(PromoEngine promos)
 
     public decimal? ShippingCost(string method, decimal weightKg)
     {
-        // SMELL S21: the shipping cost is picked with a switch on the method string
-        switch (method)
-        {
-            case "standard":
-                return Math.Round(5.00m + 2.00m * weightKg, 2, MidpointRounding.AwayFromZero);
-            case "express":
-                return Math.Round(12.00m + 4.00m * weightKg, 2, MidpointRounding.AwayFromZero);
-            case "pickup":
-                return 0m;
-            default:
-                return null;
-        }
+        return shippingStrategies.TryGetValue(method, out var strategy)
+            ? strategy.Calculate(weightKg)
+            : null;
     }
 
     private static decimal AddOnCost(Cart cart, decimal discountedSubtotal)

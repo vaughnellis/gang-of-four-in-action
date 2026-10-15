@@ -31,10 +31,10 @@ Create the {{Pattern Name}} solution: a copy of the baseline in which smell {{Sx
 - **FR-001** Run `tools/new-pattern.ps1 -Category {{category}} -Name {{pattern-folder}}`. Confirm the copy builds and the golden master passes before changing anything.
 - **FR-002** Refactor smell {{Sxx}} using {{Pattern Name}} as described above.
 - **FR-003** Remove the `SMELL {{Sxx}}` marker(s). Leave every other `SMELL` marker in place.
-- **FR-004** Add `{{PatternName}}Tests.cs` covering the pattern itself: {{2 to 4 behaviours the tests must prove}}.
+- **FR-004** Add `{{PatternName}}Tests.cs` covering the pattern itself: {{2 to 4 behaviours the tests must prove}}. Use test visibility for internal participants when needed; do not widen the production API only for tests.
 - **FR-005** Fill `README.md` using the template in section 8 of the project brief, including a Mermaid class diagram of the refactored seam and a **Files changed** list.
-- **FR-006** Run `tools/diff-baseline.ps1 -Category {{category}} -Name {{pattern-folder}}` and commit the resulting `DIFF.md`.
-- **FR-007** Set this pattern's status to Done in `docs/pattern-map.md` and link its folder from the root `README.md` pattern index.
+- **FR-006** Run `tools/diff-baseline.ps1 -Category {{category}} -Name {{pattern-folder}}` and commit the resulting `DIFF.md`. If the generator fails, record the error and any non-invasive workaround in the change record; do not edit baseline tooling from a pattern task.
+- **FR-007** Set this pattern's status to Done in `docs/pattern-map.md` and link its folder from the root `README.md` pattern index. Check whether the link already exists before editing the index.
 {{- FR-008 Pattern-specific extra, if any. For example, a benchmark (Flyweight) or undo tests (Command).}}
 
 ## Acceptance criteria
