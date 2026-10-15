@@ -16,7 +16,7 @@ Each of the 23 patterns is paired with one smell in the CornerStore baseline. Fi
 
 | Smell | Pattern | Folder | Baseline smell | Refactor target | Fit | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| S06 | Adapter | `adapter` | Checkout calls the `ShipFastClient` SDK directly: XML strings, prices in cents, mismatched method names | `IShippingProvider` with a `ShipFastAdapter` | Natural | Not started |
+| S06 | Adapter | `adapter` | Checkout calls the `ShipFastClient` SDK directly: XML strings, prices in cents, mismatched method names | `IShippingProvider` with a `ShipFastAdapter` | Natural | Done |
 | S07 | Bridge | `bridge` | Class explosion: `OrderConfirmedEmail`, `OrderConfirmedSms`, `OrderShippedEmail`, `OrderShippedSms` | Message abstraction bridged to an `IChannel` implementation | Natural | Not started |
 | S08 | Composite | `composite` | Bundles priced through a separate path with `is Bundle` checks; bundles cannot nest | `ICatalogItem` shared by `Product` and `Bundle` | Natural | Not started |
 | S09 | Decorator | `decorator` | Add-ons as boolean flags and an if-chain in the price calculation | `GiftWrap` and `Insurance` decorators around a base price component | Natural | Not started |

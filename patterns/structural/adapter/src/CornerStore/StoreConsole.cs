@@ -1,7 +1,6 @@
 using System.Globalization;
 using System.Text;
 using System.Text.Json;
-using System.Xml.Linq;
 
 namespace CornerStore;
 
@@ -21,7 +20,7 @@ internal class StoreConsole
     private readonly OrderService orderService;
     private readonly BackOffice backOffice;
     private readonly OrderValidator orderValidator;
-    private readonly ShipFastClient shipFastClient;
+    private readonly IShippingProvider shippingProvider;
     private readonly ReportService reports;
     private readonly Dictionary<string, Customer> customers = [];
     private readonly Dictionary<string, Cart> carts = [];
@@ -49,7 +48,7 @@ internal class StoreConsole
             analytics);
         backOffice = new BackOffice(inventory, orderService);
         orderValidator = new OrderValidator(inventory, new FraudScorer());
-        shipFastClient = new ShipFastClient(Ids);
+        shippingProvider = new ShipFastAdapter(new ShipFastClient(Ids));
         reports = new ReportService(orderService);
     }
 
@@ -437,7 +436,7 @@ internal class StoreConsole
         }
 
         order.StockReserved = true;
-        order.TrackingNumber = BookShipment(order);
+        order.TrackingNumber = shippingProvider.BookShipment(order);
         var payError = orderService.Pay(order);
         if (payError is not null)
         {
@@ -478,19 +477,6 @@ internal class StoreConsole
 
         processor.Charge(customer, amount);
         return true;
-    }
-
-    // SMELL S06: checkout calls the courier client with XML and parses its response directly
-    private string BookShipment(Order order)
-    {
-        var cents = Math.Round(order.Quote.Total * 100m, 0, MidpointRounding.AwayFromZero)
-            .ToString("0", CultureInfo.InvariantCulture);
-        var name = System.Security.SecurityElement.Escape(order.Customer.Name) ?? "";
-        var address = System.Security.SecurityElement.Escape(order.Customer.Address) ?? "";
-        var request = "<shipment><orderId>" + order.Id + "</orderId><recipient>" + name
-            + "</recipient><address>" + address + "</address><amountCents>" + cents + "</amountCents></shipment>";
-        var response = shipFastClient.CreateConsignmentFromXml(request);
-        return XDocument.Parse(response).Root?.Element("tracking")?.Value ?? "";
     }
 
     private void ReportCsv(JsonElement step)
