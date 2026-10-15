@@ -18,7 +18,7 @@
 | composite | Done | Conformant with justified divergence | e840c73, 6e0bdd3 | composite-v1 |
 | iterator | Done | Conformant | 102e099, cd57c52 | iterator-v1 |
 | proxy | Done | Conformant with justified divergence | 33063ce, 7eb18eb | proxy-v1 |
-| abstract-factory | Not started | Pending | - | - |
+| abstract-factory | In progress | Pending | ff3f207 | - |
 | bridge | Not started | Pending | - | - |
 | mediator | Not started | Pending | - | - |
 | memento | Not started | Pending | - | - |
