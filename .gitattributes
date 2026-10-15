@@ -1,0 +1,30 @@
+# Normalise all text files to LF so the golden-master transcript is byte-identical on every platform.
+* text=auto eol=lf
+
+*.txt text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.cs text eol=lf
+*.slnx text eol=lf
+*.props text eol=lf
+*.csproj text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.ps1 text eol=lf
+*.sh text eol=lf
+
+# Verify output is generated, not reviewed.
+*.received.* -diff
+
+# Binary files.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.dll binary
+*.exe binary
+*.pdb binary
+*.nupkg binary
