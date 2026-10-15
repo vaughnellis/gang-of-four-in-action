@@ -15,7 +15,7 @@
 | template-method | Done | Conformant with justified divergence | c812e07, ca45636 | template-method-v1 |
 | chain-of-responsibility | Done | Conformant | b74c7b0, 07f1eef | chain-of-responsibility-v1 |
 | command | Done | Conformant with justified divergence | 72156d3, 3783fb1 | command-v1 |
-| composite | Not started | Pending | - | - |
+| composite | In progress | Pending | - | - |
 | iterator | Not started | Pending | - | - |
 | proxy | Not started | Pending | - | - |
 | abstract-factory | Not started | Pending | - | - |
