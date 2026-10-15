@@ -2,7 +2,7 @@ using System.Globalization;
 
 namespace CornerStore;
 
-internal class OrderValidator(InventoryService inventory, FraudScorer fraudScorer)
+internal class OrderValidator(IInventoryService inventory, FraudScorer fraudScorer)
 {
     public string? Validate(Customer customer, Cart cart, Quote quote)
     {

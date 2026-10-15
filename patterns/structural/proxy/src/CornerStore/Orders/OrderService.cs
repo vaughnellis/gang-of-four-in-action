@@ -2,7 +2,8 @@ namespace CornerStore;
 
 internal class OrderService(
     IdSequence ids,
-    InventoryService inventory,
+    IInventoryService inventory,
+    IStockRestorer stockRestorer,
     OrderConfirmedEmail confirmedEmail,
     OrderConfirmedSms confirmedSms,
     OrderShippedEmail shippedEmail,
@@ -165,7 +166,7 @@ internal class OrderService(
     {
         foreach (var line in order.Lines)
         {
-            inventory.AdjustStock(line.Product.Sku, line.Quantity);
+            stockRestorer.RestoreStock(line.Product.Sku, line.Quantity);
         }
 
         order.StockReserved = false;

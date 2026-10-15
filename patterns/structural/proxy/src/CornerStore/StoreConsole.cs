@@ -13,7 +13,9 @@ internal class StoreConsole
     private readonly PromoEngine promos = new();
     private readonly PricingService pricing;
     private readonly ListingImporter importer = new();
-    private readonly InventoryService inventory = new();
+    private readonly IInventoryService inventory;
+    private readonly IBackOfficeInventory backOfficeInventory;
+    private readonly IStockRestorer stockRestorer;
     private readonly EmailSender emailSender = new();
     private readonly SmsSender smsSender = new();
     private readonly LoyaltyService loyalty = new();
@@ -36,18 +38,25 @@ internal class StoreConsole
     public StoreConsole(ScenarioClock clock)
     {
         this.clock = clock;
+        var inventoryService = new InventoryService();
+        var cachingProxy = new CachingInventoryProxy(inventoryService, inventoryService, inventoryService);
+        var protectionProxy = new ProtectionInventoryProxy(cachingProxy, cachingProxy, cachingProxy);
+        inventory = protectionProxy;
+        backOfficeInventory = protectionProxy;
+        stockRestorer = protectionProxy;
         cartService = new CartService(catalog);
         pricing = new PricingService(promos);
         orderService = new OrderService(
             Ids,
             inventory,
+            stockRestorer,
             new OrderConfirmedEmail(emailSender),
             new OrderConfirmedSms(smsSender),
             new OrderShippedEmail(emailSender),
             new OrderShippedSms(smsSender),
             loyalty,
             analytics);
-        backOffice = new BackOffice(inventory, orderService);
+        backOffice = new BackOffice(backOfficeInventory, orderService);
         orderValidator = new OrderValidator(inventory, new FraudScorer());
         shipFastClient = new ShipFastClient(Ids);
         reports = new ReportService(orderService);
@@ -426,7 +435,7 @@ internal class StoreConsole
             {
                 foreach (var reservedLine in reservedLines)
                 {
-                    inventory.AdjustStock(reservedLine.Product.Sku, reservedLine.Quantity);
+                    stockRestorer.RestoreStock(reservedLine.Product.Sku, reservedLine.Quantity);
                 }
 
                 Log.Info("checkout rejected: stock changed for " + line.Product.Sku);
@@ -443,7 +452,7 @@ internal class StoreConsole
         {
             foreach (var reservedLine in reservedLines)
             {
-                inventory.AdjustStock(reservedLine.Product.Sku, reservedLine.Quantity);
+                stockRestorer.RestoreStock(reservedLine.Product.Sku, reservedLine.Quantity);
             }
 
             order.StockReserved = false;
