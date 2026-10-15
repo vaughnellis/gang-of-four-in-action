@@ -13,7 +13,7 @@
 | state | Done | Conformant with justified divergence | 419ff5d, df825b1 | state-v1 |
 | builder | Done | Conformant with justified divergence | 2fcb8e5, 16bfda1 | builder-v1 |
 | template-method | Done | Conformant with justified divergence | c812e07, ca45636 | template-method-v1 |
-| chain-of-responsibility | Not started | Pending | - | - |
+| chain-of-responsibility | In progress | Pending | b74c7b0 | - |
 | command | Not started | Pending | - | - |
 | composite | Not started | Pending | - | - |
 | iterator | Not started | Pending | - | - |
