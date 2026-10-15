@@ -28,10 +28,10 @@ public class CartScenarioTests : IDisposable
     {
         var transcript = RunSteps(Ava, TwoShoes, RunKit, """{ "op": "cart.show", "customer": "cu-1" }""");
 
-        Assert.Contains("  - SHOE-RUN-42 Runner Pro x2 @ 89.95 = 179.90\n", transcript);
-        Assert.Contains("  - SHOE-RUN-42 Runner Pro x1 @ 80.96 = 80.96 (from BUN-RUN-KIT)\n", transcript);
-        Assert.Contains("  - SOCK-WOOL Wool Socks x1 @ 10.80 = 10.80 (from BUN-RUN-KIT)\n", transcript);
-        Assert.EndsWith("  cart cu-1 lines=3 subtotal=271.66\n", transcript);
+        Assert.Contains("  - SHOE-RUN-42 Runner Pro x2 @ A$89.95 = A$179.90\n", transcript);
+        Assert.Contains("  - SHOE-RUN-42 Runner Pro x1 @ A$80.96 = A$80.96 (from BUN-RUN-KIT)\n", transcript);
+        Assert.Contains("  - SOCK-WOOL Wool Socks x1 @ A$10.80 = A$10.80 (from BUN-RUN-KIT)\n", transcript);
+        Assert.EndsWith("  cart cu-1 lines=3 subtotal=A$271.66\n", transcript);
     }
 
     [Fact]
@@ -39,7 +39,7 @@ public class CartScenarioTests : IDisposable
     {
         var transcript = RunSteps(Ava, TwoShoes, RunKit, Undo);
 
-        Assert.EndsWith("  undone\n  cart cu-1 lines=1 subtotal=179.90\n", transcript);
+        Assert.EndsWith("  undone\n  cart cu-1 lines=1 subtotal=A$179.90\n", transcript);
     }
 
     [Fact]
@@ -47,8 +47,8 @@ public class CartScenarioTests : IDisposable
     {
         var transcript = RunSteps(Ava, TwoShoes, """{ "op": "cart.remove", "customer": "cu-1", "sku": "SHOE-RUN-42" }""", Undo);
 
-        Assert.Contains("  removed SHOE-RUN-42\n  cart cu-1 lines=0 subtotal=0.00\n", transcript);
-        Assert.EndsWith("  undone\n  cart cu-1 lines=1 subtotal=179.90\n", transcript);
+        Assert.Contains("  removed SHOE-RUN-42\n  cart cu-1 lines=0 subtotal=A$0.00\n", transcript);
+        Assert.EndsWith("  undone\n  cart cu-1 lines=1 subtotal=A$179.90\n", transcript);
     }
 
     [Fact]
@@ -69,7 +69,7 @@ public class CartScenarioTests : IDisposable
             Undo);
 
         Assert.Contains("  rejected: unknown sku NOPE-1\n", transcript);
-        Assert.EndsWith("  undone\n  cart cu-1 lines=0 subtotal=0.00\n", transcript);
+        Assert.EndsWith("  undone\n  cart cu-1 lines=0 subtotal=A$0.00\n", transcript);
     }
 
     [Fact]
@@ -81,7 +81,7 @@ public class CartScenarioTests : IDisposable
             """{ "op": "cart.add", "customer": "cu-1", "sku": "SHOE-RUN-42" }""",
             """{ "op": "cart.remove", "customer": "cu-1", "sku": "SHOE-RUN-42" }""");
 
-        Assert.EndsWith("  removed SHOE-RUN-42\n  cart cu-1 lines=2 subtotal=91.76\n", transcript);
+        Assert.EndsWith("  removed SHOE-RUN-42\n  cart cu-1 lines=2 subtotal=A$91.76\n", transcript);
     }
 
     [Fact]

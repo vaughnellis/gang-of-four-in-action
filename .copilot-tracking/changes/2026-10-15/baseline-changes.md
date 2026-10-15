@@ -8,7 +8,7 @@ Date started: 2026-10-15
 
 ## Summary
 
-P03 of 11 complete (P01 and P02 committed by the human): customers, cart, bundle expansion and one-level undo (S18, plus a third S08 site) with the matching scenario steps. Nothing pushed or tagged by the agent.
+P04 of 11 complete (P01 to P03 committed by the human): regions, tax, weight, shipping, add-ons and promo rules (S01, S09, S15, S21, S23 tax and weight sites) with the matching scenario steps. Nothing pushed or tagged by the agent.
 
 ## Phase P01: App shell and determinism
 
@@ -164,6 +164,68 @@ SMELL markers planted in P03
 | S18 | `baseline/src/CornerStore/StoreConsole.cs` line 283 | `CartUndo` | Caller writes the saved internals straight back into the cart |
 | S18 | `baseline/src/CornerStore/StoreConsole.cs` line 320 | `CopyLines` | Caller must know every field of a cart line |
 | S08 | `baseline/src/CornerStore/Cart/CartService.cs` line 14 | `Add` | `is Bundle` check expands a bundle into discounted lines |
+
+## Phase P04: Regions, pricing, promos, shipping cost, tax and weight
+
+Added
+
+* `baseline/src/CornerStore/Pricing/TaxCalculator.cs` (`RateFor` by region, S01; `LineTax` by line type, S23)
+* `baseline/src/CornerStore/Pricing/ShippingCalculator.cs` (`RegionSurcharge`, S01)
+* `baseline/src/CornerStore/Pricing/MoneyFormatter.cs` (`Format`, S01)
+* `baseline/src/CornerStore/Pricing/WeightCalculator.cs` (`WeightOf`, S23)
+* `baseline/src/CornerStore/Pricing/Quote.cs` (subtotal, discount, add-ons, shipping, tax, total, weight)
+* `baseline/src/CornerStore/Pricing/PricingService.cs` (`BuildQuote`, `ShippingCost` switch S21, `AddOnCost` if-chain S09)
+* `baseline/src/CornerStore/Pricing/PromoEngine.cs` (promo table, `Evaluate` parsing rule text by hand, S15)
+* `baseline/tests/CornerStore.Tests/PricingScenarioTests.cs` (16 test cases through `ScenarioRunner.Run`)
+
+Modified
+
+* `baseline/src/CornerStore/Cart/Cart.cs`: public `GiftWrap` and `Insurance` flags (S09)
+* `baseline/src/CornerStore/StoreConsole.cs`: ops `cart.addon`, `cart.promo`, `cart.shipping`, `quote`; cart and quote output now go through `MoneyFormatter` with the customer's region; the S18 copy-out, copy-back and `Remember` code carries the two add-on flags (new `savedGiftWrap` and `savedInsurance` dictionaries)
+* `baseline/tests/CornerStore.Tests/CartScenarioTests.cs`: expectations now show `A$` because Ava is an AU customer
+* `scenarios/trading-day.json`: 17 steps added (steps 28 to 44): promos (unknown, not applicable, applied), shipping (express, unknown, standard, pickup), add-ons (gift wrap, insurance, unknown), five quotes including an empty cart
+
+Removed
+
+* None
+
+Deviations and decisions (also DL-19)
+
+* Order of operations in `BuildQuote`: subtotal, promo discount, add-ons (2 percent insurance on the discounted subtotal, 4.50 gift wrap), shipping (method cost plus regional surcharge), tax on discounted line amounts per line type, total. The discount is spread over lines in proportion to line amount, and the last line takes the remainder.
+* Rates: AU tax 10 percent, NZ 15 percent; NZ surcharge 3.00; standard 5.00 + 2.00 per kg, express 12.00 + 4.00 per kg, pickup 0. Gift cards are untaxed and weightless, digital items taxed and weightless, physical items taxed and weigh `WeightKg`.
+* Promos: `SHOES10` is `SPEND>100 AND CATEGORY=Shoes` for 10 percent; `BIGSPEND` is `SPEND>250` for 20 off; `NZFRIEND` is `REGION=NZ AND QTY>2` for 5 percent. `CATEGORY` matches the product's own category, `QTY` is the total quantity over all lines. A code is stored on the cart only if its rule holds when `cart.promo` runs; `quote` re-evaluates and prints `promo X does not apply` if the cart changed since.
+* S09 has a third site, `StoreConsole.CartAddOn`, with its own marker (DL-19). S18 gets no new marker: the existing sites were extended.
+* Undo restores lines, promo, shipping and both add-on flags to their value from just before the last add or remove. `cart.promo`, `cart.shipping` and `cart.addon` are not undo points.
+* `Catalog.FormatPrice` stays for regionless catalog output; `MoneyFormatter` is used wherever a customer is known.
+* Independent recomputation (PA-3, early): quote totals for cu-1 (300.33) and cu-2 (136.17 standard, 129.19 pickup) were worked out by hand, line by line, before comparing with the transcript. Both match.
+
+Validation (CI flags, Release)
+
+* `dotnet restore GangOfFour.slnx`: up to date
+* `dotnet build GangOfFour.slnx --no-restore -c Release -warnaserror`: 0 warnings, 0 errors
+* `dotnet test GangOfFour.slnx --no-build -c Release`: 33 passed, 0 failed
+* Running the app on `scenarios/trading-day.json` twice: identical output
+* AC-006 search in `baseline/src`: 0 hits
+* Pattern-leak scan: `StringBuilder` in `StoreConsole.cs` (BCL type) and the word "state" in the S18 marker comment; no pattern applied
+* `baseline/src`: 28 files, 1,483 lines; `Pricing/` 7 files, `Cart/` 4, `Catalog/` 9 (ceilings 60 files, 2,800 lines, 9 per folder)
+* Files: LF, no BOM, ASCII only
+
+SMELL markers planted in P04
+
+| ID | File and line | Member | Shape |
+| --- | --- | --- | --- |
+| S01 | `baseline/src/CornerStore/Pricing/TaxCalculator.cs` line 7 | `RateFor` | `if (region == "AU") ... else if (region == "NZ")` for the tax rate |
+| S01 | `baseline/src/CornerStore/Pricing/ShippingCalculator.cs` line 7 | `RegionSurcharge` | Separate region branch for the surcharge |
+| S01 | `baseline/src/CornerStore/Pricing/MoneyFormatter.cs` line 11 | `Format` | Separate region branch for the currency symbol |
+| S09 | `baseline/src/CornerStore/Cart/Cart.cs` line 14 | `Cart` | `bool GiftWrap` and `bool Insurance` public flags |
+| S09 | `baseline/src/CornerStore/Pricing/PricingService.cs` line 76 | `AddOnCost` | `if (cart.GiftWrap)` and `if (cart.Insurance)` if-chain |
+| S09 | `baseline/src/CornerStore/StoreConsole.cs` line 351 | `CartAddOn` | Console names each flag to set it |
+| S15 | `baseline/src/CornerStore/Pricing/PromoEngine.cs` line 32 | `Evaluate` | Rule text split on `AND`, each term parsed with `IndexOf` and `Substring` |
+| S21 | `baseline/src/CornerStore/Pricing/PricingService.cs` line 60 | `ShippingCost` | `switch` on the method string, no region and no cart |
+| S23 | `baseline/src/CornerStore/Pricing/TaxCalculator.cs` line 22 | `LineTax` | `switch (product)` over physical, digital and gift card |
+| S23 | `baseline/src/CornerStore/Pricing/WeightCalculator.cs` line 7 | `WeightOf` | `switch (product)` over the same three types |
+
+Existing S18 sites extended (markers unchanged): `StoreConsole.cs` lines 242 (`CartAdd`), 271 (`CartRemove`), 304 (`CartUndo`), 451 (`CopyLines`). The caller now also copies and restores the two add-on flags.
 
 ## Follow-on and open items
 

@@ -30,6 +30,23 @@
     { "op": "cart.add", "customer": "cu-2", "sku": "BUN-GIFT" },
     { "op": "cart.add", "customer": "cu-2", "sku": "NOPE-1" },
     { "op": "cart.add", "customer": "cu-9", "sku": "MUG-ENAMEL" },
-    { "op": "cart.show", "customer": "cu-2" }
+    { "op": "cart.show", "customer": "cu-2" },
+    { "op": "cart.promo", "customer": "cu-1", "code": "NOPE10" },
+    { "op": "cart.promo", "customer": "cu-1", "code": "NZFRIEND" },
+    { "op": "cart.promo", "customer": "cu-1", "code": "SHOES10" },
+    { "op": "cart.shipping", "customer": "cu-1", "method": "express" },
+    { "op": "cart.addon", "customer": "cu-1", "addon": "giftwrap" },
+    { "op": "cart.addon", "customer": "cu-1", "addon": "insurance" },
+    { "op": "cart.addon", "customer": "cu-1", "addon": "sparkles" },
+    { "op": "quote", "customer": "cu-1" },
+    { "op": "cart.promo", "customer": "cu-2", "code": "BIGSPEND" },
+    { "op": "cart.promo", "customer": "cu-2", "code": "NZFRIEND" },
+    { "op": "cart.shipping", "customer": "cu-2", "method": "drone" },
+    { "op": "cart.shipping", "customer": "cu-2", "method": "standard" },
+    { "op": "quote", "customer": "cu-2" },
+    { "op": "cart.shipping", "customer": "cu-2", "method": "pickup" },
+    { "op": "cart.addon", "customer": "cu-2", "addon": "insurance" },
+    { "op": "quote", "customer": "cu-2" },
+    { "op": "quote", "customer": "cu-3" }
   ]
 }

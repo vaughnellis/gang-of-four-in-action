@@ -132,12 +132,12 @@ Every phase ends with the same closing step, written once here: run restore, bui
 
 ### Phase P04: Regions, pricing, promos, shipping cost, tax and weight (S01, S09, S15, S21, S23) <!-- parallelizable: false -->
 
-* [ ] P04-S1 `TaxCalculator`, `ShippingCalculator` and `MoneyFormatter` with scattered `region == "AU"` branches (S01); line-type tax switch (S23)
-* [ ] P04-S2 `WeightCalculator` with the line-type switch (S23)
-* [ ] P04-S3 `PricingService` and `Quote`: add-on flags and if-chain (S09), shipping cost `switch` on method (S21)
-* [ ] P04-S4 `PromoEngine` parsing rules with `Split` and `IndexOf` (S15)
-* [ ] P04-S5 Ops `cart.addon`, `cart.promo`, `cart.shipping`, `quote`; extend the scenario
-* [ ] P04-S6 Closing step. STOP
+* [x] P04-S1 `TaxCalculator`, `ShippingCalculator` and `MoneyFormatter` with scattered `region == "AU"` branches (S01); line-type tax switch (S23)
+* [x] P04-S2 `WeightCalculator` with the line-type switch (S23)
+* [x] P04-S3 `PricingService` and `Quote`: add-on flags and if-chain (S09), shipping cost `switch` on method (S21)
+* [x] P04-S4 `PromoEngine` parsing rules with `Split` and `IndexOf` (S15)
+* [x] P04-S5 Ops `cart.addon`, `cart.promo`, `cart.shipping`, `quote`; extend the scenario
+* [x] P04-S6 Closing step. STOP
 
 ### Phase P05: Cart widgets (S17) <!-- parallelizable: false -->
 

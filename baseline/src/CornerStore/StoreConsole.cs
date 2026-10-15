@@ -9,18 +9,23 @@ internal class StoreConsole
     private readonly ScenarioClock clock;
     private readonly Catalog catalog = new();
     private readonly CartService cartService;
+    private readonly PromoEngine promos = new();
+    private readonly PricingService pricing;
     private readonly ListingImporter importer = new();
     private readonly Dictionary<string, Customer> customers = [];
     private readonly Dictionary<string, Cart> carts = [];
     private readonly Dictionary<string, List<CartLine>> savedLines = [];
     private readonly Dictionary<string, string> savedPromo = [];
     private readonly Dictionary<string, string> savedShipping = [];
+    private readonly Dictionary<string, bool> savedGiftWrap = [];
+    private readonly Dictionary<string, bool> savedInsurance = [];
     private List<Listing> listings = [];
 
     public StoreConsole(ScenarioClock clock)
     {
         this.clock = clock;
         cartService = new CartService(catalog);
+        pricing = new PricingService(promos);
     }
 
     public IdSequence Ids { get; } = new();
@@ -67,6 +72,18 @@ internal class StoreConsole
                 break;
             case "cart.show":
                 CartShow(step);
+                break;
+            case "cart.addon":
+                CartAddOn(step);
+                break;
+            case "cart.promo":
+                CartPromo(step);
+                break;
+            case "cart.shipping":
+                CartShipping(step);
+                break;
+            case "quote":
+                ShowQuote(step);
                 break;
             default:
                 Log.Info("unknown op");
@@ -226,6 +243,8 @@ internal class StoreConsole
         var lines = CopyLines(cart.Lines);
         var promo = cart.PromoCode;
         var shipping = cart.ShippingMethod;
+        var giftWrap = cart.GiftWrap;
+        var insurance = cart.Insurance;
 
         var error = cartService.Add(cart, sku, quantity);
         if (error is not null)
@@ -234,7 +253,7 @@ internal class StoreConsole
             return;
         }
 
-        Remember(cart.CustomerId, lines, promo, shipping);
+        Remember(cart.CustomerId, lines, promo, shipping, giftWrap, insurance);
         Log.Info("added " + quantity.ToString(CultureInfo.InvariantCulture) + " x " + sku);
         Log.Info(Summary(cart));
     }
@@ -253,6 +272,8 @@ internal class StoreConsole
         var lines = CopyLines(cart.Lines);
         var promo = cart.PromoCode;
         var shipping = cart.ShippingMethod;
+        var giftWrap = cart.GiftWrap;
+        var insurance = cart.Insurance;
 
         var error = cartService.Remove(cart, sku);
         if (error is not null)
@@ -261,7 +282,7 @@ internal class StoreConsole
             return;
         }
 
-        Remember(cart.CustomerId, lines, promo, shipping);
+        Remember(cart.CustomerId, lines, promo, shipping, giftWrap, insurance);
         Log.Info("removed " + sku);
         Log.Info(Summary(cart));
     }
@@ -284,10 +305,14 @@ internal class StoreConsole
         cart.Lines = lines;
         cart.PromoCode = savedPromo[cart.CustomerId];
         cart.ShippingMethod = savedShipping[cart.CustomerId];
+        cart.GiftWrap = savedGiftWrap[cart.CustomerId];
+        cart.Insurance = savedInsurance[cart.CustomerId];
 
         savedLines.Remove(cart.CustomerId);
         savedPromo.Remove(cart.CustomerId);
         savedShipping.Remove(cart.CustomerId);
+        savedGiftWrap.Remove(cart.CustomerId);
+        savedInsurance.Remove(cart.CustomerId);
         Log.Info("undone");
         Log.Info(Summary(cart));
     }
@@ -300,21 +325,127 @@ internal class StoreConsole
             return;
         }
 
+        var region = customers[cart.CustomerId].Region;
         foreach (var line in cart.Lines)
         {
             var origin = line.FromBundle == "" ? "" : " (from " + line.FromBundle + ")";
             var amount = line.UnitPrice * line.Quantity;
             Log.Info("- " + line.Product.Sku + " " + line.Product.Name + " x" + line.Quantity.ToString(CultureInfo.InvariantCulture)
-                + " @ " + Catalog.FormatPrice(line.UnitPrice) + " = " + Catalog.FormatPrice(amount) + origin);
+                + " @ " + MoneyFormatter.Format(line.UnitPrice, region) + " = " + MoneyFormatter.Format(amount, region) + origin);
         }
 
         Log.Info(Summary(cart));
     }
 
+    private void CartAddOn(JsonElement step)
+    {
+        var cart = FindCart(step);
+        if (cart is null)
+        {
+            return;
+        }
+
+        var name = Text(step, "addon");
+        var on = !step.TryGetProperty("on", out var flag) || flag.ValueKind != JsonValueKind.False;
+
+        // SMELL S09: the console has to know each add-on flag by name to set it
+        if (name == "giftwrap")
+        {
+            cart.GiftWrap = on;
+        }
+        else if (name == "insurance")
+        {
+            cart.Insurance = on;
+        }
+        else
+        {
+            Log.Info("rejected: unknown add-on " + name);
+            return;
+        }
+
+        Log.Info(name + (on ? " added" : " removed"));
+    }
+
+    private void CartPromo(JsonElement step)
+    {
+        var cart = FindCart(step);
+        if (cart is null)
+        {
+            return;
+        }
+
+        var code = Text(step, "code");
+        if (!promos.IsKnown(code))
+        {
+            Log.Info("rejected: unknown promo " + code);
+            return;
+        }
+
+        if (!promos.Evaluate(code, cart, customers[cart.CustomerId], cartService.Subtotal(cart)))
+        {
+            Log.Info("rejected: promo " + code + " does not apply to this cart");
+            return;
+        }
+
+        cart.PromoCode = code;
+        Log.Info("promo " + code + " applied (" + promos.RuleOf(code) + ")");
+    }
+
+    private void CartShipping(JsonElement step)
+    {
+        var cart = FindCart(step);
+        if (cart is null)
+        {
+            return;
+        }
+
+        var method = Text(step, "method");
+        if (pricing.ShippingCost(method, 0m) is null)
+        {
+            Log.Info("rejected: unknown shipping method " + method);
+            return;
+        }
+
+        cart.ShippingMethod = method;
+        Log.Info("shipping set to " + method);
+    }
+
+    private void ShowQuote(JsonElement step)
+    {
+        var cart = FindCart(step);
+        if (cart is null)
+        {
+            return;
+        }
+
+        if (cart.Lines.Count == 0)
+        {
+            Log.Info("rejected: cart is empty");
+            return;
+        }
+
+        var region = customers[cart.CustomerId].Region;
+        var quote = pricing.BuildQuote(cart, customers[cart.CustomerId]);
+        Log.Info("quote " + cart.CustomerId + " (" + region + ", " + cart.ShippingMethod + ", "
+            + quote.WeightKg.ToString("0.00", CultureInfo.InvariantCulture) + " kg)");
+        Log.Info("subtotal " + MoneyFormatter.Format(quote.Subtotal, region));
+        if (cart.PromoCode != "")
+        {
+            Log.Info(quote.Discount > 0m
+                ? "discount -" + MoneyFormatter.Format(quote.Discount, region) + " (" + cart.PromoCode + ")"
+                : "promo " + cart.PromoCode + " does not apply");
+        }
+
+        Log.Info("add-ons " + MoneyFormatter.Format(quote.AddOns, region));
+        Log.Info("shipping " + MoneyFormatter.Format(quote.Shipping, region));
+        Log.Info("tax " + MoneyFormatter.Format(quote.Tax, region));
+        Log.Info("total " + MoneyFormatter.Format(quote.Total, region));
+    }
+
     private string Summary(Cart cart)
     {
         return "cart " + cart.CustomerId + " lines=" + cart.Lines.Count.ToString(CultureInfo.InvariantCulture)
-            + " subtotal=" + Catalog.FormatPrice(cartService.Subtotal(cart));
+            + " subtotal=" + MoneyFormatter.Format(cartService.Subtotal(cart), customers[cart.CustomerId].Region);
     }
 
     // SMELL S18: the caller has to know every field of a cart line to copy it
@@ -335,11 +466,13 @@ internal class StoreConsole
         return copy;
     }
 
-    private void Remember(string customerId, List<CartLine> lines, string promo, string shipping)
+    private void Remember(string customerId, List<CartLine> lines, string promo, string shipping, bool giftWrap, bool insurance)
     {
         savedLines[customerId] = lines;
         savedPromo[customerId] = promo;
         savedShipping[customerId] = shipping;
+        savedGiftWrap[customerId] = giftWrap;
+        savedInsurance[customerId] = insurance;
     }
 
     private void SetConfig(JsonElement step)
