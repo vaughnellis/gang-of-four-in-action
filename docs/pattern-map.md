@@ -38,4 +38,4 @@ Each of the 23 patterns is paired with one smell in the CornerStore baseline. Fi
 | S20 | State | `state` | `order.Status` string checked with if/else in Pay, Ship, Cancel and Refund | One class per order state that owns its transitions | Natural | Done |
 | S21 | Strategy | `strategy` | Shipping cost `switch` on method inside the pricing code | `IShippingCostStrategy` per method, chosen at checkout | Natural | Done |
 | S22 | Template Method | `template-method` | CSV and JSON exporters duplicate the same load, filter, aggregate, write skeleton | `ReportExporter` base class with abstract steps and hooks | Natural | Done |
-| S23 | Visitor | `visitor` | Physical, digital and gift card line items handled with type switches in tax, weight and export code | `ILineItemVisitor` with tax, weight and export visitors | Natural | Not started |
+| S23 | Visitor | `visitor` | Physical, digital and gift card line items handled with type switches in tax, weight and export code | `ILineItemVisitor` with tax, weight and export visitors | Natural | Done |

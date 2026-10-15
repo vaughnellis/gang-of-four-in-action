@@ -22,8 +22,8 @@
 | bridge | Done | Conformant | 6f8c853, 27e8507 | bridge-v1 |
 | mediator | Done | Conformant | b651a9c, 9ee5fb6 | mediator-v1 |
 | memento | Done | Conformant | b454ddc, a0a70b1 | memento-v1 |
-| visitor | In progress | Pending | - | - |
-| singleton | Not started | Pending | - | - |
+| visitor | Done | Conformant | d71dc3d, 2b4f7f1 | visitor-v1 |
+| singleton | In progress | Pending | - | - |
 | prototype | Not started | Pending | - | - |
 | flyweight | Not started | Pending | - | - |
 | interpreter | Not started | Pending | - | - |
