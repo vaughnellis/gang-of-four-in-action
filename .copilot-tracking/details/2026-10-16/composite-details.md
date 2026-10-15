@@ -9,10 +9,10 @@
 ## P02: Refactor and test
 
 * Add `ICatalogItem` and implement it on `Product` and `Bundle`.
-* Change catalog pricing, component addition, and cart expansion to use the
-  component contract instead of S08 type checks.
-* Allocate nested bundle prices deterministically and guard against cycles.
-* Replace the old nested-bundle rejection test and add focused scenarios.
+* Change catalog pricing and cart expansion to use the component contract
+  instead of S08 type checks.
+* Retain the nested-bundle rejection to preserve the approved transcript.
+* Add focused scenarios for the shared behavior and the retained domain rule.
 
 ## P03: Document and review
 

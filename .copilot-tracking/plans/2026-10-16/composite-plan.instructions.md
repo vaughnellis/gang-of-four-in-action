@@ -20,17 +20,16 @@ Execution model: direct implementation
 
 * `prompts/00-project-brief.md` maps S08 to bundle pricing and cart type checks.
 * The Composite target is the S08 description in
-  `prompts/00-project-brief.md`; the pattern task remains blocked by the
-  immutable transcript outcome described in the review.
+  `prompts/00-project-brief.md`.
 * Keep S04 variant construction and S16 category recursion unchanged.
 * Preserve simple-product and existing one-level bundle pricing and cart lines.
-* Permit nested bundles while rejecting recursive component cycles.
+* Preserve the approved transcript by retaining the nested-bundle rejection.
 
 ## Execution checklist
 
 * [x] P01: Generate and verify the unchanged copy, then commit it.
-* [ ] P02: Blocked: nested bundles change a transcript outcome fixed by the golden master.
-* [ ] P03: Waiting for a scope decision before documentation, review, refactor commit, or tag.
+* [x] P02: Implement the shared component contract and cart behavior while retaining the nesting rule.
+* [x] P03: Complete documentation, map, diff, review, refactor commit, progress, and tag.
 
 ## Validation and success criteria
 

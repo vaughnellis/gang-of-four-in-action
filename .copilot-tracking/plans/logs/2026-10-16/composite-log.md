@@ -3,10 +3,11 @@
 
 ## Decisions
 
-* `ICatalogItem` exposes pricing, children, and recursive cart expansion so
-  callers do not branch on Product versus Bundle.
-* Nested discount allocation preserves each inner bundle's distribution while
-  ensuring all resulting cart lines sum to the outer bundle price.
-* Direct or indirect component cycles are rejected.
-* The copied S08 test that expected nesting to fail is replaced; no baseline
-  test or golden-master file is changed.
+* `ICatalogItem` exposes pricing, children, and cart expansion so callers do
+  not branch on Product versus Bundle.
+* Nested bundles remain rejected because the approved transcript records that
+  domain rule; changing it would violate the behavior-preservation decision.
+* The Composite contract is still used for product and one-level bundle
+  pricing and cart behavior.
+* The copied S08 test continues to assert that nesting fails; no baseline test
+  or golden-master file is changed.
