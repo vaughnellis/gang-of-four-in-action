@@ -29,7 +29,7 @@ Each of the 23 patterns is paired with one smell in the CornerStore baseline. Fi
 | Smell | Pattern | Folder | Baseline smell | Refactor target | Fit | Status |
 | --- | --- | --- | --- | --- | --- | --- |
 | S13 | Chain of Responsibility | `chain-of-responsibility` | One long validation method: stock, address, fraud score and credit limit in nested ifs | Ordered validation handlers | Natural | Done |
-| S14 | Command | `command` | Back-office actions run inline with no undo, audit trail or queue | `ICommand` objects with `Execute` and `Undo`, plus an audit log | Natural | Not started |
+| S14 | Command | `command` | Back-office actions run inline with no undo, audit trail or queue | `ICommand` objects with `Execute` and `Undo`, plus an audit log | Natural | Done |
 | S15 | Interpreter | `interpreter` | Promo rules such as `SPEND>100 AND CATEGORY=Shoes` parsed with `Split` and `IndexOf` | A small grammar and expression tree evaluated against a cart | Extension | Not started |
 | S16 | Iterator | `iterator` | Callers walk the category tree with manual recursion, copy-pasted in several places | Depth-first and breadth-first iterators; explain `IEnumerable` with `yield` as the built-in form | Natural | Not started |
 | S17 | Mediator | `mediator` | Cart widgets (item list, promo box, shipping selector, totals) reference and update each other directly | `CartMediator` that the widgets notify | Extension | Not started |
