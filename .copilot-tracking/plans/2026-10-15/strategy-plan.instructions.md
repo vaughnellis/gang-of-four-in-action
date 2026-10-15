@@ -29,7 +29,7 @@ Execution model: direct implementation; no subagents
 
 * [x] P01: Generate the unchanged Strategy copy, run its tests, and commit it as `da5088a`.
 * [x] P02: Replace the shipping-cost switch with pluggable `IShippingCostStrategy` implementations and add the required tests.
-* [ ] P03: Complete README, diff, map/index verification, pilot recommendation, full validation, review, refactor commit, progress update, and local tag.
+* [x] P03: Complete README, diff, map/index verification, pilot recommendation, full validation, review, refactor commit, progress update, and local tag.
 
 ## Validation and success criteria
 

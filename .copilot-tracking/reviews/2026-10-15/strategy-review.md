@@ -44,4 +44,4 @@ S21 is refactored into three interchangeable shipping-cost strategies selected t
 
 ## Remaining work
 
-Commit the reviewed Strategy changes locally, update the run-all row with both commit hashes, create `strategy-v1`, and continue with Batch A Observer. Do not push.
+The reviewed Strategy changes are committed as `cc230d0`; the unchanged copy is `da5088a`; local tag `strategy-v1` points to `cc230d0fc5531860a47aea71361caf513025a46f`. The run-all row is Done. The reusable template is locked as is after applying the Facade notes. Continue with Batch A Observer. Do not push.
