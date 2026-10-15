@@ -37,7 +37,7 @@ internal class ItemListWidget(Cart cart, Customer customer, CartService cartServ
         {
             var origin = line.FromBundle == "" ? "" : " (from " + line.FromBundle + ")";
             var amount = line.UnitPrice * line.Quantity;
-            Log.Info("- " + line.Product.Sku + " " + line.Product.Name + " x" + line.Quantity.ToString(CultureInfo.InvariantCulture)
+            Log.Instance.Info("- " + line.Product.Sku + " " + line.Product.Name + " x" + line.Quantity.ToString(CultureInfo.InvariantCulture)
                 + " @ " + MoneyFormatter.Format(line.UnitPrice, customer.Region) + " = "
                 + MoneyFormatter.Format(amount, customer.Region) + origin);
         }

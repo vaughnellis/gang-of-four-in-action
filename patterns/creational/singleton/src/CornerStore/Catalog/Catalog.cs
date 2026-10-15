@@ -162,10 +162,10 @@ internal class Catalog
     {
         // SMELL S16: manual recursion over the category tree, first copy
         var pad = new string(' ', depth * 2);
-        Log.Info(pad + category.Name);
+        Log.Instance.Info(pad + category.Name);
         foreach (var product in category.Products)
         {
-            Log.Info(pad + "  - " + product.Sku + " " + product.Name + " " + FormatPrice(PriceOf(product.Sku)));
+            Log.Instance.Info(pad + "  - " + product.Sku + " " + product.Name + " " + FormatPrice(PriceOf(product.Sku)));
         }
 
         foreach (var child in category.Children)

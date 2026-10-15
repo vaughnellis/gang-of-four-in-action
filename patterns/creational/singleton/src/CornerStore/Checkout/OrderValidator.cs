@@ -32,7 +32,7 @@ internal class OrderValidator(InventoryService inventory, FraudScorer fraudScore
             else
             {
                 var fraudScore = fraudScorer.Score(customer);
-                if (fraudScore > Config.FraudThreshold)
+                if (fraudScore > Config.Instance.FraudThreshold)
                 {
                     error = "fraud score " + fraudScore.ToString(CultureInfo.InvariantCulture) + " exceeds threshold";
                 }

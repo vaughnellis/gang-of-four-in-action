@@ -1,16 +1,85 @@
 namespace CornerStore;
 
-// SMELL S05: global settings in a static class with public mutable fields, set from anywhere
-internal static class Config
+internal sealed class Config
 {
-    public static int Seed = 0;
-    public static int FraudThreshold = 80;
-    public static int LowStockLevel = 3;
+    private static readonly Lazy<Config> singleton =
+        new(static () => new Config(), LazyThreadSafetyMode.ExecutionAndPublication);
 
-    public static void Reset()
+    private readonly object sync = new();
+    private int seed;
+    private int fraudThreshold = 80;
+    private int lowStockLevel = 3;
+
+    private Config()
     {
-        Seed = 0;
-        FraudThreshold = 80;
-        LowStockLevel = 3;
+    }
+
+    public static Config Instance => singleton.Value;
+
+    public int Seed
+    {
+        get
+        {
+            lock (sync)
+            {
+                return seed;
+            }
+        }
+    }
+
+    public int FraudThreshold
+    {
+        get
+        {
+            lock (sync)
+            {
+                return fraudThreshold;
+            }
+        }
+    }
+
+    public int LowStockLevel
+    {
+        get
+        {
+            lock (sync)
+            {
+                return lowStockLevel;
+            }
+        }
+    }
+
+    public void SetSeed(int value)
+    {
+        lock (sync)
+        {
+            seed = value;
+        }
+    }
+
+    public void SetFraudThreshold(int value)
+    {
+        lock (sync)
+        {
+            fraudThreshold = value;
+        }
+    }
+
+    public void SetLowStockLevel(int value)
+    {
+        lock (sync)
+        {
+            lowStockLevel = value;
+        }
+    }
+
+    public void Reset()
+    {
+        lock (sync)
+        {
+            seed = 0;
+            fraudThreshold = 80;
+            lowStockLevel = 3;
+        }
     }
 }
