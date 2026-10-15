@@ -22,7 +22,6 @@ index a15a29b..f8dc6c1 100644
 @@ -5,4 +5,8 @@
      <TargetFramework>net10.0</TargetFramework>
    </PropertyGroup>
-
 +  <ItemGroup>
 +    <InternalsVisibleTo Include="CornerStore.Tests" />
 +  </ItemGroup>
@@ -79,7 +78,6 @@ index 64d5dd4..7492998 100644
 +++ b/pattern/src/CornerStore/Pricing/PricingService.cs
 @@ -1,7 +1,23 @@
  namespace CornerStore;
-
 -internal class PricingService(PromoEngine promos)
 +internal class PricingService
  {
@@ -103,7 +101,6 @@ index 64d5dd4..7492998 100644
      {
          var subtotal = 0m;
 @@ -57,18 +73,9 @@ internal class PricingService(PromoEngine promos)
-
      public decimal? ShippingCost(string method, decimal weightKg)
      {
 -        // SMELL S21: the shipping cost is picked with a switch on the method string
@@ -122,7 +119,6 @@ index 64d5dd4..7492998 100644
 +            ? strategy.Calculate(weightKg)
 +            : null;
      }
-
      private static decimal AddOnCost(Cart cart, decimal discountedSubtotal)
 diff --git a/pattern/src/CornerStore/Pricing/StandardShippingCostStrategy.cs b/pattern/src/CornerStore/Pricing/StandardShippingCostStrategy.cs
 new file mode 100644

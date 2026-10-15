@@ -59,7 +59,6 @@ index a15a29b..f8dc6c1 100644
 @@ -5,4 +5,8 @@
      <TargetFramework>net10.0</TargetFramework>
    </PropertyGroup>
-
 +  <ItemGroup>
 +    <InternalsVisibleTo Include="CornerStore.Tests" />
 +  </ItemGroup>
@@ -74,9 +73,7 @@ index a288b4e..d2f471a 100644
  using System.Text;
  using System.Text.Json;
 -using System.Xml.Linq;
-
  namespace CornerStore;
-
 @@ -21,7 +20,7 @@ internal class StoreConsole
      private readonly OrderService orderService;
      private readonly BackOffice backOffice;
@@ -94,10 +91,8 @@ index a288b4e..d2f471a 100644
 +        shippingProvider = new ShipFastAdapter(new ShipFastClient(Ids));
          reports = new ReportService(orderService);
      }
-
 @@ -437,7 +436,7 @@ internal class StoreConsole
          }
-
          order.StockReserved = true;
 -        order.TrackingNumber = BookShipment(order);
 +        order.TrackingNumber = shippingProvider.BookShipment(order);
@@ -107,7 +102,6 @@ index a288b4e..d2f471a 100644
 @@ -480,19 +479,6 @@ internal class StoreConsole
          return true;
      }
-
 -    // SMELL S06: checkout calls the courier client with XML and parses its response directly
 -    private string BookShipment(Order order)
 -    {

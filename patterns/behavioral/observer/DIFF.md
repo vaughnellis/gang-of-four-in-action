@@ -24,7 +24,6 @@ index a15a29b..f8dc6c1 100644
 @@ -5,4 +5,8 @@
      <TargetFramework>net10.0</TargetFramework>
    </PropertyGroup>
-
 +  <ItemGroup>
 +    <InternalsVisibleTo Include="CornerStore.Tests" />
 +  </ItemGroup>
@@ -140,7 +139,6 @@ index 87f6ce2..eeb5b9d 100644
 --- a/baseline/src/CornerStore/Orders/OrderService.cs
 +++ b/pattern/src/CornerStore/Orders/OrderService.cs
 @@ -2,16 +2,16 @@ namespace CornerStore;
-
  internal class OrderService(
      IdSequence ids,
 -    InventoryService inventory,
@@ -160,54 +158,43 @@ index 87f6ce2..eeb5b9d 100644
 +    {
 +        observers.Add(observer);
 +    }
-
      public Order Create(Customer customer, Cart cart, Quote quote, string paymentType)
      {
 @@ -55,7 +55,7 @@ internal class OrderService(
          }
-
          order.Status = "Paid";
 -        RecordStatusChange(order);
 +        NotifyObservers(order);
          return null;
      }
-
 @@ -73,7 +73,7 @@ internal class OrderService(
              order.TrackingNumber = ids.NextShipmentId();
          }
-
 -        RecordStatusChange(order);
 +        NotifyObservers(order);
          return null;
      }
-
 @@ -86,7 +86,7 @@ internal class OrderService(
          }
-
          order.Status = "Delivered";
 -        RecordStatusChange(order);
 +        NotifyObservers(order);
          return null;
      }
-
 @@ -104,7 +104,7 @@ internal class OrderService(
              RestoreStock(order);
          }
-
 -        RecordStatusChange(order);
 +        NotifyObservers(order);
          return null;
      }
-
 @@ -122,43 +122,16 @@ internal class OrderService(
              RestoreStock(order);
          }
-
 -        RecordStatusChange(order);
 +        NotifyObservers(order);
          return null;
      }
-
 -    private void RecordStatusChange(Order order)
 +    private void NotifyObservers(Order order)
      {
@@ -245,7 +232,6 @@ index 87f6ce2..eeb5b9d 100644
 -        loyalty.RecordStatusChange(order);
 -        analytics.RecordStatusChange(order);
      }
-
      private void RestoreStock(Order order)
 diff --git a/baseline/src/CornerStore/StoreConsole.cs b/pattern/src/CornerStore/StoreConsole.cs
 index a288b4e..1f4806a 100644

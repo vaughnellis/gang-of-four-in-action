@@ -22,12 +22,9 @@ index a08dcb6..f758792 100644
 --- a/baseline/src/CornerStore/Cart/Cart.cs
 +++ b/pattern/src/CornerStore/Cart/Cart.cs
 @@ -11,7 +11,6 @@ internal class Cart(string customerId)
-
      public string ShippingMethod = "standard";
-
 -    // SMELL S09: add-ons are plain boolean flags, one per add-on
      public bool GiftWrap;
-
      public bool Insurance;
 diff --git a/baseline/src/CornerStore/CornerStore.csproj b/pattern/src/CornerStore/CornerStore.csproj
 index a15a29b..f8dc6c1 100644
@@ -36,7 +33,6 @@ index a15a29b..f8dc6c1 100644
 @@ -5,4 +5,8 @@
      <TargetFramework>net10.0</TargetFramework>
    </PropertyGroup>
-
 +  <ItemGroup>
 +    <InternalsVisibleTo Include="CornerStore.Tests" />
 +  </ItemGroup>
@@ -104,7 +100,6 @@ index 64d5dd4..363f52a 100644
 --- a/baseline/src/CornerStore/Pricing/PricingService.cs
 +++ b/pattern/src/CornerStore/Pricing/PricingService.cs
 @@ -73,18 +73,9 @@ internal class PricingService(PromoEngine promos)
-
      private static decimal AddOnCost(Cart cart, decimal discountedSubtotal)
      {
 -        // SMELL S09: each add-on is a boolean flag checked in an if-chain
@@ -133,7 +128,6 @@ index a288b4e..4d08e3d 100644
 @@ -632,7 +632,6 @@ internal class StoreConsole
          var name = Text(step, "addon");
          var on = !step.TryGetProperty("on", out var flag) || flag.ValueKind != JsonValueKind.False;
-
 -        // SMELL S09: the console has to know each add-on flag by name to set it
          if (name == "giftwrap")
          {

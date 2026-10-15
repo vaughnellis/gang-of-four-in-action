@@ -26,7 +26,6 @@ index a15a29b..f8dc6c1 100644
 @@ -5,4 +5,8 @@
      <TargetFramework>net10.0</TargetFramework>
    </PropertyGroup>
-
 +  <ItemGroup>
 +    <InternalsVisibleTo Include="CornerStore.Tests" />
 +  </ItemGroup>
@@ -88,16 +87,12 @@ index 6344d8b..f758a8d 100644
      Quote quote,
      string paymentType,
 @@ -17,7 +17,9 @@ internal class Order(
-
      public Customer Customer { get; } = customer;
-
 -    public string Status { get; set; } = status;
 +    public OrderState State { get; set; } = state;
 +
 +    public string Status => State.Name;
-
      public List<CartLine> Lines { get; } = lines;
-
 diff --git a/baseline/src/CornerStore/Orders/OrderService.cs b/pattern/src/CornerStore/Orders/OrderService.cs
 index 87f6ce2..2ac78d3 100644
 --- a/baseline/src/CornerStore/Orders/OrderService.cs
@@ -112,7 +107,6 @@ index 87f6ce2..2ac78d3 100644
              cart.PromoCode == "" ? null : cart.PromoCode, null, null, null, null);
          orders[order.Id] = order;
 @@ -48,85 +48,30 @@ internal class OrderService(
-
      public string? Pay(Order order)
      {
 -        // SMELL S20: the allowed transition is selected by comparing the status string
@@ -126,7 +120,6 @@ index 87f6ce2..2ac78d3 100644
 -        return null;
 +        return order.State.Pay(this, order);
      }
-
      public string? Ship(Order order)
      {
 -        // SMELL S20: the allowed transition is selected by comparing the status string
@@ -145,7 +138,6 @@ index 87f6ce2..2ac78d3 100644
 -        return null;
 +        return order.State.Ship(this, order);
      }
-
      public string? Deliver(Order order)
      {
 -        // SMELL S20: the allowed transition is selected by comparing the status string
@@ -159,7 +151,6 @@ index 87f6ce2..2ac78d3 100644
 -        return null;
 +        return order.State.Deliver(this, order);
      }
-
      public string? Cancel(Order order)
      {
 -        // SMELL S20: the allowed transition is selected by comparing the status string
@@ -178,7 +169,6 @@ index 87f6ce2..2ac78d3 100644
 -        return null;
 +        return order.State.Cancel(this, order);
      }
-
      public string? Refund(Order order)
      {
 -        // SMELL S20: the allowed transition is selected by comparing the status string
@@ -197,7 +187,6 @@ index 87f6ce2..2ac78d3 100644
 -        return null;
 +        return order.State.Refund(this, order);
      }
-
 -    private void RecordStatusChange(Order order)
 +    internal void RecordStatusChange(Order order)
      {
@@ -206,7 +195,6 @@ index 87f6ce2..2ac78d3 100644
 @@ -161,7 +106,7 @@ internal class OrderService(
          analytics.RecordStatusChange(order);
      }
-
 -    private void RestoreStock(Order order)
 +    internal void RestoreStock(Order order)
      {
@@ -215,7 +203,6 @@ index 87f6ce2..2ac78d3 100644
 @@ -171,6 +116,14 @@ internal class OrderService(
          order.StockReserved = false;
      }
-
 +    internal void AssignTrackingNumber(Order order)
 +    {
 +        if (order.TrackingNumber is null)

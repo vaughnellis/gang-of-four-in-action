@@ -20,7 +20,6 @@ index a15a29b..f8dc6c1 100644
 @@ -5,4 +5,8 @@
      <TargetFramework>net10.0</TargetFramework>
    </PropertyGroup>
-
 +  <ItemGroup>
 +    <InternalsVisibleTo Include="CornerStore.Tests" />
 +  </ItemGroup>
@@ -202,7 +201,6 @@ index 87f6ce2..8491766 100644
 --- a/baseline/src/CornerStore/Orders/OrderService.cs
 +++ b/pattern/src/CornerStore/Orders/OrderService.cs
 @@ -15,11 +15,14 @@ internal class OrderService(
-
      public Order Create(Customer customer, Cart cart, Quote quote, string paymentType)
      {
 -        // SMELL S02: the order is assembled with eleven positional arguments and null optionals
@@ -222,7 +220,6 @@ index 87f6ce2..8491766 100644
          CreateInvoice(order);
          return order;
 @@ -27,11 +30,9 @@ internal class OrderService(
-
      public Invoice CreateInvoice(Order order)
      {
 -        var quote = order.Quote;

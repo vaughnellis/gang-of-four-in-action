@@ -109,7 +109,6 @@ index e7357c9..bee4911 100644
 -using System.Globalization;
 -
  namespace CornerStore;
-
 -internal class OrderValidator(InventoryService inventory, FraudScorer fraudScorer)
 +internal sealed class OrderValidator
  {
@@ -132,7 +131,6 @@ index e7357c9..bee4911 100644
 -            }
 -        }
 +    private readonly OrderValidationHandler firstHandler;
-
 -        if (error is null)
 -        {
 -            if (customer.Address == "")
@@ -161,7 +159,6 @@ index e7357c9..bee4911 100644
 +                    fraudScorer,
 +                    new CreditLimitValidationHandler(null))));
 +    }
-
 -        return error;
 +    public string? Validate(Customer customer, Cart cart, Quote quote)
 +    {
@@ -207,7 +204,6 @@ index a15a29b..f8dc6c1 100644
 @@ -5,4 +5,8 @@
      <TargetFramework>net10.0</TargetFramework>
    </PropertyGroup>
-
 +  <ItemGroup>
 +    <InternalsVisibleTo Include="CornerStore.Tests" />
 +  </ItemGroup>

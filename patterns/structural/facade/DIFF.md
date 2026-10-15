@@ -130,7 +130,6 @@ index a15a29b..f8dc6c1 100644
 @@ -5,4 +5,8 @@
      <TargetFramework>net10.0</TargetFramework>
    </PropertyGroup>
-
 +  <ItemGroup>
 +    <InternalsVisibleTo Include="CornerStore.Tests" />
 +  </ItemGroup>
@@ -145,9 +144,7 @@ index a288b4e..1aa6675 100644
  using System.Text;
  using System.Text.Json;
 -using System.Xml.Linq;
-
  namespace CornerStore;
-
 @@ -20,8 +19,7 @@ internal class StoreConsole
      private readonly AnalyticsService analytics = new();
      private readonly OrderService orderService;
@@ -172,11 +169,9 @@ index a288b4e..1aa6675 100644
 +            new ShipFastClient(Ids));
          reports = new ReportService(orderService);
      }
-
 @@ -387,7 +389,6 @@ internal class StoreConsole
          Log.Info(backOffice.Cancel(customer, order));
      }
-
 -    // SMELL S10: the console coordinates every checkout subsystem in a fixed order
      private void Checkout(JsonElement step)
      {
@@ -184,7 +179,6 @@ index a288b4e..1aa6675 100644
 @@ -396,101 +397,8 @@ internal class StoreConsole
              return;
          }
-
 -        if (cart.Lines.Count == 0)
 -        {
 -            Log.Info("checkout rejected: cart is empty");
@@ -282,7 +276,6 @@ index a288b4e..1aa6675 100644
 -        return XDocument.Parse(response).Root?.Element("tracking")?.Value ?? "";
 +        Log.Info(checkoutFacade.PlaceOrder(cart, customer, Text(step, "payment")));
      }
-
      private void ReportCsv(JsonElement step)
 diff --git a/pattern/tests/CornerStore.Tests/CheckoutFacadeTests.cs b/pattern/tests/CornerStore.Tests/CheckoutFacadeTests.cs
 new file mode 100644

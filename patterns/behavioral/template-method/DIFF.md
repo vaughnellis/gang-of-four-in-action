@@ -21,7 +21,6 @@ index a15a29b..f8dc6c1 100644
 @@ -5,4 +5,8 @@
      <TargetFramework>net10.0</TargetFramework>
    </PropertyGroup>
-
 +  <ItemGroup>
 +    <InternalsVisibleTo Include="CornerStore.Tests" />
 +  </ItemGroup>
@@ -34,9 +33,7 @@ index 3e49cdf..7df3c3f 100644
 @@ -1,43 +1,34 @@
 -using System.Globalization;
  using System.Text;
-
  namespace CornerStore;
-
 -internal class CsvReportExporter
 +internal sealed class CsvReportExporter : ReportExporter
  {
@@ -81,7 +78,6 @@ index 3e49cdf..7df3c3f 100644
 +                break;
          }
 +    }
-
 +    protected override string WriteReport(ReportTotals totals)
 +    {
          var builder = new StringBuilder();
@@ -103,9 +99,7 @@ index 028f70e..8dca46b 100644
 @@ -1,43 +1,34 @@
 -using System.Globalization;
  using System.Text;
-
  namespace CornerStore;
-
 -internal class JsonReportExporter
 +internal sealed class JsonReportExporter : ReportExporter
  {
@@ -150,7 +144,6 @@ index 028f70e..8dca46b 100644
 +                break;
          }
 +    }
-
 +    protected override string WriteReport(ReportTotals totals)
 +    {
          var builder = new StringBuilder();

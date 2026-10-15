@@ -164,7 +164,7 @@ function Get-LineChanges {
         [string]$PatternPath
     )
 
-        $output = & git -c core.autocrlf=false -c core.safecrlf=false diff --no-index --numstat -- $BaselinePath $PatternPath
+    $output = @(& git -c core.autocrlf=false -c core.safecrlf=false diff --no-index --numstat -- $BaselinePath $PatternPath)
     $exitCode = $LASTEXITCODE
     if ($exitCode -gt 1) {
         throw "git diff --numstat failed with exit code $exitCode."
@@ -210,17 +210,26 @@ function Get-DirectoryDiff {
 
     Push-Location -LiteralPath $WorkingDirectory
     try {
-        $output = & git -c core.autocrlf=false -c core.safecrlf=false diff --no-index --no-color -- $BaselinePath $PatternPath
+        $output = @(& git -c core.autocrlf=false -c core.safecrlf=false diff --no-index --no-color -- $BaselinePath $PatternPath)
         $exitCode = $LASTEXITCODE
         if ($exitCode -gt 1) {
             throw "git diff failed with exit code $exitCode."
         }
 
-        if ($null -eq $output -or $output.Count -eq 0) {
+        if ($output.Count -eq 0) {
             return ''
         }
 
-        return [string]::Join("`n", [string[]]$output)
+        $diffLines = @(
+            $output |
+                ForEach-Object { [string]$_ } |
+                Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+        )
+        if ($diffLines.Count -eq 0) {
+            return ''
+        }
+
+        return [string]::Join("`n", [string[]]$diffLines)
     }
     finally {
         Pop-Location

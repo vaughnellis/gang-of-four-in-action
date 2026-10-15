@@ -88,7 +88,6 @@ index a15a29b..f8dc6c1 100644
 @@ -5,4 +5,8 @@
      <TargetFramework>net10.0</TargetFramework>
    </PropertyGroup>
-
 +  <ItemGroup>
 +    <InternalsVisibleTo Include="CornerStore.Tests" />
 +  </ItemGroup>
@@ -101,7 +100,6 @@ index a288b4e..7ac3a6c 100644
 @@ -454,29 +454,28 @@ internal class StoreConsole
          Log.Info("checkout placed " + order.Id);
      }
-
 -    // SMELL S03: payment processor construction is selected by a switch in checkout
      private static bool ChargePayment(string paymentType, Customer customer, decimal amount)
      {
@@ -122,18 +120,15 @@ index a288b4e..7ac3a6c 100644
 +                creator = new AfterpayProcessorCreator();
                  break;
          }
-
 -        if (processor is null)
 +        if (creator is null)
          {
              return false;
          }
-
 -        processor.Charge(customer, amount);
 +        creator.Charge(customer, amount);
          return true;
      }
-
 diff --git a/pattern/tests/CornerStore.Tests/FactoryMethodTests.cs b/pattern/tests/CornerStore.Tests/FactoryMethodTests.cs
 new file mode 100644
 index 0000000..7173246
