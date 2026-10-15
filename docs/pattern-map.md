@@ -10,7 +10,7 @@ Each of the 23 patterns is paired with one smell in the CornerStore baseline. Fi
 | S02 | Builder | `builder` | `Order` and `Invoice` built through 11-parameter constructors with nulls for optional parts | Fluent `OrderBuilder` and `InvoiceBuilder` that validate on `Build()` | Natural | Done |
 | S03 | Factory Method | `factory-method` | `switch (paymentType)` with `new CardProcessor()` and friends inside checkout | Creator classes that override `CreateProcessor()` | Natural | Done |
 | S04 | Prototype | `prototype` | Size and colour variants built by copying every field of the parent product by hand | `Clone()` on products; note records and `with` as the modern form | Natural | Not started |
-| S05 | Singleton | `singleton` | Static `Config` and `Log` classes with public mutable fields, set from anywhere | Thread-safe Singleton via `Lazy<T>`, then the same object as a DI singleton lifetime, with trade-offs | Natural | Not started |
+| S05 | Singleton | `singleton` | Static `Config` and `Log` classes with public mutable fields, set from anywhere | Thread-safe Singleton via `Lazy<T>`, then the same object as a DI singleton lifetime, with trade-offs | Natural | Done |
 
 ## Structural
 
