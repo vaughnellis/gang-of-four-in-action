@@ -31,7 +31,7 @@ Execution model: direct implementation; no subagents
 
 * [x] P01: Copy baseline, run 41 tests, and commit unchanged copy as `8470705`.
 * [x] P02: Publish status changes to registered observers and add behavior tests.
-* [ ] P03: Complete docs/diff/map, review, commits, progress row, and local tag.
+* [x] P03: Complete docs/diff/map, review, commits, progress row, and local tag.
 
 ## Validation and success criteria
 

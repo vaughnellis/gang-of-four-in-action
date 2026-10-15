@@ -6,7 +6,7 @@
 | baseline | Done | Conformant with justified divergence | 79da1bac67bc277d66de86bd7610ba9a84c6ce16 | baseline-v1 |
 | facade | Done | Conformant with justified divergence | ca016f9, 5ccd08b | facade-v1 |
 | strategy | Done | Conformant with justified divergence | da5088a, cc230d0 | strategy-v1 |
-| observer | In progress | Pending | 8470705 | - |
+| observer | Done | Conformant with justified divergence | 8470705, 5ec2583 | observer-v1 |
 | factory-method | Not started | Pending | - | - |
 | adapter | Not started | Pending | - | - |
 | decorator | Not started | Pending | - | - |

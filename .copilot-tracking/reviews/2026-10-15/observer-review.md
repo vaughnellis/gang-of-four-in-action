@@ -43,4 +43,4 @@ S19 status-change reactions now use an ordered observer list. All 44 tests pass,
 
 ## Remaining work
 
-Commit the reviewed Observer changes locally, update the run-all row with both hashes, create `observer-v1`, and continue with Factory Method. Do not push.
+The reviewed Observer changes are committed as `5ec2583`; the unchanged copy is `8470705`; local tag `observer-v1` points to `5ec258389b0cde0fba297de52a00adbaff4fb6ed`. The run-all row is Done. Continue with Factory Method. Do not push.

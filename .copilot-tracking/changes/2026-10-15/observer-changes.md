@@ -49,4 +49,4 @@ The root README already contained the Observer link and was left unchanged. The 
 
 ## Release summary
 
-Unchanged-copy commit: `8470705`. The refactor commit and local `observer-v1` tag are recorded in run-all progress after review.
+Unchanged-copy commit: `8470705`. Refactor commit: `5ec2583`. Local tag: `observer-v1` at `5ec258389b0cde0fba297de52a00adbaff4fb6ed`. No push was made.
