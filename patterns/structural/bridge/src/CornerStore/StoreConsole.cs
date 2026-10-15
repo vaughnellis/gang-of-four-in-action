@@ -41,10 +41,8 @@ internal class StoreConsole
         orderService = new OrderService(
             Ids,
             inventory,
-            new OrderConfirmedEmail(emailSender),
-            new OrderConfirmedSms(smsSender),
-            new OrderShippedEmail(emailSender),
-            new OrderShippedSms(smsSender),
+            emailSender,
+            smsSender,
             loyalty,
             analytics);
         backOffice = new BackOffice(inventory, orderService);
