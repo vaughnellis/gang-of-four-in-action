@@ -25,5 +25,5 @@
 | visitor | Done | Conformant | d71dc3d, 2b4f7f1 | visitor-v1 |
 | singleton | Done | Conformant | 496cfa0, f1c190b | singleton-v1 |
 | prototype | Done | Conformant | afd5fe0, d284c52 | prototype-v1 |
-| flyweight | Not started | Pending | - | - |
+| flyweight | Done | Conformant with justified divergence | b8459d3, 74b9d1d | flyweight-v1 |
 | interpreter | Not started | Pending | - | - |
