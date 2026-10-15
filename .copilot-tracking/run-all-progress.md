@@ -21,8 +21,8 @@
 | abstract-factory | Done | Conformant | ff3f207, 11fffc7 | abstract-factory-v1 |
 | bridge | Done | Conformant | 6f8c853, 27e8507 | bridge-v1 |
 | mediator | Done | Conformant | b651a9c, 9ee5fb6 | mediator-v1 |
-| memento | Not started | Pending | - | - |
-| visitor | Not started | Pending | - | - |
+| memento | Done | Conformant | b454ddc, a0a70b1 | memento-v1 |
+| visitor | In progress | Pending | - | - |
 | singleton | Not started | Pending | - | - |
 | prototype | Not started | Pending | - | - |
 | flyweight | Not started | Pending | - | - |
