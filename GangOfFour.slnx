@@ -20,6 +20,8 @@
     <Project Path="patterns/behavioral/strategy/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
     <Project Path="patterns/behavioral/observer/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/behavioral/observer/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+    <Project Path="patterns/behavioral/state/src/CornerStore/CornerStore.csproj" />
+    <Project Path="patterns/behavioral/state/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
   </Folder>
   <Folder Name="/capstone/" />
 </Solution>
