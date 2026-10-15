@@ -45,5 +45,5 @@ behavior and S14 inline action code remain unchanged.
 ## Commits and tag
 
 * Copy: `33063ce`.
-* Refactor: pending.
-* Tag: `proxy-v1` pending.
+* Refactor: `7eb18eb`.
+* Tag: `proxy-v1`.
