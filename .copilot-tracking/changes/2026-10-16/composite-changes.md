@@ -38,5 +38,5 @@ without changing the established business rule.
 ## Commits and tag
 
 * Copy: `e840c73`.
-* Refactor: pending.
-* Tag: `composite-v1` pending.
+* Refactor: `6e0bdd3`.
+* Tag: `composite-v1`.
