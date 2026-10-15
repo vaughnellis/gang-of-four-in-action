@@ -481,6 +481,8 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 
-# Verify received output
-*.received.*
-*.received/
+# Golden master received output
+*.received.txt
+
+# Keep planning logs under version control despite the Logs/ rule above
+!.copilot-tracking/plans/logs/

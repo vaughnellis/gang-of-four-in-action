@@ -1,5 +1,8 @@
 <Solution>
-  <Folder Name="/baseline/" />
+  <Folder Name="/baseline/">
+    <Project Path="baseline/src/CornerStore/CornerStore.csproj" />
+    <Project Path="baseline/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
   <Folder Name="/patterns/creational/" />
   <Folder Name="/patterns/structural/" />
   <Folder Name="/patterns/behavioral/" />
