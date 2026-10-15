@@ -54,4 +54,4 @@ The root README already contained the Abstract Factory link and was left unchang
 
 ## Release summary
 
-Unchanged-copy commit: `ff3f207`. Refactor commit: pending. Local tag: pending.
+Unchanged-copy commit: `ff3f207`. Refactor commit: `11fffc7`. Local tag: `abstract-factory-v1` at `11fffc7`. No push was made.

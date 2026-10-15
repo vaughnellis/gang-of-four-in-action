@@ -37,4 +37,4 @@ No unresolved findings.
 
 ## Remaining work
 
-Commit the reviewed refactor, create the local `abstract-factory-v1` tag, record commit hashes and tag in the run-all progress file, then continue with Bridge. Do not push.
+The unchanged copy is `ff3f207`; the refactor is `11fffc7`, tagged `abstract-factory-v1`. Progress is recorded. Continue with Bridge. Do not push.

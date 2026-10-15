@@ -26,8 +26,8 @@ Execution model: direct implementation
 ## Execution checklist
 
 * [x] Generate and verify the unchanged copy, then commit it as `ff3f207`.
-* [ ] Centralize region selection in family factories, route tax, surcharge and currency formatting through them, and add focused tests.
-* [ ] Complete README and generated diff, update the map, validate the full solution, review, commit, tag and record progress.
+* [x] Centralize region selection in family factories, route tax, surcharge and currency formatting through them, and add focused tests.
+* [x] Complete README and generated diff, update the map, validate the full solution, review, commit, tag and record progress.
 
 ## Validation and success criteria
 
