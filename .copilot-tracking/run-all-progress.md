@@ -11,7 +11,7 @@
 | adapter | Done | Conformant with justified divergence | e3af51e, 1348680 | adapter-v1 |
 | decorator | Done | Conformant with justified divergence | b5c83ac, 660b5ca | decorator-v1 |
 | state | Done | Conformant with justified divergence | 419ff5d, df825b1 | state-v1 |
-| builder | Not started | Pending | - | - |
+| builder | In progress | Pending | 2fcb8e5 | - |
 | template-method | Not started | Pending | - | - |
 | chain-of-responsibility | Not started | Pending | - | - |
 | command | Not started | Pending | - | - |

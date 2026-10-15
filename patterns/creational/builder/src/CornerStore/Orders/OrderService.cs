@@ -15,11 +15,14 @@ internal class OrderService(
 
     public Order Create(Customer customer, Cart cart, Quote quote, string paymentType)
     {
-        // SMELL S02: the order is assembled with eleven positional arguments and null optionals
-        var order = new Order(
-            ids.NextOrderId(), customer, "Pending",
-            cart.Lines.Select(CopyLine).ToList(), quote, paymentType,
-            cart.PromoCode == "" ? null : cart.PromoCode, null, null, null, null);
+        var order = new OrderBuilder()
+            .WithId(ids.NextOrderId())
+            .WithCustomer(customer)
+            .WithLines(cart.Lines.Select(CopyLine).ToList())
+            .WithQuote(quote)
+            .WithPaymentType(paymentType)
+            .WithPromoCode(cart.PromoCode == "" ? null : cart.PromoCode)
+            .Build();
         orders[order.Id] = order;
         CreateInvoice(order);
         return order;
@@ -27,11 +30,9 @@ internal class OrderService(
 
     public Invoice CreateInvoice(Order order)
     {
-        var quote = order.Quote;
-        // SMELL S02: invoice parts are assembled with eleven positional arguments and a null note
-        var invoice = new Invoice(
-            order.Id + "-I", order.Id, order.Customer, order.Lines,
-            quote.Subtotal, quote.Discount, quote.AddOns, quote.Shipping, quote.Tax, quote.Total, null);
+        var invoice = new InvoiceBuilder()
+            .ForOrder(order)
+            .Build();
         invoices.Add(invoice);
         return invoice;
     }
