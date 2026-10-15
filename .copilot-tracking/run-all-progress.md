@@ -24,6 +24,6 @@
 | memento | Done | Conformant | b454ddc, a0a70b1 | memento-v1 |
 | visitor | Done | Conformant | d71dc3d, 2b4f7f1 | visitor-v1 |
 | singleton | Done | Conformant | 496cfa0, f1c190b | singleton-v1 |
-| prototype | Not started | Pending | - | - |
+| prototype | Done | Conformant | afd5fe0, d284c52 | prototype-v1 |
 | flyweight | Not started | Pending | - | - |
 | interpreter | Not started | Pending | - | - |
