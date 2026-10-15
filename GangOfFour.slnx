@@ -8,6 +8,9 @@
     <Project Path="patterns/structural/facade/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/structural/facade/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
   </Folder>
-  <Folder Name="/patterns/behavioral/" />
+  <Folder Name="/patterns/behavioral/">
+    <Project Path="patterns/behavioral/strategy/src/CornerStore/CornerStore.csproj" />
+    <Project Path="patterns/behavioral/strategy/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
   <Folder Name="/capstone/" />
 </Solution>
