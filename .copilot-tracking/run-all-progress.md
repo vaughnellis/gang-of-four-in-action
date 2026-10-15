@@ -16,7 +16,7 @@
 | chain-of-responsibility | Done | Conformant | b74c7b0, 07f1eef | chain-of-responsibility-v1 |
 | command | Done | Conformant with justified divergence | 72156d3, 3783fb1 | command-v1 |
 | composite | Done | Conformant with justified divergence | e840c73, 6e0bdd3 | composite-v1 |
-| iterator | Not started | Pending | - | - |
+| iterator | Done | Conformant | 102e099, cd57c52 | iterator-v1 |
 | proxy | Not started | Pending | - | - |
 | abstract-factory | Not started | Pending | - | - |
 | bridge | Not started | Pending | - | - |

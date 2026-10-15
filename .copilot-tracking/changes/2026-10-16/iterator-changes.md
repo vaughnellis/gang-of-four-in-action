@@ -36,5 +36,5 @@ product counts, and imported SKU order.
 ## Commits and tag
 
 * Copy: `102e099`.
-* Refactor: pending.
-* Tag: `iterator-v1` pending.
+* Refactor: `cd57c52`.
+* Tag: `iterator-v1`.
