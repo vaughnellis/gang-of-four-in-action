@@ -37,4 +37,4 @@ No unresolved findings.
 
 ## Remaining work
 
-Commit the reviewed refactor, create the local `mediator-v1` tag, record commit hashes and tag in the run-all progress file, then continue with Memento. Do not push.
+The unchanged copy is `b651a9c`; the refactor is `9ee5fb6`, tagged `mediator-v1`. Progress is recorded. Continue with Memento. Do not push.

@@ -47,4 +47,4 @@ The root README already contained the Mediator link and was left unchanged. `DIF
 
 ## Release summary
 
-Unchanged-copy commit: `b651a9c`. Refactor commit: pending. Local tag: pending.
+Unchanged-copy commit: `b651a9c`. Refactor commit: `9ee5fb6`. Local tag: `mediator-v1` at `9ee5fb6`. No push was made.

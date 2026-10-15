@@ -20,7 +20,7 @@
 | proxy | Done | Conformant with justified divergence | 33063ce, 7eb18eb | proxy-v1 |
 | abstract-factory | Done | Conformant | ff3f207, 11fffc7 | abstract-factory-v1 |
 | bridge | Done | Conformant | 6f8c853, 27e8507 | bridge-v1 |
-| mediator | In progress | Pending | b651a9c | - |
+| mediator | Done | Conformant | b651a9c, 9ee5fb6 | mediator-v1 |
 | memento | Not started | Pending | - | - |
 | visitor | Not started | Pending | - | - |
 | singleton | Not started | Pending | - | - |
