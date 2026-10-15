@@ -4,11 +4,24 @@ using System.Text.Json;
 
 namespace CornerStore;
 
-internal class StoreConsole(ScenarioClock clock)
+internal class StoreConsole
 {
+    private readonly ScenarioClock clock;
     private readonly Catalog catalog = new();
+    private readonly CartService cartService;
     private readonly ListingImporter importer = new();
+    private readonly Dictionary<string, Customer> customers = [];
+    private readonly Dictionary<string, Cart> carts = [];
+    private readonly Dictionary<string, List<CartLine>> savedLines = [];
+    private readonly Dictionary<string, string> savedPromo = [];
+    private readonly Dictionary<string, string> savedShipping = [];
     private List<Listing> listings = [];
+
+    public StoreConsole(ScenarioClock clock)
+    {
+        this.clock = clock;
+        cartService = new CartService(catalog);
+    }
 
     public IdSequence Ids { get; } = new();
 
@@ -39,6 +52,21 @@ internal class StoreConsole(ScenarioClock clock)
                 break;
             case "import":
                 Import(step);
+                break;
+            case "register":
+                Register(step);
+                break;
+            case "cart.add":
+                CartAdd(step);
+                break;
+            case "cart.remove":
+                CartRemove(step);
+                break;
+            case "cart.undo":
+                CartUndo(step);
+                break;
+            case "cart.show":
+                CartShow(step);
                 break;
             default:
                 Log.Info("unknown op");
@@ -149,6 +177,169 @@ internal class StoreConsole(ScenarioClock clock)
         catalog.CollectSkus(catalog.Root, skus);
         listings = importer.Import(skus, count);
         Log.Info("imported " + listings.Count.ToString(CultureInfo.InvariantCulture) + " listings");
+    }
+
+    private void Register(JsonElement step)
+    {
+        var id = Ids.NextCustomerId();
+        var role = Text(step, "role");
+        var customer = new Customer
+        {
+            Id = id,
+            Number = customers.Count + 1,
+            Name = Text(step, "name"),
+            Region = Text(step, "region"),
+            Channel = Text(step, "channel"),
+            Address = Text(step, "address"),
+            CreditLimit = step.TryGetProperty("creditLimit", out var limit) && limit.TryGetDecimal(out var amount) ? amount : 0m,
+            Role = role == "" ? "customer" : role,
+        };
+        customers[id] = customer;
+        carts[id] = new Cart(id);
+        Log.Info("registered " + id + " " + customer.Name + " (" + customer.Region + ", " + customer.Channel + ")");
+    }
+
+    private Cart? FindCart(JsonElement step)
+    {
+        var id = Text(step, "customer");
+        if (!customers.ContainsKey(id))
+        {
+            Log.Info("rejected: unknown customer " + id);
+            return null;
+        }
+
+        return carts[id];
+    }
+
+    private void CartAdd(JsonElement step)
+    {
+        var cart = FindCart(step);
+        if (cart is null)
+        {
+            return;
+        }
+
+        var sku = Text(step, "sku");
+        var quantity = step.TryGetProperty("qty", out var value) && value.TryGetInt32(out var number) ? number : 1;
+
+        // SMELL S18: the caller copies the cart's public internals out before the change
+        var lines = CopyLines(cart.Lines);
+        var promo = cart.PromoCode;
+        var shipping = cart.ShippingMethod;
+
+        var error = cartService.Add(cart, sku, quantity);
+        if (error is not null)
+        {
+            Log.Info("rejected: " + error);
+            return;
+        }
+
+        Remember(cart.CustomerId, lines, promo, shipping);
+        Log.Info("added " + quantity.ToString(CultureInfo.InvariantCulture) + " x " + sku);
+        Log.Info(Summary(cart));
+    }
+
+    private void CartRemove(JsonElement step)
+    {
+        var cart = FindCart(step);
+        if (cart is null)
+        {
+            return;
+        }
+
+        var sku = Text(step, "sku");
+
+        // SMELL S18: the caller copies the cart's public internals out before the change
+        var lines = CopyLines(cart.Lines);
+        var promo = cart.PromoCode;
+        var shipping = cart.ShippingMethod;
+
+        var error = cartService.Remove(cart, sku);
+        if (error is not null)
+        {
+            Log.Info("rejected: " + error);
+            return;
+        }
+
+        Remember(cart.CustomerId, lines, promo, shipping);
+        Log.Info("removed " + sku);
+        Log.Info(Summary(cart));
+    }
+
+    private void CartUndo(JsonElement step)
+    {
+        var cart = FindCart(step);
+        if (cart is null)
+        {
+            return;
+        }
+
+        if (!savedLines.TryGetValue(cart.CustomerId, out var lines))
+        {
+            Log.Info("nothing to undo");
+            return;
+        }
+
+        // SMELL S18: the caller writes the saved internals straight back into the cart
+        cart.Lines = lines;
+        cart.PromoCode = savedPromo[cart.CustomerId];
+        cart.ShippingMethod = savedShipping[cart.CustomerId];
+
+        savedLines.Remove(cart.CustomerId);
+        savedPromo.Remove(cart.CustomerId);
+        savedShipping.Remove(cart.CustomerId);
+        Log.Info("undone");
+        Log.Info(Summary(cart));
+    }
+
+    private void CartShow(JsonElement step)
+    {
+        var cart = FindCart(step);
+        if (cart is null)
+        {
+            return;
+        }
+
+        foreach (var line in cart.Lines)
+        {
+            var origin = line.FromBundle == "" ? "" : " (from " + line.FromBundle + ")";
+            var amount = line.UnitPrice * line.Quantity;
+            Log.Info("- " + line.Product.Sku + " " + line.Product.Name + " x" + line.Quantity.ToString(CultureInfo.InvariantCulture)
+                + " @ " + Catalog.FormatPrice(line.UnitPrice) + " = " + Catalog.FormatPrice(amount) + origin);
+        }
+
+        Log.Info(Summary(cart));
+    }
+
+    private string Summary(Cart cart)
+    {
+        return "cart " + cart.CustomerId + " lines=" + cart.Lines.Count.ToString(CultureInfo.InvariantCulture)
+            + " subtotal=" + Catalog.FormatPrice(cartService.Subtotal(cart));
+    }
+
+    // SMELL S18: the caller has to know every field of a cart line to copy it
+    private static List<CartLine> CopyLines(List<CartLine> lines)
+    {
+        var copy = new List<CartLine>();
+        foreach (var line in lines)
+        {
+            copy.Add(new CartLine
+            {
+                Product = line.Product,
+                Quantity = line.Quantity,
+                UnitPrice = line.UnitPrice,
+                FromBundle = line.FromBundle,
+            });
+        }
+
+        return copy;
+    }
+
+    private void Remember(string customerId, List<CartLine> lines, string promo, string shipping)
+    {
+        savedLines[customerId] = lines;
+        savedPromo[customerId] = promo;
+        savedShipping[customerId] = shipping;
     }
 
     private void SetConfig(JsonElement step)

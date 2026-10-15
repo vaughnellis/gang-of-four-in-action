@@ -24,6 +24,7 @@ Plan: `.copilot-tracking/plans/2026-10-15/baseline-plan.instructions.md`
 | DL-15 | The user said PowerShell 7 is now installed. `pwsh` is not on PATH, `C:\Program Files\PowerShell\7` does not exist, and no `pwsh*` is in `WindowsApps` or the machine and user PATH (checked in this terminal session) | Not a P01 blocker. A terminal started before the install may have a stale PATH, but the folder check says it is absent. P11-S1a re-checks and stops to ask if still missing (critique C-14) |
 | DL-16 | `.gitattributes` still has `*.received.* -diff` with a Verify comment | Left as is (PD-15). It is harmless and matches the `*.received.txt` ignore |
 | DL-17 | The existing Verify block is the last block of `.gitignore`, after the Windows entries, and the `[Ll]ogs/` rule is earlier in the file | P01-S1 replaces the Verify block in place and appends the logs negation at the end, after the rule it overrides. Checked with `git check-ignore` |
+| DL-18 | P03 user instruction overrides the details wording for S18 (public `Saved*` fields on `Cart`, snapshot in `CartService`) | The saved copies live in `StoreConsole`, written and read by the caller, so `Cart` holds no snapshot. No snapshot or history type, no command objects (S14). Cart widgets (S17) not touched. P04 must extend the copy code for the add-on flags |
 
 ## Pending user decisions
 

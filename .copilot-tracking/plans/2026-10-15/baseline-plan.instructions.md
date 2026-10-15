@@ -125,10 +125,10 @@ Every phase ends with the same closing step, written once here: run restore, bui
 
 ### Phase P03: Customers, cart and undo (S18) <!-- parallelizable: false -->
 
-* [ ] P03-S1 `Customer`, `Cart`, `CartLine`, `CartService` (add, remove, bundle expansion into lines)
-* [ ] P03-S2 Undo by public cart internals copied by the caller (S18)
-* [ ] P03-S3 Ops `register`, `cart.add`, `cart.remove`, `cart.undo`, `cart.show`; extend the scenario
-* [ ] P03-S4 Closing step. STOP
+* [x] P03-S1 `Customer`, `Cart`, `CartLine`, `CartService` (add, remove, bundle expansion into lines)
+* [x] P03-S2 Undo by public cart internals copied by the caller (S18)
+* [x] P03-S3 Ops `register`, `cart.add`, `cart.remove`, `cart.undo`, `cart.show`; extend the scenario
+* [x] P03-S4 Closing step. STOP
 
 ### Phase P04: Regions, pricing, promos, shipping cost, tax and weight (S01, S09, S15, S21, S23) <!-- parallelizable: false -->
 

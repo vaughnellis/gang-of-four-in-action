@@ -8,7 +8,7 @@ Date started: 2026-10-15
 
 ## Summary
 
-P02 of 11 complete (P01 committed by the human): catalog, variants, bundles, bulk import, category walks (S04, S08, S11, S16) and the first scenario steps. Nothing pushed or tagged by the agent.
+P03 of 11 complete (P01 and P02 committed by the human): customers, cart, bundle expansion and one-level undo (S18, plus a third S08 site) with the matching scenario steps. Nothing pushed or tagged by the agent.
 
 ## Phase P01: App shell and determinism
 
@@ -113,6 +113,57 @@ SMELL markers planted in P02
 | S16 | `baseline/src/CornerStore/Catalog/Catalog.cs` line 163 | `PrintTree` | Manual recursion, copy 1 |
 | S16 | `baseline/src/CornerStore/Catalog/Catalog.cs` line 179 | `CountProducts` | Manual recursion, copy 2 |
 | S16 | `baseline/src/CornerStore/Catalog/Catalog.cs` line 191 | `CollectSkus` | Manual recursion, copy 3 |
+
+## Phase P03: Customers, cart and undo
+
+Added
+
+* `baseline/src/CornerStore/Cart/Customer.cs` (id, number, name, region, channel, address, credit limit, role)
+* `baseline/src/CornerStore/Cart/CartLine.cs` (public fields: product, quantity, unit price, `FromBundle`)
+* `baseline/src/CornerStore/Cart/Cart.cs` (public fields `Lines`, `PromoCode`, `ShippingMethod`; S18)
+* `baseline/src/CornerStore/Cart/CartService.cs` (`Add`, `Remove`, `Subtotal`, private bundle expansion; third S08 site)
+* `baseline/tests/CornerStore.Tests/CartScenarioTests.cs` (8 tests through `ScenarioRunner.Run`)
+
+Modified
+
+* `baseline/src/CornerStore/StoreConsole.cs`: explicit constructor instead of a primary constructor (a field initializer cannot reference another instance field, and `CartService` needs the catalog); customer, cart and saved-copy dictionaries; ops `register`, `cart.add`, `cart.remove`, `cart.undo`, `cart.show`
+* `scenarios/trading-day.json`: three registrations (Ava AU email customer, Ben NZ sms customer without an address, Sam AU email staff) and 15 cart steps (steps 10 to 27 in the transcript)
+
+Removed
+
+* None
+
+Deviations and decisions
+
+* S18 follows the P03 instruction, not the earlier details wording (DL-18): the saved copies live in `StoreConsole`, not in `Cart`; there is no snapshot or history type and no command object. `Cart` is only public fields. A change is remembered only when the service accepts it, so a rejected add or remove keeps the earlier undo state (tested).
+* Bundle lines: each component becomes its own line tagged with `FromBundle`. Components take the discounted price rounded to two decimals, and the last component takes the remainder so the lines add up to `Catalog.PriceOf` of the bundle (91.76 for `BUN-RUN-KIT`: 80.96 + 10.80; 38.25 for `BUN-GIFT`: 13.05 + 25.20).
+* Lines merge only when SKU and `FromBundle` both match. `cart.remove` with a bundle SKU removes that bundle's lines; with a plain SKU it removes only the plain lines.
+* Customers get `Number` (registration order) for the fraud score in P08. `address` is optional; Ben has none, for the P08 validation rule.
+* `Cart` has no add-on flags yet. P04 adds them with the S09 marker and must extend the copy-out, copy-back and `Remember` code in `StoreConsole` (S18 maintenance cost, deliberate).
+* Cart output prints plain two-decimal prices until `MoneyFormatter` (P04). No widget coupling (S17 is P05).
+* One test-expectation check by hand: 89.95 x 0.9 = 80.955, rounds away from zero to 80.96; 12.00 x 0.9 = 10.80; sum 91.76 equals the bundle price.
+
+Validation (CI flags, Release)
+
+* `dotnet restore GangOfFour.slnx`: up to date
+* `dotnet build GangOfFour.slnx --no-restore -c Release -warnaserror`: 0 warnings, 0 errors
+* `dotnet test GangOfFour.slnx --no-build -c Release`: 17 passed, 0 failed
+* Running the app on `scenarios/trading-day.json` twice: identical output
+* AC-006 search in `baseline/src`: 0 hits
+* Pattern-leak scan: `StringBuilder` in `StoreConsole.cs` (BCL type) and the word "state" in the S18 marker comment; no pattern applied
+* `baseline/src`: 21 files, 1,034 lines; `Cart/` 4 files, `Catalog/` 9 files (ceilings 60 files, 2,800 lines, 9 per folder)
+* Files: LF, no BOM, ASCII only
+
+SMELL markers planted in P03
+
+| ID | File and line | Member | Shape |
+| --- | --- | --- | --- |
+| S18 | `baseline/src/CornerStore/Cart/Cart.cs` line 3 | `Cart` | Every internal is a public field |
+| S18 | `baseline/src/CornerStore/StoreConsole.cs` line 225 | `CartAdd` | Caller copies lines, promo and shipping out before the change |
+| S18 | `baseline/src/CornerStore/StoreConsole.cs` line 252 | `CartRemove` | Same copy-out, second copy |
+| S18 | `baseline/src/CornerStore/StoreConsole.cs` line 283 | `CartUndo` | Caller writes the saved internals straight back into the cart |
+| S18 | `baseline/src/CornerStore/StoreConsole.cs` line 320 | `CopyLines` | Caller must know every field of a cart line |
+| S08 | `baseline/src/CornerStore/Cart/CartService.cs` line 14 | `Add` | `is Bundle` check expands a bundle into discounted lines |
 
 ## Follow-on and open items
 

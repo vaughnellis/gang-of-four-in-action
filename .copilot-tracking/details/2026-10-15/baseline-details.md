@@ -103,7 +103,7 @@ Each site gets its own marker: `// SMELL Sxx: <short description>`. A smell with
 | S15 | P04 | Interpreter | `Pricing/PromoEngine.cs` `Evaluate` | Rules such as `SPEND>100 AND CATEGORY=Shoes` parsed with `Split` and `IndexOf` | `cart.promo` with three rules |
 | S16 | P02 | Iterator | `Catalog/Catalog.cs` `PrintTree`, `CountProducts`, `CollectSkus` | Three copies of the same manual recursion over the category tree | `browse` |
 | S17 | P05 | Mediator | `Widgets/ItemListWidget.cs`, `PromoBoxWidget.cs`, `ShippingSelectorWidget.cs`, `TotalsPanelWidget.cs` | Widgets hold references to each other and call each other's refresh methods | `cart.add`, `cart.remove`, `cart.promo`, `cart.shipping` |
-| S18 | P03 | Memento | `Cart/Cart.cs` public `Saved*` fields; `Cart/CartService.cs` snapshot and `Undo` | Undo works because cart internals are public and the service copies them | `cart.undo` |
+| S18 | P03 | Memento | `Cart/Cart.cs` public fields; `StoreConsole.cs` `CartAdd`, `CartRemove`, `CartUndo`, `CopyLines` | Undo works because every cart internal is public and the caller (`StoreConsole`) copies them out before a change and writes them back on undo; the saved copies live in `StoreConsole`, not in `Cart`, and there is no snapshot or history type (DL-18) | `cart.undo` |
 | S19 | P07 | Observer | `Orders/OrderService.cs` blocks after each status change | After a status change the service directly calls the message classes, `InventoryService`, `LoyaltyService` and `AnalyticsService` | `checkout`, `order.ship`, `admin.cancel`, `admin.refund` |
 | S20 | P07 | State | `Orders/OrderService.cs` `Pay`, `Ship`, `Deliver`, `Cancel`, `Refund`; `Orders/Order.cs` `Status` | `Status` is a string checked with if/else at the top of each transition | `order.*`, `admin.*` including illegal attempts |
 | S21 | P04 | Strategy | `Pricing/PricingService.cs` `ShippingCost` | `switch` on the shipping method string inside the pricing code | `cart.shipping` with standard, express, pickup |
@@ -201,7 +201,7 @@ P02
 
 P03
 
-* `CartService` snapshots `Lines`, `PromoCode`, `GiftWrap`, `Insurance` and `ShippingMethod` into the cart's public `Saved*` fields before each change; `Undo` copies them back. One level of undo.
+* `Cart` exposes public fields `Lines`, `PromoCode` and `ShippingMethod` (P04 adds the add-on flags and must extend the copy-out, copy-back and `Remember` code in `StoreConsole` for them). `StoreConsole` copies the fields out before an add or remove and commits the copies to its own per-customer dictionaries only when the change succeeds; `cart.undo` writes them back and clears them. One level of undo. No snapshot or history type and no command objects (DL-18).
 
 P04
 

@@ -12,6 +12,24 @@
     { "op": "bundle.add", "bundle": "BUN-GIFT", "sku": "MUG-ENAMEL" },
     { "op": "bundle.add", "bundle": "BUN-GIFT", "sku": "TOWEL-SET" },
     { "op": "bundle.add", "bundle": "BUN-GIFT", "sku": "BUN-RUN-KIT" },
-    { "op": "import", "count": 100000 }
+    { "op": "import", "count": 100000 },
+    { "op": "register", "name": "Ava", "region": "AU", "channel": "email", "creditLimit": 800, "role": "customer", "address": "1 Harbour St, Sydney" },
+    { "op": "register", "name": "Ben", "region": "NZ", "channel": "sms", "creditLimit": 300, "role": "customer" },
+    { "op": "register", "name": "Sam", "region": "AU", "channel": "email", "creditLimit": 0, "role": "staff", "address": "2 Depot Rd, Sydney" },
+    { "op": "cart.add", "customer": "cu-1", "sku": "SHOE-RUN-42", "qty": 2 },
+    { "op": "cart.add", "customer": "cu-1", "sku": "BUN-RUN-KIT" },
+    { "op": "cart.show", "customer": "cu-1" },
+    { "op": "cart.undo", "customer": "cu-1" },
+    { "op": "cart.add", "customer": "cu-1", "sku": "BUN-RUN-KIT" },
+    { "op": "cart.remove", "customer": "cu-1", "sku": "SHOE-RUN-42" },
+    { "op": "cart.undo", "customer": "cu-1" },
+    { "op": "cart.undo", "customer": "cu-1" },
+    { "op": "cart.add", "customer": "cu-2", "sku": "MUG-ENAMEL", "qty": 3 },
+    { "op": "cart.add", "customer": "cu-2", "sku": "GC-25" },
+    { "op": "cart.add", "customer": "cu-2", "sku": "EBOOK-FIT" },
+    { "op": "cart.add", "customer": "cu-2", "sku": "BUN-GIFT" },
+    { "op": "cart.add", "customer": "cu-2", "sku": "NOPE-1" },
+    { "op": "cart.add", "customer": "cu-9", "sku": "MUG-ENAMEL" },
+    { "op": "cart.show", "customer": "cu-2" }
   ]
 }
