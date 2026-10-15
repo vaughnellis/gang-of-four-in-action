@@ -2,16 +2,16 @@ namespace CornerStore;
 
 internal class OrderService(
     IdSequence ids,
-    InventoryService inventory,
-    OrderConfirmedEmail confirmedEmail,
-    OrderConfirmedSms confirmedSms,
-    OrderShippedEmail shippedEmail,
-    OrderShippedSms shippedSms,
-    LoyaltyService loyalty,
-    AnalyticsService analytics)
+    InventoryService inventory)
 {
     private readonly Dictionary<string, Order> orders = new(StringComparer.Ordinal);
     private readonly List<Invoice> invoices = [];
+    private readonly List<IOrderStatusObserver> observers = [];
+
+    public void Subscribe(IOrderStatusObserver observer)
+    {
+        observers.Add(observer);
+    }
 
     public Order Create(Customer customer, Cart cart, Quote quote, string paymentType)
     {
@@ -55,7 +55,7 @@ internal class OrderService(
         }
 
         order.Status = "Paid";
-        RecordStatusChange(order);
+        NotifyObservers(order);
         return null;
     }
 
@@ -73,7 +73,7 @@ internal class OrderService(
             order.TrackingNumber = ids.NextShipmentId();
         }
 
-        RecordStatusChange(order);
+        NotifyObservers(order);
         return null;
     }
 
@@ -86,7 +86,7 @@ internal class OrderService(
         }
 
         order.Status = "Delivered";
-        RecordStatusChange(order);
+        NotifyObservers(order);
         return null;
     }
 
@@ -104,7 +104,7 @@ internal class OrderService(
             RestoreStock(order);
         }
 
-        RecordStatusChange(order);
+        NotifyObservers(order);
         return null;
     }
 
@@ -122,43 +122,16 @@ internal class OrderService(
             RestoreStock(order);
         }
 
-        RecordStatusChange(order);
+        NotifyObservers(order);
         return null;
     }
 
-    private void RecordStatusChange(Order order)
+    private void NotifyObservers(Order order)
     {
-        // SMELL S19: order transitions directly call stock, notification, loyalty and analytics services
-        foreach (var line in order.Lines)
+        foreach (var observer in observers)
         {
-            inventory.GetStock(line.Product.Sku);
+            observer.OnStatusChanged(order);
         }
-
-        if (order.Status == "Paid")
-        {
-            if (order.Customer.Channel == "email")
-            {
-                confirmedEmail.Send(order.Customer, order.Id, order.Quote.Total);
-            }
-            else
-            {
-                confirmedSms.Send(order.Customer, order.Id, order.Quote.Total);
-            }
-        }
-        else if (order.Status == "Shipped")
-        {
-            if (order.Customer.Channel == "email")
-            {
-                shippedEmail.Send(order.Customer, order.Id, order.TrackingNumber ?? "");
-            }
-            else
-            {
-                shippedSms.Send(order.Customer, order.Id, order.TrackingNumber ?? "");
-            }
-        }
-
-        loyalty.RecordStatusChange(order);
-        analytics.RecordStatusChange(order);
     }
 
     private void RestoreStock(Order order)
