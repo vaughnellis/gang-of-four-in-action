@@ -25,7 +25,7 @@ internal class StoreConsole
     private readonly ReportService reports;
     private readonly Dictionary<string, Customer> customers = [];
     private readonly Dictionary<string, Cart> carts = [];
-    private readonly Dictionary<string, ItemListWidget> itemListWidgets = [];
+    private readonly Dictionary<string, CartMediator> cartMediators = [];
     private readonly Dictionary<string, List<CartLine>> savedLines = [];
     private readonly Dictionary<string, string> savedPromo = [];
     private readonly Dictionary<string, string> savedShipping = [];
@@ -267,15 +267,8 @@ internal class StoreConsole
         var cart = new Cart(id);
         carts[id] = cart;
 
-        var itemListWidget = new ItemListWidget(cart, customer, cartService);
-        var promoBoxWidget = new PromoBoxWidget(cart, customer, cartService, promos);
-        var shippingSelectorWidget = new ShippingSelectorWidget(cart, pricing);
-        var totalsPanelWidget = new TotalsPanelWidget(cart, customer, pricing);
-        itemListWidget.Connect(promoBoxWidget, shippingSelectorWidget, totalsPanelWidget);
-        promoBoxWidget.Connect(itemListWidget, shippingSelectorWidget, totalsPanelWidget);
-        shippingSelectorWidget.Connect(itemListWidget, promoBoxWidget, totalsPanelWidget);
-        totalsPanelWidget.Connect(itemListWidget, promoBoxWidget, shippingSelectorWidget);
-        itemListWidgets[id] = itemListWidget;
+        var mediator = new CartMediator(cart, customer, cartService, promos, pricing);
+        cartMediators[id] = mediator;
         Log.Info("registered " + id + " " + customer.Name + " (" + customer.Region + ", " + customer.Channel + ")");
     }
 
@@ -533,8 +526,8 @@ internal class StoreConsole
         var giftWrap = cart.GiftWrap;
         var insurance = cart.Insurance;
 
-        var itemListWidget = itemListWidgets[cart.CustomerId];
-        var error = itemListWidget.Add(sku, quantity);
+        var mediator = cartMediators[cart.CustomerId];
+        var error = mediator.Add(sku, quantity);
         if (error is not null)
         {
             Log.Info("rejected: " + error);
@@ -542,7 +535,6 @@ internal class StoreConsole
         }
 
         Remember(cart.CustomerId, lines, promo, shipping, giftWrap, insurance);
-        itemListWidget.RefreshAfterChange();
         Log.Info("added " + quantity.ToString(CultureInfo.InvariantCulture) + " x " + sku);
         Log.Info(Summary(cart));
     }
@@ -564,8 +556,8 @@ internal class StoreConsole
         var giftWrap = cart.GiftWrap;
         var insurance = cart.Insurance;
 
-        var itemListWidget = itemListWidgets[cart.CustomerId];
-        var error = itemListWidget.Remove(sku);
+        var mediator = cartMediators[cart.CustomerId];
+        var error = mediator.Remove(sku);
         if (error is not null)
         {
             Log.Info("rejected: " + error);
@@ -573,7 +565,6 @@ internal class StoreConsole
         }
 
         Remember(cart.CustomerId, lines, promo, shipping, giftWrap, insurance);
-        itemListWidget.RefreshAfterChange();
         Log.Info("removed " + sku);
         Log.Info(Summary(cart));
     }
@@ -604,7 +595,7 @@ internal class StoreConsole
         savedShipping.Remove(cart.CustomerId);
         savedGiftWrap.Remove(cart.CustomerId);
         savedInsurance.Remove(cart.CustomerId);
-        itemListWidgets[cart.CustomerId].RefreshAfterChange();
+        cartMediators[cart.CustomerId].ItemListChanged();
         Log.Info("undone");
         Log.Info(Summary(cart));
     }
@@ -617,7 +608,7 @@ internal class StoreConsole
             return;
         }
 
-        itemListWidgets[cart.CustomerId].RefreshAfterChange();
+        cartMediators[cart.CustomerId].ItemListChanged();
         Log.Info(Summary(cart));
     }
 
@@ -647,7 +638,7 @@ internal class StoreConsole
             return;
         }
 
-        itemListWidgets[cart.CustomerId].TotalsPanel.RefreshAfterChange();
+        cartMediators[cart.CustomerId].TotalsChanged();
         Log.Info(name + (on ? " added" : " removed"));
     }
 
@@ -660,21 +651,20 @@ internal class StoreConsole
         }
 
         var code = Text(step, "code");
-        var promoBoxWidget = itemListWidgets[cart.CustomerId].PromoBox;
-        if (!promoBoxWidget.IsKnown(code))
+        var mediator = cartMediators[cart.CustomerId];
+        if (!mediator.IsKnownPromo(code))
         {
             Log.Info("rejected: unknown promo " + code);
             return;
         }
 
-        if (!promoBoxWidget.Evaluate(code))
+        if (!mediator.PromoApplies(code))
         {
             Log.Info("rejected: promo " + code + " does not apply to this cart");
             return;
         }
 
-        promoBoxWidget.Apply(code);
-        promoBoxWidget.RefreshAfterChange();
+        mediator.ApplyPromo(code);
         Log.Info("promo " + code + " applied (" + promos.RuleOf(code) + ")");
     }
 
@@ -687,15 +677,14 @@ internal class StoreConsole
         }
 
         var method = Text(step, "method");
-        var shippingSelectorWidget = itemListWidgets[cart.CustomerId].ShippingSelector;
-        if (!shippingSelectorWidget.CanSelect(method))
+        var mediator = cartMediators[cart.CustomerId];
+        if (!mediator.CanSelectShipping(method))
         {
             Log.Info("rejected: unknown shipping method " + method);
             return;
         }
 
-        shippingSelectorWidget.Select(method);
-        shippingSelectorWidget.RefreshAfterChange();
+        mediator.SelectShipping(method);
         Log.Info("shipping set to " + method);
     }
 
@@ -713,7 +702,7 @@ internal class StoreConsole
             return;
         }
 
-        itemListWidgets[cart.CustomerId].TotalsPanel.ShowQuote();
+        cartMediators[cart.CustomerId].ShowQuote();
     }
 
     private string Summary(Cart cart)

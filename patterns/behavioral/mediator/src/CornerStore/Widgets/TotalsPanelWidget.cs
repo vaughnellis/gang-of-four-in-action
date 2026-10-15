@@ -4,30 +4,10 @@ namespace CornerStore;
 
 internal class TotalsPanelWidget(Cart cart, Customer customer, PricingService pricing)
 {
-    private ItemListWidget? itemList;
-    private PromoBoxWidget? promoBox;
-    private ShippingSelectorWidget? shippingSelector;
-
-    public void Connect(ItemListWidget itemListWidget, PromoBoxWidget promoBoxWidget, ShippingSelectorWidget shippingSelectorWidget)
-    {
-        itemList = itemListWidget;
-        promoBox = promoBoxWidget;
-        shippingSelector = shippingSelectorWidget;
-    }
-
     public void Refresh()
     {
         var total = cart.Lines.Count == 0 ? 0m : pricing.BuildQuote(cart, customer).Total;
         Log.Info("totals " + MoneyFormatter.Format(total, customer.Region));
-    }
-
-    public void RefreshAfterChange()
-    {
-        // SMELL S17: this widget refreshes its peers directly after a totals change
-        Refresh();
-        itemList?.Refresh();
-        promoBox?.Refresh();
-        shippingSelector?.Refresh();
     }
 
     public void ShowQuote()

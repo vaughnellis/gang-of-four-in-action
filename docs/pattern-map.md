@@ -32,7 +32,7 @@ Each of the 23 patterns is paired with one smell in the CornerStore baseline. Fi
 | S14 | Command | `command` | Back-office actions run inline with no undo, audit trail or queue | `ICommand` objects with `Execute` and `Undo`, plus an audit log | Natural | Done |
 | S15 | Interpreter | `interpreter` | Promo rules such as `SPEND>100 AND CATEGORY=Shoes` parsed with `Split` and `IndexOf` | A small grammar and expression tree evaluated against a cart | Extension | Not started |
 | S16 | Iterator | `iterator` | Callers walk the category tree with manual recursion, copy-pasted in several places | Depth-first and breadth-first iterators; explain `IEnumerable` with `yield` as the built-in form | Natural | Done |
-| S17 | Mediator | `mediator` | Cart widgets (item list, promo box, shipping selector, totals) reference and update each other directly | `CartMediator` that the widgets notify | Extension | Not started |
+| S17 | Mediator | `mediator` | Cart widgets (item list, promo box, shipping selector, totals) reference and update each other directly | `CartMediator` that the widgets notify | Extension | Done |
 | S18 | Memento | `memento` | Undo works by making cart internals public and copying them | `CartMemento` captured and restored by a caretaker | Natural | Not started |
 | S19 | Observer | `observer` | After a status change, `OrderService` directly calls email, stock, loyalty and analytics | Order events with subscribers; note C# events and `IObservable<T>` | Natural | Done |
 | S20 | State | `state` | `order.Status` string checked with if/else in Pay, Ship, Cancel and Refund | One class per order state that owns its transitions | Natural | Done |

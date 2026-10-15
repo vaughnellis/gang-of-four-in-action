@@ -1,18 +1,7 @@
 namespace CornerStore;
 
-internal class ShippingSelectorWidget(Cart cart, PricingService pricing)
+internal class ShippingSelectorWidget(Cart cart, PricingService pricing, CartMediator mediator)
 {
-    private ItemListWidget? itemList;
-    private PromoBoxWidget? promoBox;
-    private TotalsPanelWidget? totalsPanel;
-
-    public void Connect(ItemListWidget itemListWidget, PromoBoxWidget promoBoxWidget, TotalsPanelWidget totalsPanelWidget)
-    {
-        itemList = itemListWidget;
-        promoBox = promoBoxWidget;
-        totalsPanel = totalsPanelWidget;
-    }
-
     public bool CanSelect(string method)
     {
         return pricing.ShippingCost(method, 0m) is not null;
@@ -21,6 +10,7 @@ internal class ShippingSelectorWidget(Cart cart, PricingService pricing)
     public void Select(string method)
     {
         cart.ShippingMethod = method;
+        mediator.ShippingChanged();
     }
 
     public void Refresh()
@@ -28,12 +18,4 @@ internal class ShippingSelectorWidget(Cart cart, PricingService pricing)
         Log.Info("shipping " + cart.ShippingMethod);
     }
 
-    public void RefreshAfterChange()
-    {
-        // SMELL S17: this widget refreshes its peers directly after a shipping change
-        Refresh();
-        itemList?.Refresh();
-        promoBox?.Refresh();
-        totalsPanel?.Refresh();
-    }
 }

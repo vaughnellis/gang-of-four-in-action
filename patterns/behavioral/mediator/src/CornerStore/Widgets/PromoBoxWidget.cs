@@ -1,18 +1,7 @@
 namespace CornerStore;
 
-internal class PromoBoxWidget(Cart cart, Customer customer, CartService cartService, PromoEngine promos)
+internal class PromoBoxWidget(Cart cart, Customer customer, CartService cartService, PromoEngine promos, CartMediator mediator)
 {
-    private ItemListWidget? itemList;
-    private ShippingSelectorWidget? shippingSelector;
-    private TotalsPanelWidget? totalsPanel;
-
-    public void Connect(ItemListWidget itemListWidget, ShippingSelectorWidget shippingSelectorWidget, TotalsPanelWidget totalsPanelWidget)
-    {
-        itemList = itemListWidget;
-        shippingSelector = shippingSelectorWidget;
-        totalsPanel = totalsPanelWidget;
-    }
-
     public bool IsKnown(string code)
     {
         return promos.IsKnown(code);
@@ -26,6 +15,7 @@ internal class PromoBoxWidget(Cart cart, Customer customer, CartService cartServ
     public void Apply(string code)
     {
         cart.PromoCode = code;
+        mediator.PromoChanged();
     }
 
     public void Refresh()
@@ -33,12 +23,4 @@ internal class PromoBoxWidget(Cart cart, Customer customer, CartService cartServ
         Log.Info("promo " + (cart.PromoCode == "" ? "none" : cart.PromoCode));
     }
 
-    public void RefreshAfterChange()
-    {
-        // SMELL S17: this widget refreshes its peers directly after a promo change
-        Refresh();
-        itemList?.Refresh();
-        shippingSelector?.Refresh();
-        totalsPanel?.Refresh();
-    }
 }
