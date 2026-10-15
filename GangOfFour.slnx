@@ -3,7 +3,10 @@
     <Project Path="baseline/src/CornerStore/CornerStore.csproj" />
     <Project Path="baseline/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
   </Folder>
-  <Folder Name="/patterns/creational/" />
+  <Folder Name="/patterns/creational/">
+    <Project Path="patterns/creational/factory-method/src/CornerStore/CornerStore.csproj" />
+    <Project Path="patterns/creational/factory-method/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
   <Folder Name="/patterns/structural/">
     <Project Path="patterns/structural/facade/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/structural/facade/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
