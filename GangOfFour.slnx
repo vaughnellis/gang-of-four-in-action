@@ -32,6 +32,8 @@
     <Project Path="patterns/behavioral/chain-of-responsibility/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
     <Project Path="patterns/behavioral/command/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/behavioral/command/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+    <Project Path="patterns/behavioral/iterator/src/CornerStore/CornerStore.csproj" />
+    <Project Path="patterns/behavioral/iterator/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
   </Folder>
   <Folder Name="/capstone/" />
 </Solution>
