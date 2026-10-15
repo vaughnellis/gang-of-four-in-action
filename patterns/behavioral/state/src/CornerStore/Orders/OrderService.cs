@@ -17,7 +17,7 @@ internal class OrderService(
     {
         // SMELL S02: the order is assembled with eleven positional arguments and null optionals
         var order = new Order(
-            ids.NextOrderId(), customer, "Pending",
+            ids.NextOrderId(), customer, new PendingOrderState(),
             cart.Lines.Select(CopyLine).ToList(), quote, paymentType,
             cart.PromoCode == "" ? null : cart.PromoCode, null, null, null, null);
         orders[order.Id] = order;
@@ -48,85 +48,30 @@ internal class OrderService(
 
     public string? Pay(Order order)
     {
-        // SMELL S20: the allowed transition is selected by comparing the status string
-        if (order.Status != "Pending")
-        {
-            return "cannot pay from " + order.Status;
-        }
-
-        order.Status = "Paid";
-        RecordStatusChange(order);
-        return null;
+        return order.State.Pay(this, order);
     }
 
     public string? Ship(Order order)
     {
-        // SMELL S20: the allowed transition is selected by comparing the status string
-        if (order.Status != "Paid")
-        {
-            return "cannot ship from " + order.Status;
-        }
-
-        order.Status = "Shipped";
-        if (order.TrackingNumber is null)
-        {
-            order.TrackingNumber = ids.NextShipmentId();
-        }
-
-        RecordStatusChange(order);
-        return null;
+        return order.State.Ship(this, order);
     }
 
     public string? Deliver(Order order)
     {
-        // SMELL S20: the allowed transition is selected by comparing the status string
-        if (order.Status != "Shipped")
-        {
-            return "cannot deliver from " + order.Status;
-        }
-
-        order.Status = "Delivered";
-        RecordStatusChange(order);
-        return null;
+        return order.State.Deliver(this, order);
     }
 
     public string? Cancel(Order order)
     {
-        // SMELL S20: the allowed transition is selected by comparing the status string
-        if (order.Status != "Pending" && order.Status != "Paid")
-        {
-            return "cannot cancel from " + order.Status;
-        }
-
-        order.Status = "Cancelled";
-        if (order.StockReserved)
-        {
-            RestoreStock(order);
-        }
-
-        RecordStatusChange(order);
-        return null;
+        return order.State.Cancel(this, order);
     }
 
     public string? Refund(Order order)
     {
-        // SMELL S20: the allowed transition is selected by comparing the status string
-        if (order.Status != "Paid" && order.Status != "Shipped" && order.Status != "Delivered")
-        {
-            return "cannot refund from " + order.Status;
-        }
-
-        order.Status = "Refunded";
-        if (order.StockReserved)
-        {
-            RestoreStock(order);
-        }
-
-        RecordStatusChange(order);
-        return null;
+        return order.State.Refund(this, order);
     }
 
-    private void RecordStatusChange(Order order)
+    internal void RecordStatusChange(Order order)
     {
         // SMELL S19: order transitions directly call stock, notification, loyalty and analytics services
         foreach (var line in order.Lines)
@@ -161,7 +106,7 @@ internal class OrderService(
         analytics.RecordStatusChange(order);
     }
 
-    private void RestoreStock(Order order)
+    internal void RestoreStock(Order order)
     {
         foreach (var line in order.Lines)
         {
@@ -169,6 +114,14 @@ internal class OrderService(
         }
 
         order.StockReserved = false;
+    }
+
+    internal void AssignTrackingNumber(Order order)
+    {
+        if (order.TrackingNumber is null)
+        {
+            order.TrackingNumber = ids.NextShipmentId();
+        }
     }
 
     private static CartLine CopyLine(CartLine line)
