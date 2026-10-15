@@ -29,7 +29,7 @@ Execution model: direct implementation; no subagents
 
 * [x] P01: Generate unchanged copy, run 41 tests, and commit it as `419ff5d`.
 * [x] P02: Move transition decisions to state classes and add focused tests.
-* [ ] P03: Complete README/diff/map, review, refactor commit, progress, and local tag.
+* [x] P03: Complete README/diff/map, review, refactor commit, progress, and local tag.
 
 ## Validation and success criteria
 

@@ -51,4 +51,4 @@ The root README already linked the State folder and was left unchanged. `DIFF.md
 
 ## Release summary
 
-Unchanged-copy commit: `419ff5d`. The refactor commit and local `state-v1` tag are recorded in run-all progress after review.
+Unchanged-copy commit: `419ff5d`. Refactor commit: `df825b1`. Local tag: `state-v1` at `df825b172328b1befbe5991897371bfb295798bf`. No push was made.

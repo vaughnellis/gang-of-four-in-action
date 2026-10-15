@@ -42,4 +42,4 @@ S20 transition decisions now belong to concrete order state objects. The public-
 
 ## Remaining work
 
-Commit the reviewed State changes locally, update progress with both hashes, create `state-v1`, and continue with Builder. Do not push.
+The reviewed State changes are committed as `df825b1`; the unchanged copy is `419ff5d`; local tag `state-v1` points to `df825b172328b1befbe5991897371bfb295798bf`. The progress row is Done. Continue with Builder. Do not push.
