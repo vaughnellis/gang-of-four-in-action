@@ -117,11 +117,11 @@ Every phase ends with the same closing step, written once here: run restore, bui
 
 ### Phase P02: Catalog (S04, S08, S11, S16) <!-- parallelizable: false -->
 
-* [ ] P02-S1 Product types: `Product`, `PhysicalProduct`, `DigitalProduct`, `GiftCardProduct`, `Category`, `Bundle`
-* [ ] P02-S2 `Catalog` with lookup, nested categories, `CreateVariant` (S04, field-by-field copy), `PriceOf` and bundle rules with the nesting refusal (S08), and three copy-pasted recursive walks (S16)
-* [ ] P02-S3 `Listing` and `ListingImporter` generating 100,000 listings with per-listing string copies (S11); summary count only in the transcript
-* [ ] P02-S4 Ops `browse`, `variant`, `bundle.create`, `bundle.add`, `import`; first steps in `scenarios/trading-day.json`
-* [ ] P02-S5 Closing step. STOP
+* [x] P02-S1 Product types: `Product`, `PhysicalProduct`, `DigitalProduct`, `GiftCardProduct`, `Category`, `Bundle`
+* [x] P02-S2 `Catalog` with lookup, nested categories, `CreateVariant` (S04, field-by-field copy), `PriceOf` and bundle rules with the nesting refusal (S08), and three copy-pasted recursive walks (S16)
+* [x] P02-S3 `Listing` and `ListingImporter` generating 100,000 listings with per-listing string copies (S11); summary count only in the transcript
+* [x] P02-S4 Ops `browse`, `variant`, `bundle.create`, `bundle.add`, `import`; first steps in `scenarios/trading-day.json`
+* [x] P02-S5 Closing step. STOP
 
 ### Phase P03: Customers, cart and undo (S18) <!-- parallelizable: false -->
 

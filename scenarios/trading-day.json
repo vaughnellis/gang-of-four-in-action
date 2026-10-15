@@ -1,0 +1,17 @@
+{
+  "name": "trading-day",
+  "startTime": "2026-03-02T09:00:00Z",
+  "seed": 20260302,
+  "config": { "fraudThreshold": 80, "lowStockLevel": 3 },
+  "steps": [
+    { "op": "browse" },
+    { "op": "variant", "parent": "SHOE-RUN-42", "sku": "SHOE-RUN-44", "size": "44", "colour": "Blue" },
+    { "op": "variant", "parent": "EBOOK-FIT", "sku": "EBOOK-FIT-2", "size": "A5", "colour": "None" },
+    { "op": "browse", "category": "Shoes" },
+    { "op": "bundle.create", "sku": "BUN-GIFT", "name": "Gift set" },
+    { "op": "bundle.add", "bundle": "BUN-GIFT", "sku": "MUG-ENAMEL" },
+    { "op": "bundle.add", "bundle": "BUN-GIFT", "sku": "TOWEL-SET" },
+    { "op": "bundle.add", "bundle": "BUN-GIFT", "sku": "BUN-RUN-KIT" },
+    { "op": "import", "count": 100000 }
+  ]
+}
