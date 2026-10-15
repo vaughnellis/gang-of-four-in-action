@@ -44,6 +44,8 @@
     <Project Path="patterns/behavioral/mediator/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
     <Project Path="patterns/behavioral/memento/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/behavioral/memento/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+    <Project Path="patterns/behavioral/visitor/src/CornerStore/CornerStore.csproj" />
+    <Project Path="patterns/behavioral/visitor/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
   </Folder>
   <Folder Name="/capstone/" />
 </Solution>
