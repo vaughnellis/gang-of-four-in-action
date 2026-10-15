@@ -454,29 +454,28 @@ internal class StoreConsole
         Log.Info("checkout placed " + order.Id);
     }
 
-    // SMELL S03: payment processor construction is selected by a switch in checkout
     private static bool ChargePayment(string paymentType, Customer customer, decimal amount)
     {
-        IPaymentProcessor? processor = null;
+        PaymentProcessorCreator? creator = null;
         switch (paymentType)
         {
             case "card":
-                processor = new CardProcessor();
+                creator = new CardProcessorCreator();
                 break;
             case "paypal":
-                processor = new PayPalProcessor();
+                creator = new PayPalProcessorCreator();
                 break;
             case "afterpay":
-                processor = new AfterpayProcessor();
+                creator = new AfterpayProcessorCreator();
                 break;
         }
 
-        if (processor is null)
+        if (creator is null)
         {
             return false;
         }
 
-        processor.Charge(customer, amount);
+        creator.Charge(customer, amount);
         return true;
     }
 
