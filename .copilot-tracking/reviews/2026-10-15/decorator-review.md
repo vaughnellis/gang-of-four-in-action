@@ -42,4 +42,4 @@ S09's pricing conditional is replaced by composable cost decorators. Gift wrap r
 
 ## Remaining work
 
-Commit the reviewed Decorator changes locally, update progress with both hashes, create `decorator-v1`, and continue with Batch B State. Do not push.
+The reviewed Decorator changes are committed as `660b5ca`; the unchanged copy is `b5c83ac`; local tag `decorator-v1` points to `660b5cae5b547a8605cfbec2702c885b700185a2`. The progress row is Done. Batch A is complete. Continue with Batch B State. Do not push.

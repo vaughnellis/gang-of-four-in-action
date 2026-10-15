@@ -9,7 +9,7 @@
 | observer | Done | Conformant with justified divergence | 8470705, 5ec2583 | observer-v1 |
 | factory-method | Done | Conformant with justified divergence | ba5b4ff, c4b1706 | factory-method-v1 |
 | adapter | Done | Conformant with justified divergence | e3af51e, 1348680 | adapter-v1 |
-| decorator | In progress | Pending | b5c83ac | - |
+| decorator | Done | Conformant with justified divergence | b5c83ac, 660b5ca | decorator-v1 |
 | state | Not started | Pending | - | - |
 | builder | Not started | Pending | - | - |
 | template-method | Not started | Pending | - | - |

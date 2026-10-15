@@ -49,4 +49,4 @@ The root README already linked Decorator and was left unchanged. The generated `
 
 ## Release summary
 
-Unchanged-copy commit: `b5c83ac`. The refactor commit and local `decorator-v1` tag are recorded in run-all progress after review.
+Unchanged-copy commit: `b5c83ac`. Refactor commit: `660b5ca`. Local tag: `decorator-v1` at `660b5cae5b547a8605cfbec2702c885b700185a2`. No push was made.
