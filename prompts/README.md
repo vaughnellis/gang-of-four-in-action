@@ -16,7 +16,8 @@ HVE Core writes its working artifacts (plans, plan critiques, change records, re
 | `05-run-all.md` | `run-all` | Orchestrates everything after foundations in one automatic run: finishes the baseline, runs both pilots, applies their notes, then generates and runs the other 21 pattern briefs. |
 | `06-comparisons.md` | `comparisons` | `docs/comparisons.md`: eight commonly confused pattern pairs, explained with code from this repo. |
 | `07-capstone.md` | `capstone` | All 23 patterns applied together in `capstone/`, one commit per pattern, held to the same golden master. |
-| `08-release-v1.md` | `release-v1` | Release preparation: landing page, build history, pinned actions, Dependabot, changelog, link check. |
+| `08-readmes.md` | `readmes` | Every README rewritten to one educational standard: root, baseline, the three categories, all 23 patterns and the capstone. |
+| `09-release-v1.md` | `release-v1` | Release preparation: final accuracy pass, pinned actions, Dependabot, changelog, link check. |
 | `patterns/_template.md` | (template) | Copy and fill to create the brief for each remaining pattern. |
 
 Alongside these briefs, `.github/copilot-instructions.md` and `.github/instructions/` hold standing rules that Copilot applies automatically to every interaction in the repo, RPI or not. The briefs say what to build; the instructions say how to behave while building it. Keep the two consistent: if a rule changes in `00-project-brief.md`, update the instructions too.
