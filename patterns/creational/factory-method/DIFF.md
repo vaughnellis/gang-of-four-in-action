@@ -17,7 +17,7 @@
 ```diff
 diff --git a/pattern/src/CornerStore/Checkout/AfterpayProcessorCreator.cs b/pattern/src/CornerStore/Checkout/AfterpayProcessorCreator.cs
 new file mode 100644
-index 0000000..38170fb
+index 0000000..af8a35f
 --- /dev/null
 +++ b/pattern/src/CornerStore/Checkout/AfterpayProcessorCreator.cs
 @@ -0,0 +1,9 @@
@@ -33,7 +33,7 @@ index 0000000..38170fb
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Checkout/CardProcessorCreator.cs b/pattern/src/CornerStore/Checkout/CardProcessorCreator.cs
 new file mode 100644
-index 0000000..356cbba
+index 0000000..4599678
 --- /dev/null
 +++ b/pattern/src/CornerStore/Checkout/CardProcessorCreator.cs
 @@ -0,0 +1,9 @@
@@ -49,7 +49,7 @@ index 0000000..356cbba
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Checkout/PayPalProcessorCreator.cs b/pattern/src/CornerStore/Checkout/PayPalProcessorCreator.cs
 new file mode 100644
-index 0000000..edba688
+index 0000000..b146822
 --- /dev/null
 +++ b/pattern/src/CornerStore/Checkout/PayPalProcessorCreator.cs
 @@ -0,0 +1,9 @@
@@ -65,7 +65,7 @@ index 0000000..edba688
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Checkout/PaymentProcessorCreator.cs b/pattern/src/CornerStore/Checkout/PaymentProcessorCreator.cs
 new file mode 100644
-index 0000000..8914395
+index 0000000..f6c8131
 --- /dev/null
 +++ b/pattern/src/CornerStore/Checkout/PaymentProcessorCreator.cs
 @@ -0,0 +1,11 @@
@@ -131,7 +131,7 @@ index a288b4e..7ac3a6c 100644
      }
 diff --git a/pattern/tests/CornerStore.Tests/FactoryMethodTests.cs b/pattern/tests/CornerStore.Tests/FactoryMethodTests.cs
 new file mode 100644
-index 0000000..7173246
+index 0000000..42bea2f
 --- /dev/null
 +++ b/pattern/tests/CornerStore.Tests/FactoryMethodTests.cs
 @@ -0,0 +1,71 @@

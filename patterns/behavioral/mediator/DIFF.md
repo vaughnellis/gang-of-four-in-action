@@ -161,7 +161,7 @@ index a288b4e..e7a0197 100644
      private string Summary(Cart cart)
 diff --git a/pattern/src/CornerStore/Widgets/CartMediator.cs b/pattern/src/CornerStore/Widgets/CartMediator.cs
 new file mode 100644
-index 0000000..a4f8422
+index 0000000..a18f480
 --- /dev/null
 +++ b/pattern/src/CornerStore/Widgets/CartMediator.cs
 @@ -0,0 +1,97 @@
@@ -445,7 +445,7 @@ index 0c0ab23..b349187 100644
          var quote = pricing.BuildQuote(cart, customer);
 diff --git a/pattern/tests/CornerStore.Tests/MediatorTests.cs b/pattern/tests/CornerStore.Tests/MediatorTests.cs
 new file mode 100644
-index 0000000..a6ec116
+index 0000000..0c8d6b7
 --- /dev/null
 +++ b/pattern/tests/CornerStore.Tests/MediatorTests.cs
 @@ -0,0 +1,98 @@

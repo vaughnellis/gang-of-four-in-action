@@ -27,7 +27,7 @@ index a15a29b..f8dc6c1 100644
  </Project>
 diff --git a/pattern/src/CornerStore/Orders/InvoiceBuilder.cs b/pattern/src/CornerStore/Orders/InvoiceBuilder.cs
 new file mode 100644
-index 0000000..0ab040d
+index 0000000..878af02
 --- /dev/null
 +++ b/pattern/src/CornerStore/Orders/InvoiceBuilder.cs
 @@ -0,0 +1,41 @@
@@ -75,7 +75,7 @@ index 0000000..0ab040d
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Orders/OrderBuilder.cs b/pattern/src/CornerStore/Orders/OrderBuilder.cs
 new file mode 100644
-index 0000000..f4e6f42
+index 0000000..59c193e
 --- /dev/null
 +++ b/pattern/src/CornerStore/Orders/OrderBuilder.cs
 @@ -0,0 +1,116 @@
@@ -235,7 +235,7 @@ index 87f6ce2..8491766 100644
      }
 diff --git a/pattern/tests/CornerStore.Tests/BuilderTests.cs b/pattern/tests/CornerStore.Tests/BuilderTests.cs
 new file mode 100644
-index 0000000..e674075
+index 0000000..d8bbc07
 --- /dev/null
 +++ b/pattern/tests/CornerStore.Tests/BuilderTests.cs
 @@ -0,0 +1,93 @@

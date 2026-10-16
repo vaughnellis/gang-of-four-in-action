@@ -31,7 +31,7 @@ index a15a29b..f8dc6c1 100644
  </Project>
 diff --git a/pattern/src/CornerStore/Orders/AnalyticsOrderStatusObserver.cs b/pattern/src/CornerStore/Orders/AnalyticsOrderStatusObserver.cs
 new file mode 100644
-index 0000000..8a9ce83
+index 0000000..233ac52
 --- /dev/null
 +++ b/pattern/src/CornerStore/Orders/AnalyticsOrderStatusObserver.cs
 @@ -0,0 +1,9 @@
@@ -47,7 +47,7 @@ index 0000000..8a9ce83
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Orders/IOrderStatusObserver.cs b/pattern/src/CornerStore/Orders/IOrderStatusObserver.cs
 new file mode 100644
-index 0000000..07e8407
+index 0000000..4cc04a4
 --- /dev/null
 +++ b/pattern/src/CornerStore/Orders/IOrderStatusObserver.cs
 @@ -0,0 +1,6 @@
@@ -60,7 +60,7 @@ index 0000000..07e8407
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Orders/InventoryOrderStatusObserver.cs b/pattern/src/CornerStore/Orders/InventoryOrderStatusObserver.cs
 new file mode 100644
-index 0000000..2f8118e
+index 0000000..ce23b64
 --- /dev/null
 +++ b/pattern/src/CornerStore/Orders/InventoryOrderStatusObserver.cs
 @@ -0,0 +1,12 @@
@@ -79,7 +79,7 @@ index 0000000..2f8118e
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Orders/LoyaltyOrderStatusObserver.cs b/pattern/src/CornerStore/Orders/LoyaltyOrderStatusObserver.cs
 new file mode 100644
-index 0000000..ffcd66f
+index 0000000..7729936
 --- /dev/null
 +++ b/pattern/src/CornerStore/Orders/LoyaltyOrderStatusObserver.cs
 @@ -0,0 +1,9 @@
@@ -95,7 +95,7 @@ index 0000000..ffcd66f
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Orders/NotificationOrderStatusObserver.cs b/pattern/src/CornerStore/Orders/NotificationOrderStatusObserver.cs
 new file mode 100644
-index 0000000..389b0cb
+index 0000000..89dd6a9
 --- /dev/null
 +++ b/pattern/src/CornerStore/Orders/NotificationOrderStatusObserver.cs
 @@ -0,0 +1,34 @@
@@ -261,7 +261,7 @@ index a288b4e..1f4806a 100644
          shipFastClient = new ShipFastClient(Ids);
 diff --git a/pattern/tests/CornerStore.Tests/ObserverTests.cs b/pattern/tests/CornerStore.Tests/ObserverTests.cs
 new file mode 100644
-index 0000000..2489ee5
+index 0000000..774dc9e
 --- /dev/null
 +++ b/pattern/tests/CornerStore.Tests/ObserverTests.cs
 @@ -0,0 +1,98 @@

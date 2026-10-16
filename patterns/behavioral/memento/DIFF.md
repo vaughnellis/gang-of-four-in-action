@@ -75,7 +75,7 @@ index a08dcb6..d461958 100644
  }
 diff --git a/pattern/src/CornerStore/Cart/CartMemento.cs b/pattern/src/CornerStore/Cart/CartMemento.cs
 new file mode 100644
-index 0000000..d6ccf71
+index 0000000..2d85680
 --- /dev/null
 +++ b/pattern/src/CornerStore/Cart/CartMemento.cs
 @@ -0,0 +1,29 @@
@@ -236,7 +236,7 @@ index a288b4e..193210a 100644
          if (!step.TryGetProperty("key", out var key)
 diff --git a/pattern/tests/CornerStore.Tests/MementoTests.cs b/pattern/tests/CornerStore.Tests/MementoTests.cs
 new file mode 100644
-index 0000000..bed25b8
+index 0000000..072ee8b
 --- /dev/null
 +++ b/pattern/tests/CornerStore.Tests/MementoTests.cs
 @@ -0,0 +1,62 @@

@@ -79,7 +79,7 @@ index a15a29b..f8dc6c1 100644
  </Project>
 diff --git a/pattern/tests/CornerStore.Tests/PrototypeTests.cs b/pattern/tests/CornerStore.Tests/PrototypeTests.cs
 new file mode 100644
-index 0000000..8fc7be8
+index 0000000..3d2423d
 --- /dev/null
 +++ b/pattern/tests/CornerStore.Tests/PrototypeTests.cs
 @@ -0,0 +1,69 @@

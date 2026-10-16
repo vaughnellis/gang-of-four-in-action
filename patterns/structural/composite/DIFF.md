@@ -218,7 +218,7 @@ index 2131b22..d75a960 100644
      }
 diff --git a/pattern/src/CornerStore/Catalog/ICatalogItem.cs b/pattern/src/CornerStore/Catalog/ICatalogItem.cs
 new file mode 100644
-index 0000000..8d5d0f3
+index 0000000..ba15d79
 --- /dev/null
 +++ b/pattern/src/CornerStore/Catalog/ICatalogItem.cs
 @@ -0,0 +1,14 @@
@@ -260,7 +260,7 @@ index a803edc..f11d3ae 100644
  }
 diff --git a/pattern/tests/CornerStore.Tests/CompositeTests.cs b/pattern/tests/CornerStore.Tests/CompositeTests.cs
 new file mode 100644
-index 0000000..06ea1ae
+index 0000000..4d6685f
 --- /dev/null
 +++ b/pattern/tests/CornerStore.Tests/CompositeTests.cs
 @@ -0,0 +1,59 @@

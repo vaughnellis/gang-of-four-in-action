@@ -825,7 +825,7 @@ index be7b494..58d5e51 100644
  [assembly: Parallelization(Mode = ParallelMode.None)]
 diff --git a/pattern/tests/CornerStore.Tests/SingletonTests.cs b/pattern/tests/CornerStore.Tests/SingletonTests.cs
 new file mode 100644
-index 0000000..9210f1b
+index 0000000..645559a
 --- /dev/null
 +++ b/pattern/tests/CornerStore.Tests/SingletonTests.cs
 @@ -0,0 +1,77 @@

@@ -50,7 +50,7 @@ index 118556b..7fa05e7 100644
  }
 diff --git a/pattern/src/CornerStore/Catalog/ILineItemVisitor.cs b/pattern/src/CornerStore/Catalog/ILineItemVisitor.cs
 new file mode 100644
-index 0000000..3fba432
+index 0000000..6de2647
 --- /dev/null
 +++ b/pattern/src/CornerStore/Catalog/ILineItemVisitor.cs
 @@ -0,0 +1,10 @@
@@ -125,7 +125,7 @@ index 609c520..9a3e2d8 100644
  }
 diff --git a/pattern/src/CornerStore/Pricing/TaxVisitor.cs b/pattern/src/CornerStore/Pricing/TaxVisitor.cs
 new file mode 100644
-index 0000000..d31793a
+index 0000000..521e701
 --- /dev/null
 +++ b/pattern/src/CornerStore/Pricing/TaxVisitor.cs
 @@ -0,0 +1,21 @@
@@ -177,7 +177,7 @@ index b22a2f7..5c42263 100644
  }
 diff --git a/pattern/src/CornerStore/Pricing/WeightVisitor.cs b/pattern/src/CornerStore/Pricing/WeightVisitor.cs
 new file mode 100644
-index 0000000..4206541
+index 0000000..bb2f296
 --- /dev/null
 +++ b/pattern/src/CornerStore/Pricing/WeightVisitor.cs
 @@ -0,0 +1,21 @@
@@ -293,7 +293,7 @@ index 028f70e..731b113 100644
      }
 diff --git a/pattern/src/CornerStore/Reporting/ReportTotalsVisitor.cs b/pattern/src/CornerStore/Reporting/ReportTotalsVisitor.cs
 new file mode 100644
-index 0000000..0d04a40
+index 0000000..1c2df1e
 --- /dev/null
 +++ b/pattern/src/CornerStore/Reporting/ReportTotalsVisitor.cs
 @@ -0,0 +1,33 @@
@@ -332,7 +332,7 @@ index 0000000..0d04a40
 +}
 diff --git a/pattern/tests/CornerStore.Tests/VisitorTests.cs b/pattern/tests/CornerStore.Tests/VisitorTests.cs
 new file mode 100644
-index 0000000..5108637
+index 0000000..4641f73
 --- /dev/null
 +++ b/pattern/tests/CornerStore.Tests/VisitorTests.cs
 @@ -0,0 +1,43 @@

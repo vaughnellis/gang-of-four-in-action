@@ -14,7 +14,7 @@
 ```diff
 diff --git a/pattern/src/CornerStore/Checkout/CheckoutFacade.cs b/pattern/src/CornerStore/Checkout/CheckoutFacade.cs
 new file mode 100644
-index 0000000..294ba4b
+index 0000000..44672c0
 --- /dev/null
 +++ b/pattern/src/CornerStore/Checkout/CheckoutFacade.cs
 @@ -0,0 +1,104 @@
@@ -279,7 +279,7 @@ index a288b4e..1aa6675 100644
      private void ReportCsv(JsonElement step)
 diff --git a/pattern/tests/CornerStore.Tests/CheckoutFacadeTests.cs b/pattern/tests/CornerStore.Tests/CheckoutFacadeTests.cs
 new file mode 100644
-index 0000000..106d2b4
+index 0000000..d54da51
 --- /dev/null
 +++ b/pattern/tests/CornerStore.Tests/CheckoutFacadeTests.cs
 @@ -0,0 +1,130 @@

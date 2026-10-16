@@ -19,7 +19,7 @@
 ```diff
 diff --git a/pattern/src/CornerStore/Checkout/AddressValidationHandler.cs b/pattern/src/CornerStore/Checkout/AddressValidationHandler.cs
 new file mode 100644
-index 0000000..83c19e0
+index 0000000..5da5229
 --- /dev/null
 +++ b/pattern/src/CornerStore/Checkout/AddressValidationHandler.cs
 @@ -0,0 +1,9 @@
@@ -35,7 +35,7 @@ index 0000000..83c19e0
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Checkout/CreditLimitValidationHandler.cs b/pattern/src/CornerStore/Checkout/CreditLimitValidationHandler.cs
 new file mode 100644
-index 0000000..aeb5cbc
+index 0000000..553cc95
 --- /dev/null
 +++ b/pattern/src/CornerStore/Checkout/CreditLimitValidationHandler.cs
 @@ -0,0 +1,11 @@
@@ -53,7 +53,7 @@ index 0000000..aeb5cbc
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Checkout/FraudValidationHandler.cs b/pattern/src/CornerStore/Checkout/FraudValidationHandler.cs
 new file mode 100644
-index 0000000..90e2db3
+index 0000000..2e85935
 --- /dev/null
 +++ b/pattern/src/CornerStore/Checkout/FraudValidationHandler.cs
 @@ -0,0 +1,15 @@
@@ -75,7 +75,7 @@ index 0000000..90e2db3
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Checkout/OrderValidationContext.cs b/pattern/src/CornerStore/Checkout/OrderValidationContext.cs
 new file mode 100644
-index 0000000..ee11d5e
+index 0000000..0a23967
 --- /dev/null
 +++ b/pattern/src/CornerStore/Checkout/OrderValidationContext.cs
 @@ -0,0 +1,3 @@
@@ -85,7 +85,7 @@ index 0000000..ee11d5e
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Checkout/OrderValidationHandler.cs b/pattern/src/CornerStore/Checkout/OrderValidationHandler.cs
 new file mode 100644
-index 0000000..fe89687
+index 0000000..b598fcc
 --- /dev/null
 +++ b/pattern/src/CornerStore/Checkout/OrderValidationHandler.cs
 @@ -0,0 +1,11 @@
@@ -168,7 +168,7 @@ index e7357c9..bee4911 100644
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Checkout/StockValidationHandler.cs b/pattern/src/CornerStore/Checkout/StockValidationHandler.cs
 new file mode 100644
-index 0000000..a3ed8f7
+index 0000000..3bfafbd
 --- /dev/null
 +++ b/pattern/src/CornerStore/Checkout/StockValidationHandler.cs
 @@ -0,0 +1,24 @@
@@ -211,7 +211,7 @@ index a15a29b..f8dc6c1 100644
  </Project>
 diff --git a/pattern/tests/CornerStore.Tests/ChainOfResponsibilityTests.cs b/pattern/tests/CornerStore.Tests/ChainOfResponsibilityTests.cs
 new file mode 100644
-index 0000000..1451516
+index 0000000..233ce43
 --- /dev/null
 +++ b/pattern/tests/CornerStore.Tests/ChainOfResponsibilityTests.cs
 @@ -0,0 +1,104 @@

@@ -47,7 +47,7 @@ index 4a1ea8d..306e814 100644
      {
 diff --git a/pattern/src/CornerStore/Notifications/IChannel.cs b/pattern/src/CornerStore/Notifications/IChannel.cs
 new file mode 100644
-index 0000000..4c0b4b6
+index 0000000..f6efcd3
 --- /dev/null
 +++ b/pattern/src/CornerStore/Notifications/IChannel.cs
 @@ -0,0 +1,6 @@
@@ -76,7 +76,7 @@ index bb0efbd..0000000
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Notifications/OrderConfirmedMessage.cs b/pattern/src/CornerStore/Notifications/OrderConfirmedMessage.cs
 new file mode 100644
-index 0000000..8a20310
+index 0000000..e32789e
 --- /dev/null
 +++ b/pattern/src/CornerStore/Notifications/OrderConfirmedMessage.cs
 @@ -0,0 +1,9 @@
@@ -108,7 +108,7 @@ index 0ab688b..0000000
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Notifications/OrderMessage.cs b/pattern/src/CornerStore/Notifications/OrderMessage.cs
 new file mode 100644
-index 0000000..7c916e8
+index 0000000..618136f
 --- /dev/null
 +++ b/pattern/src/CornerStore/Notifications/OrderMessage.cs
 @@ -0,0 +1,9 @@
@@ -140,7 +140,7 @@ index 1acb063..0000000
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Notifications/OrderShippedMessage.cs b/pattern/src/CornerStore/Notifications/OrderShippedMessage.cs
 new file mode 100644
-index 0000000..f6347e5
+index 0000000..85866d1
 --- /dev/null
 +++ b/pattern/src/CornerStore/Notifications/OrderShippedMessage.cs
 @@ -0,0 +1,9 @@
@@ -255,7 +255,7 @@ index a288b4e..dac3161 100644
          backOffice = new BackOffice(inventory, orderService);
 diff --git a/pattern/tests/CornerStore.Tests/BridgeTests.cs b/pattern/tests/CornerStore.Tests/BridgeTests.cs
 new file mode 100644
-index 0000000..43664d9
+index 0000000..33154ab
 --- /dev/null
 +++ b/pattern/tests/CornerStore.Tests/BridgeTests.cs
 @@ -0,0 +1,51 @@

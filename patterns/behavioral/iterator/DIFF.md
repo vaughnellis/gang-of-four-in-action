@@ -16,7 +16,7 @@
 ```diff
 diff --git a/pattern/src/CornerStore/Catalog/BreadthFirstCategoryIterator.cs b/pattern/src/CornerStore/Catalog/BreadthFirstCategoryIterator.cs
 new file mode 100644
-index 0000000..8e8001e
+index 0000000..12f036e
 --- /dev/null
 +++ b/pattern/src/CornerStore/Catalog/BreadthFirstCategoryIterator.cs
 @@ -0,0 +1,47 @@
@@ -131,7 +131,7 @@ index 2131b22..78e6901 100644
      }
 diff --git a/pattern/src/CornerStore/Catalog/DepthFirstCategoryIterator.cs b/pattern/src/CornerStore/Catalog/DepthFirstCategoryIterator.cs
 new file mode 100644
-index 0000000..7d16c5e
+index 0000000..09eda86
 --- /dev/null
 +++ b/pattern/src/CornerStore/Catalog/DepthFirstCategoryIterator.cs
 @@ -0,0 +1,47 @@
@@ -184,7 +184,7 @@ index 0000000..7d16c5e
 +}
 diff --git a/pattern/src/CornerStore/Catalog/ICategoryIterator.cs b/pattern/src/CornerStore/Catalog/ICategoryIterator.cs
 new file mode 100644
-index 0000000..f33661e
+index 0000000..4bab1d9
 --- /dev/null
 +++ b/pattern/src/CornerStore/Catalog/ICategoryIterator.cs
 @@ -0,0 +1,8 @@
@@ -210,7 +210,7 @@ index a15a29b..f8dc6c1 100644
  </Project>
 diff --git a/pattern/tests/CornerStore.Tests/IteratorTests.cs b/pattern/tests/CornerStore.Tests/IteratorTests.cs
 new file mode 100644
-index 0000000..2dcd0d7
+index 0000000..1c97164
 --- /dev/null
 +++ b/pattern/tests/CornerStore.Tests/IteratorTests.cs
 @@ -0,0 +1,75 @@

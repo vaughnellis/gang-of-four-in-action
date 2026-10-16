@@ -33,7 +33,7 @@ index a15a29b..f8dc6c1 100644
  </Project>
 diff --git a/pattern/src/CornerStore/Orders/CancelledOrderState.cs b/pattern/src/CornerStore/Orders/CancelledOrderState.cs
 new file mode 100644
-index 0000000..9eceacb
+index 0000000..5851186
 --- /dev/null
 +++ b/pattern/src/CornerStore/Orders/CancelledOrderState.cs
 @@ -0,0 +1,6 @@
@@ -46,7 +46,7 @@ index 0000000..9eceacb
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Orders/DeliveredOrderState.cs b/pattern/src/CornerStore/Orders/DeliveredOrderState.cs
 new file mode 100644
-index 0000000..bdfecae
+index 0000000..dd18eef
 --- /dev/null
 +++ b/pattern/src/CornerStore/Orders/DeliveredOrderState.cs
 @@ -0,0 +1,22 @@
@@ -216,7 +216,7 @@ index 87f6ce2..2ac78d3 100644
          return new CartLine
 diff --git a/pattern/src/CornerStore/Orders/OrderState.cs b/pattern/src/CornerStore/Orders/OrderState.cs
 new file mode 100644
-index 0000000..06fa83a
+index 0000000..ff7f779
 --- /dev/null
 +++ b/pattern/src/CornerStore/Orders/OrderState.cs
 @@ -0,0 +1,21 @@
@@ -244,7 +244,7 @@ index 0000000..06fa83a
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Orders/PaidOrderState.cs b/pattern/src/CornerStore/Orders/PaidOrderState.cs
 new file mode 100644
-index 0000000..688e755
+index 0000000..5d49651
 --- /dev/null
 +++ b/pattern/src/CornerStore/Orders/PaidOrderState.cs
 @@ -0,0 +1,38 @@
@@ -289,7 +289,7 @@ index 0000000..688e755
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Orders/PendingOrderState.cs b/pattern/src/CornerStore/Orders/PendingOrderState.cs
 new file mode 100644
-index 0000000..684d442
+index 0000000..6a22712
 --- /dev/null
 +++ b/pattern/src/CornerStore/Orders/PendingOrderState.cs
 @@ -0,0 +1,29 @@
@@ -325,7 +325,7 @@ index 0000000..684d442
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Orders/RefundedOrderState.cs b/pattern/src/CornerStore/Orders/RefundedOrderState.cs
 new file mode 100644
-index 0000000..5392610
+index 0000000..f12c135
 --- /dev/null
 +++ b/pattern/src/CornerStore/Orders/RefundedOrderState.cs
 @@ -0,0 +1,6 @@
@@ -338,7 +338,7 @@ index 0000000..5392610
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Orders/ShippedOrderState.cs b/pattern/src/CornerStore/Orders/ShippedOrderState.cs
 new file mode 100644
-index 0000000..8fb3cd3
+index 0000000..e273f79
 --- /dev/null
 +++ b/pattern/src/CornerStore/Orders/ShippedOrderState.cs
 @@ -0,0 +1,29 @@
@@ -374,7 +374,7 @@ index 0000000..8fb3cd3
 \ No newline at end of file
 diff --git a/pattern/tests/CornerStore.Tests/StateTests.cs b/pattern/tests/CornerStore.Tests/StateTests.cs
 new file mode 100644
-index 0000000..80c33de
+index 0000000..76e3cbd
 --- /dev/null
 +++ b/pattern/tests/CornerStore.Tests/StateTests.cs
 @@ -0,0 +1,110 @@

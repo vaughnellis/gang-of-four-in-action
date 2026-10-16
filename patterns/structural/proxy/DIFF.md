@@ -43,7 +43,7 @@ index a15a29b..f8dc6c1 100644
  </Project>
 diff --git a/pattern/src/CornerStore/Inventory/CachingInventoryProxy.cs b/pattern/src/CornerStore/Inventory/CachingInventoryProxy.cs
 new file mode 100644
-index 0000000..8174753
+index 0000000..d633d27
 --- /dev/null
 +++ b/pattern/src/CornerStore/Inventory/CachingInventoryProxy.cs
 @@ -0,0 +1,55 @@
@@ -104,7 +104,7 @@ index 0000000..8174753
 +}
 diff --git a/pattern/src/CornerStore/Inventory/IInventoryService.cs b/pattern/src/CornerStore/Inventory/IInventoryService.cs
 new file mode 100644
-index 0000000..74e4bc9
+index 0000000..fbc93b3
 --- /dev/null
 +++ b/pattern/src/CornerStore/Inventory/IInventoryService.cs
 @@ -0,0 +1,20 @@
@@ -185,7 +185,7 @@ index 28dca1a..67c85c9 100644
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Inventory/ProtectionInventoryProxy.cs b/pattern/src/CornerStore/Inventory/ProtectionInventoryProxy.cs
 new file mode 100644
-index 0000000..58022a5
+index 0000000..b227ea7
 --- /dev/null
 +++ b/pattern/src/CornerStore/Inventory/ProtectionInventoryProxy.cs
 @@ -0,0 +1,45 @@
@@ -367,7 +367,7 @@ index a288b4e..5604351 100644
              order.StockReserved = false;
 diff --git a/pattern/tests/CornerStore.Tests/ProxyTests.cs b/pattern/tests/CornerStore.Tests/ProxyTests.cs
 new file mode 100644
-index 0000000..6d44418
+index 0000000..facc53d
 --- /dev/null
 +++ b/pattern/tests/CornerStore.Tests/ProxyTests.cs
 @@ -0,0 +1,73 @@

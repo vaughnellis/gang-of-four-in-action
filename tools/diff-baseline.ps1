@@ -61,6 +61,32 @@ function Find-RepositoryRoot {
     throw 'Could not find GangOfFour.slnx above the script directory.'
 }
 
+function Normalize-FileLineEndings {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Path
+    )
+
+    $bytes = [System.IO.File]::ReadAllBytes($Path)
+    $normalizedBytes = [System.Collections.Generic.List[byte]]::new($bytes.Length)
+    $changed = $false
+    for ($index = 0; $index -lt $bytes.Length; $index++) {
+        if ($bytes[$index] -eq 13 -and $index + 1 -lt $bytes.Length -and $bytes[$index + 1] -eq 10) {
+            $normalizedBytes.Add([byte]10)
+            $index++
+            $changed = $true
+        }
+        else {
+            $normalizedBytes.Add($bytes[$index])
+        }
+    }
+
+    if ($changed) {
+        [System.IO.File]::WriteAllBytes($Path, $normalizedBytes.ToArray())
+    }
+}
+
 function Copy-ProjectTree {
     <#
     .SYNOPSIS
@@ -95,6 +121,8 @@ function Copy-ProjectTree {
             $targetDirectory = Split-Path -Path $targetPath -Parent
             New-Item -ItemType Directory -Path $targetDirectory -Force | Out-Null
             Copy-Item -LiteralPath $item.FullName -Destination $targetPath -Force
+            # The temporary tree is outside the repository, so Git cannot apply its .gitattributes there.
+            Normalize-FileLineEndings -Path $targetPath
         }
     }
 }

@@ -40,7 +40,7 @@ index a15a29b..f8dc6c1 100644
  </Project>
 diff --git a/pattern/src/CornerStore/Pricing/BaseAddOnPriceComponent.cs b/pattern/src/CornerStore/Pricing/BaseAddOnPriceComponent.cs
 new file mode 100644
-index 0000000..05716c7
+index 0000000..ab9dbcc
 --- /dev/null
 +++ b/pattern/src/CornerStore/Pricing/BaseAddOnPriceComponent.cs
 @@ -0,0 +1,6 @@
@@ -53,7 +53,7 @@ index 0000000..05716c7
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Pricing/GiftWrapPriceDecorator.cs b/pattern/src/CornerStore/Pricing/GiftWrapPriceDecorator.cs
 new file mode 100644
-index 0000000..79c4924
+index 0000000..677ff2c
 --- /dev/null
 +++ b/pattern/src/CornerStore/Pricing/GiftWrapPriceDecorator.cs
 @@ -0,0 +1,6 @@
@@ -66,7 +66,7 @@ index 0000000..79c4924
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Pricing/IAddOnPriceComponent.cs b/pattern/src/CornerStore/Pricing/IAddOnPriceComponent.cs
 new file mode 100644
-index 0000000..977d749
+index 0000000..3cbadc9
 --- /dev/null
 +++ b/pattern/src/CornerStore/Pricing/IAddOnPriceComponent.cs
 @@ -0,0 +1,6 @@
@@ -79,7 +79,7 @@ index 0000000..977d749
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Pricing/InsurancePriceDecorator.cs b/pattern/src/CornerStore/Pricing/InsurancePriceDecorator.cs
 new file mode 100644
-index 0000000..88051ef
+index 0000000..6731086
 --- /dev/null
 +++ b/pattern/src/CornerStore/Pricing/InsurancePriceDecorator.cs
 @@ -0,0 +1,11 @@
@@ -134,7 +134,7 @@ index a288b4e..4d08e3d 100644
              cart.GiftWrap = on;
 diff --git a/pattern/tests/CornerStore.Tests/DecoratorTests.cs b/pattern/tests/CornerStore.Tests/DecoratorTests.cs
 new file mode 100644
-index 0000000..4332b52
+index 0000000..bf01ea7
 --- /dev/null
 +++ b/pattern/tests/CornerStore.Tests/DecoratorTests.cs
 @@ -0,0 +1,42 @@

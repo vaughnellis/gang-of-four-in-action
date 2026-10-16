@@ -62,7 +62,7 @@ index 08920e1..c540e38 100644
          }
 diff --git a/pattern/src/CornerStore/Catalog/ProductSpec.cs b/pattern/src/CornerStore/Catalog/ProductSpec.cs
 new file mode 100644
-index 0000000..f05d2c2
+index 0000000..fcd3922
 --- /dev/null
 +++ b/pattern/src/CornerStore/Catalog/ProductSpec.cs
 @@ -0,0 +1,10 @@
@@ -78,7 +78,7 @@ index 0000000..f05d2c2
 +}
 diff --git a/pattern/src/CornerStore/Catalog/ProductSpecFactory.cs b/pattern/src/CornerStore/Catalog/ProductSpecFactory.cs
 new file mode 100644
-index 0000000..976c583
+index 0000000..63475e5
 --- /dev/null
 +++ b/pattern/src/CornerStore/Catalog/ProductSpecFactory.cs
 @@ -0,0 +1,22 @@
@@ -119,7 +119,7 @@ index a15a29b..eb50762 100644
  </Project>
 diff --git a/pattern/tests/CornerStore.Tests/FlyweightTests.cs b/pattern/tests/CornerStore.Tests/FlyweightTests.cs
 new file mode 100644
-index 0000000..ef38c6f
+index 0000000..be3f801
 --- /dev/null
 +++ b/pattern/tests/CornerStore.Tests/FlyweightTests.cs
 @@ -0,0 +1,31 @@

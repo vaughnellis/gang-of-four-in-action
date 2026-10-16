@@ -15,7 +15,7 @@
 ```diff
 diff --git a/pattern/src/CornerStore/Checkout/IShippingProvider.cs b/pattern/src/CornerStore/Checkout/IShippingProvider.cs
 new file mode 100644
-index 0000000..d128355
+index 0000000..4143f27
 --- /dev/null
 +++ b/pattern/src/CornerStore/Checkout/IShippingProvider.cs
 @@ -0,0 +1,6 @@
@@ -28,7 +28,7 @@ index 0000000..d128355
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Checkout/ShipFastAdapter.cs b/pattern/src/CornerStore/Checkout/ShipFastAdapter.cs
 new file mode 100644
-index 0000000..e7acc5d
+index 0000000..8347d26
 --- /dev/null
 +++ b/pattern/src/CornerStore/Checkout/ShipFastAdapter.cs
 @@ -0,0 +1,19 @@
@@ -120,7 +120,7 @@ index a288b4e..d2f471a 100644
          var status = Text(step, "status");
 diff --git a/pattern/tests/CornerStore.Tests/AdapterTests.cs b/pattern/tests/CornerStore.Tests/AdapterTests.cs
 new file mode 100644
-index 0000000..919eaf3
+index 0000000..1b2ff54
 --- /dev/null
 +++ b/pattern/tests/CornerStore.Tests/AdapterTests.cs
 @@ -0,0 +1,62 @@

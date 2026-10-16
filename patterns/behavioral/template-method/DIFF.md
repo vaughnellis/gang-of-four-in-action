@@ -159,7 +159,7 @@ index 028f70e..8dca46b 100644
      }
 diff --git a/pattern/src/CornerStore/Reporting/ReportExporter.cs b/pattern/src/CornerStore/Reporting/ReportExporter.cs
 new file mode 100644
-index 0000000..69d5452
+index 0000000..d01726c
 --- /dev/null
 +++ b/pattern/src/CornerStore/Reporting/ReportExporter.cs
 @@ -0,0 +1,23 @@
@@ -189,7 +189,7 @@ index 0000000..69d5452
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Reporting/ReportTotals.cs b/pattern/src/CornerStore/Reporting/ReportTotals.cs
 new file mode 100644
-index 0000000..111879c
+index 0000000..b98399f
 --- /dev/null
 +++ b/pattern/src/CornerStore/Reporting/ReportTotals.cs
 @@ -0,0 +1,10 @@
@@ -206,7 +206,7 @@ index 0000000..111879c
 \ No newline at end of file
 diff --git a/pattern/tests/CornerStore.Tests/TemplateMethodTests.cs b/pattern/tests/CornerStore.Tests/TemplateMethodTests.cs
 new file mode 100644
-index 0000000..ae73a03
+index 0000000..3b8c5f7
 --- /dev/null
 +++ b/pattern/tests/CornerStore.Tests/TemplateMethodTests.cs
 @@ -0,0 +1,87 @@

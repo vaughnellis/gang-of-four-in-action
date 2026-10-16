@@ -32,7 +32,7 @@ index a15a29b..f8dc6c1 100644
  </Project>
 diff --git a/pattern/src/CornerStore/Orders/AdjustStockCommand.cs b/pattern/src/CornerStore/Orders/AdjustStockCommand.cs
 new file mode 100644
-index 0000000..d08ff16
+index 0000000..c78b402
 --- /dev/null
 +++ b/pattern/src/CornerStore/Orders/AdjustStockCommand.cs
 @@ -0,0 +1,36 @@
@@ -142,7 +142,7 @@ index aff3031..7e64fbd 100644
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Orders/CancelCommand.cs b/pattern/src/CornerStore/Orders/CancelCommand.cs
 new file mode 100644
-index 0000000..16ed290
+index 0000000..971b2b3
 --- /dev/null
 +++ b/pattern/src/CornerStore/Orders/CancelCommand.cs
 @@ -0,0 +1,19 @@
@@ -167,7 +167,7 @@ index 0000000..16ed290
 +}
 diff --git a/pattern/src/CornerStore/Orders/CommandAuditEntry.cs b/pattern/src/CornerStore/Orders/CommandAuditEntry.cs
 new file mode 100644
-index 0000000..3f7df86
+index 0000000..6418a94
 --- /dev/null
 +++ b/pattern/src/CornerStore/Orders/CommandAuditEntry.cs
 @@ -0,0 +1,3 @@
@@ -176,7 +176,7 @@ index 0000000..3f7df86
 +internal sealed record CommandAuditEntry(string CommandName, string Result);
 diff --git a/pattern/src/CornerStore/Orders/CommandInvoker.cs b/pattern/src/CornerStore/Orders/CommandInvoker.cs
 new file mode 100644
-index 0000000..027bb60
+index 0000000..6946964
 --- /dev/null
 +++ b/pattern/src/CornerStore/Orders/CommandInvoker.cs
 @@ -0,0 +1,35 @@
@@ -217,7 +217,7 @@ index 0000000..027bb60
 +}
 diff --git a/pattern/src/CornerStore/Orders/ICommand.cs b/pattern/src/CornerStore/Orders/ICommand.cs
 new file mode 100644
-index 0000000..063b56f
+index 0000000..b11b378
 --- /dev/null
 +++ b/pattern/src/CornerStore/Orders/ICommand.cs
 @@ -0,0 +1,12 @@
@@ -235,7 +235,7 @@ index 0000000..063b56f
 +}
 diff --git a/pattern/src/CornerStore/Orders/LookupStockCommand.cs b/pattern/src/CornerStore/Orders/LookupStockCommand.cs
 new file mode 100644
-index 0000000..469a4c9
+index 0000000..06f0f6d
 --- /dev/null
 +++ b/pattern/src/CornerStore/Orders/LookupStockCommand.cs
 @@ -0,0 +1,22 @@
@@ -263,7 +263,7 @@ index 0000000..469a4c9
 +}
 diff --git a/pattern/src/CornerStore/Orders/RefundCommand.cs b/pattern/src/CornerStore/Orders/RefundCommand.cs
 new file mode 100644
-index 0000000..56d65fd
+index 0000000..db212c9
 --- /dev/null
 +++ b/pattern/src/CornerStore/Orders/RefundCommand.cs
 @@ -0,0 +1,19 @@
@@ -288,7 +288,7 @@ index 0000000..56d65fd
 +}
 diff --git a/pattern/tests/CornerStore.Tests/CommandTests.cs b/pattern/tests/CornerStore.Tests/CommandTests.cs
 new file mode 100644
-index 0000000..dfd1a4d
+index 0000000..32b0955
 --- /dev/null
 +++ b/pattern/tests/CornerStore.Tests/CommandTests.cs
 @@ -0,0 +1,83 @@

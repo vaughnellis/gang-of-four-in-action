@@ -29,7 +29,7 @@ index a15a29b..f8dc6c1 100644
  </Project>
 diff --git a/pattern/src/CornerStore/Pricing/ExpressShippingCostStrategy.cs b/pattern/src/CornerStore/Pricing/ExpressShippingCostStrategy.cs
 new file mode 100644
-index 0000000..e960bc0
+index 0000000..9972eb4
 --- /dev/null
 +++ b/pattern/src/CornerStore/Pricing/ExpressShippingCostStrategy.cs
 @@ -0,0 +1,9 @@
@@ -45,7 +45,7 @@ index 0000000..e960bc0
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Pricing/IShippingCostStrategy.cs b/pattern/src/CornerStore/Pricing/IShippingCostStrategy.cs
 new file mode 100644
-index 0000000..6a4bc26
+index 0000000..967734b
 --- /dev/null
 +++ b/pattern/src/CornerStore/Pricing/IShippingCostStrategy.cs
 @@ -0,0 +1,6 @@
@@ -58,7 +58,7 @@ index 0000000..6a4bc26
 \ No newline at end of file
 diff --git a/pattern/src/CornerStore/Pricing/PickupShippingCostStrategy.cs b/pattern/src/CornerStore/Pricing/PickupShippingCostStrategy.cs
 new file mode 100644
-index 0000000..3ddf709
+index 0000000..729995e
 --- /dev/null
 +++ b/pattern/src/CornerStore/Pricing/PickupShippingCostStrategy.cs
 @@ -0,0 +1,9 @@
@@ -122,7 +122,7 @@ index 64d5dd4..7492998 100644
      private static decimal AddOnCost(Cart cart, decimal discountedSubtotal)
 diff --git a/pattern/src/CornerStore/Pricing/StandardShippingCostStrategy.cs b/pattern/src/CornerStore/Pricing/StandardShippingCostStrategy.cs
 new file mode 100644
-index 0000000..17fc5ab
+index 0000000..4f4f3fc
 --- /dev/null
 +++ b/pattern/src/CornerStore/Pricing/StandardShippingCostStrategy.cs
 @@ -0,0 +1,9 @@
@@ -138,7 +138,7 @@ index 0000000..17fc5ab
 \ No newline at end of file
 diff --git a/pattern/tests/CornerStore.Tests/StrategyTests.cs b/pattern/tests/CornerStore.Tests/StrategyTests.cs
 new file mode 100644
-index 0000000..1f81647
+index 0000000..ae1db00
 --- /dev/null
 +++ b/pattern/tests/CornerStore.Tests/StrategyTests.cs
 @@ -0,0 +1,81 @@
