@@ -1,15 +1,10 @@
 namespace CornerStore;
 
-// SMELL S11: every listing carries its own copy of the brand, manufacturer and spec text
-internal class Listing
+internal class Listing(ProductSpec productSpec)
 {
     public string Sku { get; init; } = "";
 
-    public string Brand { get; init; } = "";
-
-    public string Manufacturer { get; init; } = "";
-
-    public string SpecText { get; init; } = "";
+    public ProductSpec Spec { get; } = productSpec;
 
     public decimal Price { get; init; }
 }
