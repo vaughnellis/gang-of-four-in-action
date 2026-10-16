@@ -22,9 +22,10 @@ internal class PricingService(PromoEngine promos)
 
         var methodCost = ShippingCost(cart.ShippingMethod, weightKg)
             ?? throw new InvalidOperationException("unknown shipping method " + cart.ShippingMethod);
-        var shipping = methodCost + ShippingCalculator.RegionSurcharge(customer.Region);
+        var regionalPricing = RegionFactoryProvider.For(customer.Region).CreatePricing();
+        var shipping = methodCost + regionalPricing.ShippingSurcharge;
 
-        var rate = TaxCalculator.RateFor(customer.Region);
+        var rate = regionalPricing.TaxRate;
         var tax = 0m;
         var allocated = 0m;
         for (var i = 0; i < cart.Lines.Count; i++)
