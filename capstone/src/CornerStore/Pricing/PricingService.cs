@@ -81,18 +81,9 @@ internal class PricingService
 
     private static decimal AddOnCost(Cart cart, decimal discountedSubtotal)
     {
-        // SMELL S09: each add-on is a boolean flag checked in an if-chain
-        var cost = 0m;
-        if (cart.GiftWrap)
-        {
-            cost += 4.50m;
-        }
-
-        if (cart.Insurance)
-        {
-            cost += Math.Round(discountedSubtotal * 0.02m, 2, MidpointRounding.AwayFromZero);
-        }
-
-        return cost;
+        IAddOnPriceComponent component = new BaseAddOnPriceComponent();
+        component = new GiftWrapPriceDecorator(component, cart.GiftWrap);
+        component = new InsurancePriceDecorator(component, cart.Insurance, discountedSubtotal);
+        return component.Cost;
     }
 }

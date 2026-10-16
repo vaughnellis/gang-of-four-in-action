@@ -11,7 +11,6 @@ internal class Cart(string customerId)
 
     public string ShippingMethod = "standard";
 
-    // SMELL S09: add-ons are plain boolean flags, one per add-on
     public bool GiftWrap;
 
     public bool Insurance;
