@@ -51,6 +51,8 @@ Factory creates a family of related products through a factory object. Use
 Abstract Factory when the application must keep several related product
 choices consistent; use Factory Method when one product construction varies.
 
+See [Factory Method vs Abstract Factory](../../../docs/comparisons.md#factory-method-vs-abstract-factory) for a side-by-side comparison.
+
 ## Modern .NET notes
 
 Dependency injection can provide a selected creator, but the .NET platform

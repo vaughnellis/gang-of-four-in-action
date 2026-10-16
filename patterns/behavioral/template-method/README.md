@@ -52,6 +52,8 @@ at runtime. Prefer Strategy when the whole algorithm varies independently;
 prefer Template Method when the sequence stays fixed and only a few steps
 vary.
 
+See [Template Method vs Strategy](../../../docs/comparisons.md#template-method-vs-strategy) for a side-by-side comparison.
+
 ## Modern .NET notes
 
 LINQ and iterator methods can replace parts of a report pipeline, but they do

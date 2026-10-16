@@ -73,6 +73,8 @@ adds responsibilities around an object, while Adapter translates an
 incompatible interface. A proxy should not silently change the meaning of
 inventory operations.
 
+See [Decorator vs Proxy](../../../docs/comparisons.md#decorator-vs-proxy) for a side-by-side comparison.
+
 ## Modern .NET notes
 
 Dependency injection containers can register decorators around services, and

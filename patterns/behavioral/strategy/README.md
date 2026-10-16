@@ -49,6 +49,8 @@ object's lifecycle: its current state controls behavior and may transition to
 another state. Strategy objects are normally selected by the caller, while
 state transitions belong to the stateful object or its state objects.
 
+See [Strategy vs State](../../../docs/comparisons.md#strategy-vs-state) for a side-by-side comparison.
+
 ## Modern .NET notes
 
 The .NET dependency-injection container can register and provide strategy

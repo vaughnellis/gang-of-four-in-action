@@ -54,6 +54,8 @@ Bridge reduces combination-specific classes but adds an abstraction layer and ex
 
 Adapter makes an existing incompatible interface usable by a client. Bridge separates two dimensions before they vary independently. `IChannel` is the delivery implementation behind the message abstraction, not an adapter for a third-party API.
 
+See [Adapter vs Bridge](../../../docs/comparisons.md#adapter-vs-bridge) for a side-by-side comparison.
+
 ## Modern .NET notes
 
 Interfaces and dependency injection make the channel dimension easy to compose. The example wires email and SMS channels explicitly in `StoreConsole`; a larger application could register channel implementations with its service container.

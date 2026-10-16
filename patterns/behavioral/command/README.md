@@ -54,6 +54,8 @@ the same kind of work. Use Command when the request itself needs dispatch,
 audit, or undo; use Strategy when callers choose between interchangeable
 algorithms.
 
+See [Command vs Memento for undo](../../../docs/comparisons.md#command-vs-memento-for-undo) for a side-by-side comparison.
+
 ## Modern .NET notes
 
 An in-memory command object is enough for this synchronous example. Durable

@@ -52,6 +52,8 @@ The mediator prevents peer-to-peer coupling but becomes responsible for the coor
 
 Observer distributes a notification to subscribers without choosing their coordination policy. Mediator centralizes that policy and routes interactions among a known group of collaborators. A mediator can use events internally, but the event mechanism is not the pattern itself.
 
+See [Facade vs Mediator](../../../docs/comparisons.md#facade-vs-mediator) for a side-by-side comparison.
+
 ## Modern .NET notes
 
 Interfaces, delegates and events can all carry notifications in .NET. This example uses a concrete mediator because the cart widgets have a small, fixed collaboration group and require ordered updates.

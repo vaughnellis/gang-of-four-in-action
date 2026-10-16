@@ -57,6 +57,8 @@ Decorator also wraps a component, but adds a responsibility rather than
 representing a group of child items. The bundle's discount is group behavior,
 not a decoration around each product.
 
+See [Composite vs Decorator](../../../docs/comparisons.md#composite-vs-decorator) for a side-by-side comparison.
+
 ## Modern .NET notes
 
 `IEnumerable<T>` and collection APIs provide common ways to traverse groups,

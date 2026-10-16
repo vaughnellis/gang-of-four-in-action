@@ -56,6 +56,8 @@ coordinates peer objects that notify a central object, reducing direct
 references between those peers. Facade does not require subsystem objects to
 communicate through it.
 
+See [Facade vs Mediator](../../../docs/comparisons.md#facade-vs-mediator) for a side-by-side comparison.
+
 ## Modern .NET notes
 
 The .NET dependency-injection container can compose the facade and its

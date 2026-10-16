@@ -49,6 +49,8 @@ State models an object's lifecycle and lets the object transition between
 state objects. Strategy packages interchangeable algorithms selected by a
 caller; a strategy normally does not represent the object's lifecycle.
 
+See [Strategy vs State](../../../docs/comparisons.md#strategy-vs-state) for a side-by-side comparison.
+
 ## Modern .NET notes
 
 The .NET runtime does not provide a built-in State abstraction. Enums and

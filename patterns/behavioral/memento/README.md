@@ -47,6 +47,8 @@ Snapshots duplicate state and need a clear lifetime. This implementation keeps o
 
 Command represents an action that can be executed and potentially undone. Memento preserves an object's state so it can be restored later. A command may use a memento for undo, but the two patterns solve different parts of the problem.
 
+See [Command vs Memento for undo](../../../docs/comparisons.md#command-vs-memento-for-undo) for a side-by-side comparison.
+
 ## Modern .NET notes
 
 Immutable records are a natural way to represent snapshot values. A small private snapshot is often simpler than serializing an object graph, especially when only selected fields need restoration.

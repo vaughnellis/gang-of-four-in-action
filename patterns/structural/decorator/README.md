@@ -49,6 +49,8 @@ Adapter changes an incompatible interface so a client can use an existing
 implementation. Use Decorator for added responsibility, not protocol
 translation.
 
+See [Decorator vs Proxy](../../../docs/comparisons.md#decorator-vs-proxy) for a side-by-side comparison.
+
 ## Modern .NET notes
 
 The .NET stream and middleware APIs use wrapper-style composition. This

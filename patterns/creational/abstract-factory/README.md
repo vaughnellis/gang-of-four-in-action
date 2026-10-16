@@ -63,6 +63,8 @@ The factories keep regional rules consistent, but they add interfaces, concrete 
 
 Factory Method delegates creation of one product to creator subclasses. Abstract Factory creates a family of related products. A concrete region factory here creates both pricing rules and a currency formatter, while Factory Method in the payment example creates one processor.
 
+See [Factory Method vs Abstract Factory](../../../docs/comparisons.md#factory-method-vs-abstract-factory) for a side-by-side comparison.
+
 ## Modern .NET notes
 
 Dependency injection can select and register a regional factory when the region is known at composition time. This console scenario selects a factory at runtime from a region code. Currency values continue to use invariant numeric formatting so the transcript is deterministic.

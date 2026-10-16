@@ -22,7 +22,7 @@ gang-of-four-in-action/
 ├── capstone/        every pattern applied together (later)
 ├── scenarios/       the scripted trading day and the approved transcript
 ├── tools/           scripts to create a pattern folder and diff it against the baseline
-├── docs/            smells catalog, pattern map and pattern comparisons
+├── docs/            smells catalog, pattern map and [pattern comparisons](docs/comparisons.md)
 ├── prompts/         the task briefs used to build this repository
 └── GangOfFour.slnx  umbrella solution used by CI
 ```

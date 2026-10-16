@@ -44,6 +44,8 @@ meaningful incompatibility to isolate.
 Adapter changes an interface so a client can use an existing implementation.
 Decorator keeps the same interface and wraps an object to add behavior.
 
+See [Adapter vs Bridge](../../../docs/comparisons.md#adapter-vs-bridge) for a side-by-side comparison.
+
 ## Modern .NET notes
 
 The .NET ecosystem commonly uses adapters to normalize third-party SDKs and
