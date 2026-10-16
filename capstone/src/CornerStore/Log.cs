@@ -1,16 +1,42 @@
 namespace CornerStore;
 
-// SMELL S05: global transcript writer in a static class with a public mutable field
-internal static class Log
+internal sealed class Log
 {
-    public static TextWriter Out = TextWriter.Null;
+    private static readonly Lazy<Log> singleton =
+        new(static () => new Log(), LazyThreadSafetyMode.ExecutionAndPublication);
 
-    public static void Line(string text)
+    private readonly object sync = new();
+    private TextWriter output = TextWriter.Null;
+
+    private Log()
     {
-        Out.Write(text + "\n");
     }
 
-    public static void Info(string text)
+    public static Log Instance => singleton.Value;
+
+    public void SetOutput(TextWriter writer)
+    {
+        ArgumentNullException.ThrowIfNull(writer);
+        lock (sync)
+        {
+            output = writer;
+        }
+    }
+
+    public void ResetOutput()
+    {
+        SetOutput(TextWriter.Null);
+    }
+
+    public void Line(string text)
+    {
+        lock (sync)
+        {
+            output.Write(text + "\n");
+        }
+    }
+
+    public void Info(string text)
     {
         Line("  " + text);
     }

@@ -30,7 +30,7 @@ internal class PromoBoxWidget(Cart cart, Customer customer, CartService cartServ
 
     public void Refresh()
     {
-        Log.Info("promo " + (cart.PromoCode == "" ? "none" : cart.PromoCode));
+        Log.Instance.Info("promo " + (cart.PromoCode == "" ? "none" : cart.PromoCode));
     }
 
     public void RefreshAfterChange()

@@ -11,7 +11,7 @@ internal class ShipFastClient(IdSequence ids)
         var orderId = request.Element("orderId")?.Value ?? "";
         var cents = request.Element("amountCents")?.Value ?? "0";
         var tracking = ids.NextShipmentId();
-        Log.Info("ShipFast booked " + tracking + " for " + orderId + " (" + cents + " cents)");
+        Log.Instance.Info("ShipFast booked " + tracking + " for " + orderId + " (" + cents + " cents)");
         return "<shipment><tracking>" + tracking + "</tracking></shipment>";
     }
 }

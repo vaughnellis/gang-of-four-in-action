@@ -58,7 +58,7 @@ internal class StoreConsole
     public void Handle(int number, JsonElement step)
     {
         var op = step.TryGetProperty("op", out var opValue) ? opValue.GetString() ?? "" : "";
-        Log.Line("[" + number.ToString("D3", CultureInfo.InvariantCulture) + "] " + op + Describe(step));
+        Log.Instance.Line("[" + number.ToString("D3", CultureInfo.InvariantCulture) + "] " + op + Describe(step));
 
         switch (op)
         {
@@ -138,21 +138,20 @@ internal class StoreConsole
                 ReportJson(step);
                 break;
             default:
-                Log.Info("unknown op");
+                Log.Instance.Info("unknown op");
                 break;
         }
     }
 
     public bool ApplyConfig(string key, int value)
     {
-        // SMELL S05: any caller can overwrite the global Config fields
         switch (key)
         {
             case "fraudThreshold":
-                Config.FraudThreshold = value;
+                Config.Instance.SetFraudThreshold(value);
                 return true;
             case "lowStockLevel":
-                Config.LowStockLevel = value;
+                Config.Instance.SetLowStockLevel(value);
                 return true;
             default:
                 return false;
@@ -187,12 +186,12 @@ internal class StoreConsole
     {
         if (!step.TryGetProperty("minutes", out var minutes) || !minutes.TryGetInt32(out var value))
         {
-            Log.Info("advance needs minutes");
+            Log.Instance.Info("advance needs minutes");
             return;
         }
 
         clock.Advance(TimeSpan.FromMinutes(value));
-        Log.Info("clock " + clock.Stamp());
+        Log.Instance.Info("clock " + clock.Stamp());
     }
 
     private void Browse(JsonElement step)
@@ -201,12 +200,12 @@ internal class StoreConsole
         var category = catalog.FindCategory(name);
         if (category is null)
         {
-            Log.Info("unknown category " + name);
+            Log.Instance.Info("unknown category " + name);
             return;
         }
 
         catalog.PrintTree(category, 0);
-        Log.Info(catalog.CountProducts(category).ToString(CultureInfo.InvariantCulture) + " products under " + name);
+        Log.Instance.Info(catalog.CountProducts(category).ToString(CultureInfo.InvariantCulture) + " products under " + name);
     }
 
     private void Variant(JsonElement step)
@@ -214,14 +213,14 @@ internal class StoreConsole
         var parent = Text(step, "parent");
         var sku = Text(step, "sku");
         var error = catalog.CreateVariant(parent, sku, Text(step, "size"), Text(step, "colour"));
-        Log.Info(error is null ? "created variant " + sku + " of " + parent : "rejected: " + error);
+        Log.Instance.Info(error is null ? "created variant " + sku + " of " + parent : "rejected: " + error);
     }
 
     private void BundleCreate(JsonElement step)
     {
         var sku = Text(step, "sku");
         var error = catalog.CreateBundle(sku, Text(step, "name"));
-        Log.Info(error is null ? "created bundle " + sku : "rejected: " + error);
+        Log.Instance.Info(error is null ? "created bundle " + sku : "rejected: " + error);
     }
 
     private void BundleAdd(JsonElement step)
@@ -231,12 +230,12 @@ internal class StoreConsole
         var error = catalog.AddToBundle(bundle, sku);
         if (error is not null)
         {
-            Log.Info("rejected: " + error);
+            Log.Instance.Info("rejected: " + error);
             return;
         }
 
-        Log.Info("added " + sku + " to " + bundle);
-        Log.Info("bundle " + bundle + " price " + Catalog.FormatPrice(catalog.PriceOf(bundle)));
+        Log.Instance.Info("added " + sku + " to " + bundle);
+        Log.Instance.Info("bundle " + bundle + " price " + Catalog.FormatPrice(catalog.PriceOf(bundle)));
     }
 
     private void Import(JsonElement step)
@@ -245,7 +244,7 @@ internal class StoreConsole
         var skus = new List<string>();
         catalog.CollectSkus(catalog.Root, skus);
         listings = importer.Import(skus, count);
-        Log.Info("imported " + listings.Count.ToString(CultureInfo.InvariantCulture) + " listings");
+        Log.Instance.Info("imported " + listings.Count.ToString(CultureInfo.InvariantCulture) + " listings");
     }
 
     private void Register(JsonElement step)
@@ -276,7 +275,7 @@ internal class StoreConsole
         shippingSelectorWidget.Connect(itemListWidget, promoBoxWidget, totalsPanelWidget);
         totalsPanelWidget.Connect(itemListWidget, promoBoxWidget, shippingSelectorWidget);
         itemListWidgets[id] = itemListWidget;
-        Log.Info("registered " + id + " " + customer.Name + " (" + customer.Region + ", " + customer.Channel + ")");
+        Log.Instance.Info("registered " + id + " " + customer.Name + " (" + customer.Region + ", " + customer.Channel + ")");
     }
 
     private Cart? FindCart(JsonElement step)
@@ -284,7 +283,7 @@ internal class StoreConsole
         var id = Text(step, "customer");
         if (!customers.ContainsKey(id))
         {
-            Log.Info("rejected: unknown customer " + id);
+            Log.Instance.Info("rejected: unknown customer " + id);
             return null;
         }
 
@@ -296,7 +295,7 @@ internal class StoreConsole
         var id = Text(step, "customer");
         if (!customers.TryGetValue(id, out var customer))
         {
-            Log.Info("rejected: unknown customer " + id);
+            Log.Instance.Info("rejected: unknown customer " + id);
             return null;
         }
 
@@ -309,7 +308,7 @@ internal class StoreConsole
         var order = orderService.Find(id);
         if (order is null)
         {
-            Log.Info("rejected: unknown order " + id);
+            Log.Instance.Info("rejected: unknown order " + id);
         }
 
         return order;
@@ -324,7 +323,7 @@ internal class StoreConsole
         }
 
         var error = orderService.Ship(order);
-        Log.Info(error is null ? "order " + order.Id + " shipped" : "rejected: " + error);
+        Log.Instance.Info(error is null ? "order " + order.Id + " shipped" : "rejected: " + error);
     }
 
     private void OrderDeliver(JsonElement step)
@@ -336,7 +335,7 @@ internal class StoreConsole
         }
 
         var error = orderService.Deliver(order);
-        Log.Info(error is null ? "order " + order.Id + " delivered" : "rejected: " + error);
+        Log.Instance.Info(error is null ? "order " + order.Id + " delivered" : "rejected: " + error);
     }
 
     private void AdminStockAdjust(JsonElement step)
@@ -349,7 +348,7 @@ internal class StoreConsole
 
         var sku = Text(step, "sku");
         var amount = step.TryGetProperty("delta", out var value) && value.TryGetInt32(out var number) ? number : 0;
-        Log.Info(backOffice.AdjustStock(customer, sku, amount));
+        Log.Instance.Info(backOffice.AdjustStock(customer, sku, amount));
     }
 
     private void AdminStockLookup(JsonElement step)
@@ -360,7 +359,7 @@ internal class StoreConsole
             return;
         }
 
-        Log.Info(backOffice.LookupStock(customer, Text(step, "sku")));
+        Log.Instance.Info(backOffice.LookupStock(customer, Text(step, "sku")));
     }
 
     private void AdminRefund(JsonElement step)
@@ -372,7 +371,7 @@ internal class StoreConsole
             return;
         }
 
-        Log.Info(backOffice.Refund(customer, order));
+        Log.Instance.Info(backOffice.Refund(customer, order));
     }
 
     private void AdminCancel(JsonElement step)
@@ -384,7 +383,7 @@ internal class StoreConsole
             return;
         }
 
-        Log.Info(backOffice.Cancel(customer, order));
+        Log.Instance.Info(backOffice.Cancel(customer, order));
     }
 
     // SMELL S10: the console coordinates every checkout subsystem in a fixed order
@@ -398,7 +397,7 @@ internal class StoreConsole
 
         if (cart.Lines.Count == 0)
         {
-            Log.Info("checkout rejected: cart is empty");
+            Log.Instance.Info("checkout rejected: cart is empty");
             return;
         }
 
@@ -407,14 +406,14 @@ internal class StoreConsole
         var error = orderValidator.Validate(customer, cart, quote);
         if (error is not null)
         {
-            Log.Info("checkout rejected: " + error);
+            Log.Instance.Info("checkout rejected: " + error);
             return;
         }
 
         var paymentType = Text(step, "payment");
         if (!ChargePayment(paymentType, customer, quote.Total))
         {
-            Log.Info("checkout rejected: unknown payment type " + paymentType);
+            Log.Instance.Info("checkout rejected: unknown payment type " + paymentType);
             return;
         }
 
@@ -429,7 +428,7 @@ internal class StoreConsole
                     inventory.AdjustStock(reservedLine.Product.Sku, reservedLine.Quantity);
                 }
 
-                Log.Info("checkout rejected: stock changed for " + line.Product.Sku);
+                Log.Instance.Info("checkout rejected: stock changed for " + line.Product.Sku);
                 return;
             }
 
@@ -447,11 +446,11 @@ internal class StoreConsole
             }
 
             order.StockReserved = false;
-            Log.Info("checkout rejected: " + payError);
+            Log.Instance.Info("checkout rejected: " + payError);
             return;
         }
 
-        Log.Info("checkout placed " + order.Id);
+        Log.Instance.Info("checkout placed " + order.Id);
     }
 
     // SMELL S03: payment processor construction is selected by a switch in checkout
@@ -497,10 +496,10 @@ internal class StoreConsole
     {
         var status = Text(step, "status");
         status = status == "" ? "all" : status;
-        Log.Info("CSV report (" + status + ")");
+        Log.Instance.Info("CSV report (" + status + ")");
         foreach (var row in reports.ExportCsv(status).Split('\n', StringSplitOptions.RemoveEmptyEntries))
         {
-            Log.Info(row);
+            Log.Instance.Info(row);
         }
     }
 
@@ -508,10 +507,10 @@ internal class StoreConsole
     {
         var status = Text(step, "status");
         status = status == "" ? "all" : status;
-        Log.Info("JSON report (" + status + ")");
+        Log.Instance.Info("JSON report (" + status + ")");
         foreach (var row in reports.ExportJson(status).Split('\n', StringSplitOptions.RemoveEmptyEntries))
         {
-            Log.Info(row);
+            Log.Instance.Info(row);
         }
     }
 
@@ -537,14 +536,14 @@ internal class StoreConsole
         var error = itemListWidget.Add(sku, quantity);
         if (error is not null)
         {
-            Log.Info("rejected: " + error);
+            Log.Instance.Info("rejected: " + error);
             return;
         }
 
         Remember(cart.CustomerId, lines, promo, shipping, giftWrap, insurance);
         itemListWidget.RefreshAfterChange();
-        Log.Info("added " + quantity.ToString(CultureInfo.InvariantCulture) + " x " + sku);
-        Log.Info(Summary(cart));
+        Log.Instance.Info("added " + quantity.ToString(CultureInfo.InvariantCulture) + " x " + sku);
+        Log.Instance.Info(Summary(cart));
     }
 
     private void CartRemove(JsonElement step)
@@ -568,14 +567,14 @@ internal class StoreConsole
         var error = itemListWidget.Remove(sku);
         if (error is not null)
         {
-            Log.Info("rejected: " + error);
+            Log.Instance.Info("rejected: " + error);
             return;
         }
 
         Remember(cart.CustomerId, lines, promo, shipping, giftWrap, insurance);
         itemListWidget.RefreshAfterChange();
-        Log.Info("removed " + sku);
-        Log.Info(Summary(cart));
+        Log.Instance.Info("removed " + sku);
+        Log.Instance.Info(Summary(cart));
     }
 
     private void CartUndo(JsonElement step)
@@ -588,7 +587,7 @@ internal class StoreConsole
 
         if (!savedLines.TryGetValue(cart.CustomerId, out var lines))
         {
-            Log.Info("nothing to undo");
+            Log.Instance.Info("nothing to undo");
             return;
         }
 
@@ -605,8 +604,8 @@ internal class StoreConsole
         savedGiftWrap.Remove(cart.CustomerId);
         savedInsurance.Remove(cart.CustomerId);
         itemListWidgets[cart.CustomerId].RefreshAfterChange();
-        Log.Info("undone");
-        Log.Info(Summary(cart));
+        Log.Instance.Info("undone");
+        Log.Instance.Info(Summary(cart));
     }
 
     private void CartShow(JsonElement step)
@@ -618,7 +617,7 @@ internal class StoreConsole
         }
 
         itemListWidgets[cart.CustomerId].RefreshAfterChange();
-        Log.Info(Summary(cart));
+        Log.Instance.Info(Summary(cart));
     }
 
     private void CartAddOn(JsonElement step)
@@ -643,12 +642,12 @@ internal class StoreConsole
         }
         else
         {
-            Log.Info("rejected: unknown add-on " + name);
+            Log.Instance.Info("rejected: unknown add-on " + name);
             return;
         }
 
         itemListWidgets[cart.CustomerId].TotalsPanel.RefreshAfterChange();
-        Log.Info(name + (on ? " added" : " removed"));
+        Log.Instance.Info(name + (on ? " added" : " removed"));
     }
 
     private void CartPromo(JsonElement step)
@@ -663,19 +662,19 @@ internal class StoreConsole
         var promoBoxWidget = itemListWidgets[cart.CustomerId].PromoBox;
         if (!promoBoxWidget.IsKnown(code))
         {
-            Log.Info("rejected: unknown promo " + code);
+            Log.Instance.Info("rejected: unknown promo " + code);
             return;
         }
 
         if (!promoBoxWidget.Evaluate(code))
         {
-            Log.Info("rejected: promo " + code + " does not apply to this cart");
+            Log.Instance.Info("rejected: promo " + code + " does not apply to this cart");
             return;
         }
 
         promoBoxWidget.Apply(code);
         promoBoxWidget.RefreshAfterChange();
-        Log.Info("promo " + code + " applied (" + promos.RuleOf(code) + ")");
+        Log.Instance.Info("promo " + code + " applied (" + promos.RuleOf(code) + ")");
     }
 
     private void CartShipping(JsonElement step)
@@ -690,13 +689,13 @@ internal class StoreConsole
         var shippingSelectorWidget = itemListWidgets[cart.CustomerId].ShippingSelector;
         if (!shippingSelectorWidget.CanSelect(method))
         {
-            Log.Info("rejected: unknown shipping method " + method);
+            Log.Instance.Info("rejected: unknown shipping method " + method);
             return;
         }
 
         shippingSelectorWidget.Select(method);
         shippingSelectorWidget.RefreshAfterChange();
-        Log.Info("shipping set to " + method);
+        Log.Instance.Info("shipping set to " + method);
     }
 
     private void ShowQuote(JsonElement step)
@@ -709,7 +708,7 @@ internal class StoreConsole
 
         if (cart.Lines.Count == 0)
         {
-            Log.Info("rejected: cart is empty");
+            Log.Instance.Info("rejected: cart is empty");
             return;
         }
 
@@ -755,18 +754,18 @@ internal class StoreConsole
             || !step.TryGetProperty("value", out var value)
             || !value.TryGetInt32(out var number))
         {
-            Log.Info("config.set needs key and value");
+            Log.Instance.Info("config.set needs key and value");
             return;
         }
 
         var name = key.GetString() ?? "";
         if (ApplyConfig(name, number))
         {
-            Log.Info(name + " set to " + number.ToString(CultureInfo.InvariantCulture));
+            Log.Instance.Info(name + " set to " + number.ToString(CultureInfo.InvariantCulture));
         }
         else
         {
-            Log.Info("unknown setting " + name);
+            Log.Instance.Info("unknown setting " + name);
         }
     }
 }

@@ -18,7 +18,7 @@ internal class TotalsPanelWidget(Cart cart, Customer customer, PricingService pr
     public void Refresh()
     {
         var total = cart.Lines.Count == 0 ? 0m : pricing.BuildQuote(cart, customer).Total;
-        Log.Info("totals " + MoneyFormatter.Format(total, customer.Region));
+        Log.Instance.Info("totals " + MoneyFormatter.Format(total, customer.Region));
     }
 
     public void RefreshAfterChange()
@@ -33,19 +33,19 @@ internal class TotalsPanelWidget(Cart cart, Customer customer, PricingService pr
     public void ShowQuote()
     {
         var quote = pricing.BuildQuote(cart, customer);
-        Log.Info("quote " + cart.CustomerId + " (" + customer.Region + ", " + cart.ShippingMethod + ", "
+        Log.Instance.Info("quote " + cart.CustomerId + " (" + customer.Region + ", " + cart.ShippingMethod + ", "
             + quote.WeightKg.ToString("0.00", CultureInfo.InvariantCulture) + " kg)");
-        Log.Info("subtotal " + MoneyFormatter.Format(quote.Subtotal, customer.Region));
+        Log.Instance.Info("subtotal " + MoneyFormatter.Format(quote.Subtotal, customer.Region));
         if (cart.PromoCode != "")
         {
-            Log.Info(quote.Discount > 0m
+            Log.Instance.Info(quote.Discount > 0m
                 ? "discount -" + MoneyFormatter.Format(quote.Discount, customer.Region) + " (" + cart.PromoCode + ")"
                 : "promo " + cart.PromoCode + " does not apply");
         }
 
-        Log.Info("add-ons " + MoneyFormatter.Format(quote.AddOns, customer.Region));
-        Log.Info("shipping " + MoneyFormatter.Format(quote.Shipping, customer.Region));
-        Log.Info("tax " + MoneyFormatter.Format(quote.Tax, customer.Region));
-        Log.Info("total " + MoneyFormatter.Format(quote.Total, customer.Region));
+        Log.Instance.Info("add-ons " + MoneyFormatter.Format(quote.AddOns, customer.Region));
+        Log.Instance.Info("shipping " + MoneyFormatter.Format(quote.Shipping, customer.Region));
+        Log.Instance.Info("tax " + MoneyFormatter.Format(quote.Tax, customer.Region));
+        Log.Instance.Info("total " + MoneyFormatter.Format(quote.Total, customer.Region));
     }
 }

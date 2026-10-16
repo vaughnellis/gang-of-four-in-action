@@ -25,7 +25,7 @@ internal class ShippingSelectorWidget(Cart cart, PricingService pricing)
 
     public void Refresh()
     {
-        Log.Info("shipping " + cart.ShippingMethod);
+        Log.Instance.Info("shipping " + cart.ShippingMethod);
     }
 
     public void RefreshAfterChange()

@@ -8,10 +8,11 @@ public static class ScenarioRunner
         var clock = new ScenarioClock(scenario.StartTime);
         var console = new StoreConsole(clock);
 
-        // SMELL S05: the runner sets the global Config and Log fields directly
-        Config.Reset();
-        Config.Seed = scenario.Seed;
-        Log.Out = output;
+        var config = Config.Instance;
+        config.Reset();
+        config.SetSeed(scenario.Seed);
+        var logger = Log.Instance;
+        logger.SetOutput(output);
 
         try
         {
@@ -20,7 +21,7 @@ public static class ScenarioRunner
                 console.ApplyConfig(key, value);
             }
 
-            Log.Line("CornerStore trading day: " + scenario.Name + " (start " + clock.Stamp() + ")");
+            logger.Line("CornerStore trading day: " + scenario.Name + " (start " + clock.Stamp() + ")");
             for (var i = 0; i < scenario.Steps.Count; i++)
             {
                 console.Handle(i + 1, scenario.Steps[i]);
@@ -28,7 +29,7 @@ public static class ScenarioRunner
         }
         finally
         {
-            Log.Out = TextWriter.Null;
+            logger.ResetOutput();
         }
     }
 }
