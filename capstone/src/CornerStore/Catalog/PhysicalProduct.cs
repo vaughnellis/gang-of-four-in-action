@@ -16,6 +16,11 @@ internal class PhysicalProduct : Product
 
     public string Description { get; init; } = "";
 
+    internal override void Accept(ILineItemVisitor visitor)
+    {
+        visitor.Visit(this);
+    }
+
     public PhysicalProduct Clone(string sku, string size, string colour)
     {
         return new PhysicalProduct

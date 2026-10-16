@@ -97,15 +97,9 @@ public class TemplateMethodTests
 
     private sealed class TestReportExporter : ReportExporter
     {
-        private decimal total;
-
-        protected override void Accumulate(ReportTotals totals, CartLine line)
+        protected override string WriteReport(ReportTotalsVisitor totals)
         {
-            total += line.UnitPrice * line.Quantity;
-        }
-
-        protected override string WriteReport(ReportTotals totals)
-        {
+            var total = totals.PhysicalTotal + totals.DigitalTotal + totals.GiftCardTotal;
             return "custom:" + total.ToString("0.00", CultureInfo.InvariantCulture);
         }
     }

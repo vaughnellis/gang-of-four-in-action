@@ -5,19 +5,17 @@ internal abstract class ReportExporter
     public string Export(List<Order> source, string status)
     {
         var orders = source.Where(order => status == "all" || order.Status == status).ToList();
-        var totals = new ReportTotals();
+        var totals = new ReportTotalsVisitor();
         foreach (var order in orders)
         {
             foreach (var line in order.Lines)
             {
-                Accumulate(totals, line);
+                totals.Add(line.Product, line.UnitPrice * line.Quantity);
             }
         }
 
         return WriteReport(totals);
     }
 
-    protected abstract void Accumulate(ReportTotals totals, CartLine line);
-
-    protected abstract string WriteReport(ReportTotals totals);
+    protected abstract string WriteReport(ReportTotalsVisitor totals);
 }

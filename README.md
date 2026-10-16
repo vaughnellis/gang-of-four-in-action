@@ -1,8 +1,13 @@
-# Gang of Four in Action
+---
+title: Gang of Four in Action
+description: A C# showcase of 23 Gang of Four design patterns, from baseline refactors to an integrated capstone.
+---
+
+## Overview
 
 A showcase of the 23 Gang of Four design patterns in C# on .NET 10, built as an homage to *Design Patterns: Elements of Reusable Object-Oriented Software* by Gamma, Helm, Johnson and Vlissides.
 
-The repository holds one deliberately messy console app and one solution per pattern. The app is CornerStore, a small fictional online store with 23 catalogued code smells. Each pattern solution is a copy of the baseline in which exactly one smell is refactored with that pattern, and every solution produces the same transcript as the baseline. A capstone that applies every pattern together comes later.
+The repository holds one deliberately messy console app and one solution per pattern. The app is CornerStore, a small fictional online store with 23 catalogued code smells. Each pattern solution is a copy of the baseline in which exactly one smell is refactored with that pattern, and every solution produces the same transcript as the baseline. The [capstone](capstone/README.md) applies all 23 patterns together and describes how their seams fit.
 
 A companion blog explains each pattern using its folder in this repository.
 
@@ -19,7 +24,7 @@ gang-of-four-in-action/
 │   ├── creational/  one folder per creational pattern
 │   ├── structural/  one folder per structural pattern
 │   └── behavioral/  one folder per behavioral pattern
-├── capstone/        every pattern applied together (later)
+├── capstone/        integrated CornerStore app and pattern walkthrough
 ├── scenarios/       the scripted trading day and the approved transcript
 ├── tools/           scripts to create a pattern folder and diff it against the baseline
 ├── docs/            smells catalog, pattern map and [pattern comparisons](docs/comparisons.md)
