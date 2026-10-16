@@ -95,5 +95,8 @@
     <Project Path="patterns/behavioral/interpreter/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/behavioral/interpreter/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
   </Folder>
-  <Folder Name="/capstone/" />
+  <Folder Name="/capstone/">
+    <Project Path="capstone/src/CornerStore/CornerStore.csproj" />
+    <Project Path="capstone/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
 </Solution>

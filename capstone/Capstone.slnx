@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/CornerStore/CornerStore.csproj" />
+  <Project Path="tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+</Solution>
