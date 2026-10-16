@@ -19,8 +19,7 @@ internal class StoreConsole
     private readonly AnalyticsService analytics = new();
     private readonly OrderService orderService;
     private readonly BackOffice backOffice;
-    private readonly OrderValidator orderValidator;
-    private readonly IShippingProvider shippingProvider;
+    private readonly CheckoutFacade checkoutFacade;
     private readonly ReportService reports;
     private readonly Dictionary<string, Customer> customers = [];
     private readonly Dictionary<string, Cart> carts = [];
@@ -47,8 +46,12 @@ internal class StoreConsole
             loyalty,
             analytics);
         backOffice = new BackOffice(inventory, orderService);
-        orderValidator = new OrderValidator(inventory, new FraudScorer());
-        shippingProvider = new ShipFastAdapter(new ShipFastClient(Ids));
+        checkoutFacade = new CheckoutFacade(
+            pricing,
+            new OrderValidator(inventory, new FraudScorer()),
+            orderService,
+            inventory,
+            new ShipFastAdapter(new ShipFastClient(Ids)));
         reports = new ReportService(orderService);
     }
 
@@ -385,7 +388,6 @@ internal class StoreConsole
         Log.Instance.Info(backOffice.Cancel(customer, order));
     }
 
-    // SMELL S10: the console coordinates every checkout subsystem in a fixed order
     private void Checkout(JsonElement step)
     {
         var cart = FindCart(step);
@@ -394,87 +396,8 @@ internal class StoreConsole
             return;
         }
 
-        if (cart.Lines.Count == 0)
-        {
-            Log.Instance.Info("checkout rejected: cart is empty");
-            return;
-        }
-
         var customer = customers[cart.CustomerId];
-        var quote = pricing.BuildQuote(cart, customer);
-        var error = orderValidator.Validate(customer, cart, quote);
-        if (error is not null)
-        {
-            Log.Instance.Info("checkout rejected: " + error);
-            return;
-        }
-
-        var paymentType = Text(step, "payment");
-        if (!ChargePayment(paymentType, customer, quote.Total))
-        {
-            Log.Instance.Info("checkout rejected: unknown payment type " + paymentType);
-            return;
-        }
-
-        var order = orderService.Create(customer, cart, quote, paymentType);
-        var reservedLines = new List<CartLine>();
-        foreach (var line in order.Lines)
-        {
-            if (!inventory.ReserveStock(line.Product.Sku, line.Quantity))
-            {
-                foreach (var reservedLine in reservedLines)
-                {
-                    inventory.AdjustStock(reservedLine.Product.Sku, reservedLine.Quantity);
-                }
-
-                Log.Instance.Info("checkout rejected: stock changed for " + line.Product.Sku);
-                return;
-            }
-
-            reservedLines.Add(line);
-        }
-
-        order.StockReserved = true;
-        order.TrackingNumber = shippingProvider.BookShipment(order);
-        var payError = orderService.Pay(order);
-        if (payError is not null)
-        {
-            foreach (var reservedLine in reservedLines)
-            {
-                inventory.AdjustStock(reservedLine.Product.Sku, reservedLine.Quantity);
-            }
-
-            order.StockReserved = false;
-            Log.Instance.Info("checkout rejected: " + payError);
-            return;
-        }
-
-        Log.Instance.Info("checkout placed " + order.Id);
-    }
-
-    private static bool ChargePayment(string paymentType, Customer customer, decimal amount)
-    {
-        PaymentProcessorCreator? creator = null;
-        switch (paymentType)
-        {
-            case "card":
-                creator = new CardProcessorCreator();
-                break;
-            case "paypal":
-                creator = new PayPalProcessorCreator();
-                break;
-            case "afterpay":
-                creator = new AfterpayProcessorCreator();
-                break;
-        }
-
-        if (creator is null)
-        {
-            return false;
-        }
-
-        creator.Charge(customer, amount);
-        return true;
+        Log.Instance.Info(checkoutFacade.PlaceOrder(cart, customer, Text(step, "payment")));
     }
 
     private void ReportCsv(JsonElement step)
