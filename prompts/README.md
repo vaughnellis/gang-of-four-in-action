@@ -14,6 +14,7 @@ HVE Core writes its working artifacts (plans, plan critiques, change records, re
 | `03-pilot-facade.md` | `facade` | The first pattern solution. Proves the per-pattern workflow. |
 | `04-pilot-strategy.md` | `strategy` | The second pattern solution. Locks the pattern template. |
 | `05-run-all.md` | `run-all` | Orchestrates everything after foundations in one automatic run: finishes the baseline, runs both pilots, applies their notes, then generates and runs the other 21 pattern briefs. |
+| `06-comparisons.md` | `comparisons` | `docs/comparisons.md`: eight commonly confused pattern pairs, explained with code from this repo. |
 | `patterns/_template.md` | (template) | Copy and fill to create the brief for each remaining pattern. |
 
 Alongside these briefs, `.github/copilot-instructions.md` and `.github/instructions/` hold standing rules that Copilot applies automatically to every interaction in the repo, RPI or not. The briefs say what to build; the instructions say how to behave while building it. Keep the two consistent: if a rule changes in `00-project-brief.md`, update the instructions too.
