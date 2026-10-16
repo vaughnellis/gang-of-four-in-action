@@ -7,7 +7,7 @@
 .SYNOPSIS
     Creates a baseline copy for one pattern solution.
 .DESCRIPTION
-    Copies baseline source and tests, creates a solution and README stub, and adds both projects to the umbrella solution.
+    Copies baseline source and tests, creates a solution and README stub, and adds both projects to a pattern-specific folder in the umbrella solution.
 .PARAMETER Category
     Pattern category: creational, structural or behavioral.
 .PARAMETER Name
@@ -191,7 +191,7 @@ function Add-ProjectsToSolution {
     .PARAMETER SolutionPath
         Umbrella solution path.
     .PARAMETER FolderName
-        Pattern category folder path.
+        Pattern-specific solution folder path.
     .PARAMETER ProjectPaths
         Project paths relative to the repository root.
     #>
@@ -316,7 +316,7 @@ if ($MyInvocation.InvocationName -ne '.') {
         )
         Add-ProjectsToSolution `
             -SolutionPath (Join-Path $repositoryRoot 'GangOfFour.slnx') `
-            -FolderName "/patterns/$Category/" `
+            -FolderName "/$relativeRoot/" `
             -ProjectPaths $projects
 
         Write-Host "Created $Category/$Name from baseline."

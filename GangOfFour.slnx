@@ -3,55 +3,95 @@
     <Project Path="baseline/src/CornerStore/CornerStore.csproj" />
     <Project Path="baseline/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
   </Folder>
-  <Folder Name="/patterns/creational/">
+  <Folder Name="/patterns/creational/factory-method/">
     <Project Path="patterns/creational/factory-method/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/creational/factory-method/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
+  <Folder Name="/patterns/creational/builder/">
     <Project Path="patterns/creational/builder/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/creational/builder/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
+  <Folder Name="/patterns/creational/abstract-factory/">
     <Project Path="patterns/creational/abstract-factory/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/creational/abstract-factory/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
+  <Folder Name="/patterns/creational/singleton/">
     <Project Path="patterns/creational/singleton/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/creational/singleton/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
+  <Folder Name="/patterns/creational/prototype/">
     <Project Path="patterns/creational/prototype/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/creational/prototype/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
   </Folder>
-  <Folder Name="/patterns/structural/">
+  <Folder Name="/patterns/structural/facade/">
     <Project Path="patterns/structural/facade/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/structural/facade/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
+  <Folder Name="/patterns/structural/adapter/">
     <Project Path="patterns/structural/adapter/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/structural/adapter/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
+  <Folder Name="/patterns/structural/decorator/">
     <Project Path="patterns/structural/decorator/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/structural/decorator/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
+  <Folder Name="/patterns/structural/composite/">
     <Project Path="patterns/structural/composite/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/structural/composite/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
+  <Folder Name="/patterns/structural/proxy/">
     <Project Path="patterns/structural/proxy/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/structural/proxy/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
+  <Folder Name="/patterns/structural/bridge/">
     <Project Path="patterns/structural/bridge/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/structural/bridge/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
+  <Folder Name="/patterns/structural/flyweight/">
     <Project Path="patterns/structural/flyweight/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/structural/flyweight/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
   </Folder>
-  <Folder Name="/patterns/behavioral/">
+  <Folder Name="/patterns/behavioral/strategy/">
     <Project Path="patterns/behavioral/strategy/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/behavioral/strategy/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
+  <Folder Name="/patterns/behavioral/observer/">
     <Project Path="patterns/behavioral/observer/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/behavioral/observer/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
+  <Folder Name="/patterns/behavioral/state/">
     <Project Path="patterns/behavioral/state/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/behavioral/state/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
+  <Folder Name="/patterns/behavioral/template-method/">
     <Project Path="patterns/behavioral/template-method/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/behavioral/template-method/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
+  <Folder Name="/patterns/behavioral/chain-of-responsibility/">
     <Project Path="patterns/behavioral/chain-of-responsibility/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/behavioral/chain-of-responsibility/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
+  <Folder Name="/patterns/behavioral/command/">
     <Project Path="patterns/behavioral/command/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/behavioral/command/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
+  <Folder Name="/patterns/behavioral/iterator/">
     <Project Path="patterns/behavioral/iterator/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/behavioral/iterator/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
+  <Folder Name="/patterns/behavioral/mediator/">
     <Project Path="patterns/behavioral/mediator/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/behavioral/mediator/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
+  <Folder Name="/patterns/behavioral/memento/">
     <Project Path="patterns/behavioral/memento/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/behavioral/memento/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
+  <Folder Name="/patterns/behavioral/visitor/">
     <Project Path="patterns/behavioral/visitor/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/behavioral/visitor/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
+  </Folder>
+  <Folder Name="/patterns/behavioral/interpreter/">
     <Project Path="patterns/behavioral/interpreter/src/CornerStore/CornerStore.csproj" />
     <Project Path="patterns/behavioral/interpreter/tests/CornerStore.Tests/CornerStore.Tests.csproj" />
   </Folder>

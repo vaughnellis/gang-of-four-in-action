@@ -38,7 +38,9 @@ dotnet build GangOfFour.slnx
 dotnet test GangOfFour.slnx
 ```
 
-Each pattern folder will hold its own solution, such as `patterns/structural/facade/Facade.slnx`. Build and test it the same way by passing that file to `dotnet build` and `dotnet test`. The umbrella solution has no projects yet, so the commands above succeed with a warning that there is nothing to restore.
+Each pattern folder holds its own solution, such as `patterns/structural/facade/Facade.slnx`. Build and test it the same way by passing that file to `dotnet build` and `dotnet test`.
+
+The umbrella solution includes the baseline and all 23 patterns (24 test projects). Each copy has its own nested solution folder, such as `/baseline/` or `/patterns/behavioral/strategy/`, so project and namespace names stay `CornerStore` and `CornerStore.Tests` in every copy. `tools/new-pattern.ps1` adds new patterns to their own solution folders. Build outputs remain in each project's local `bin` and `obj` directories.
 
 ## Pattern index
 
