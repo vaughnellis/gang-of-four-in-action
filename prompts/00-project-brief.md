@@ -217,5 +217,5 @@ Fit: **Natural** means the pattern fixes a smell the domain has anyway. **Extens
 - Never change project or namespace names in a copy.
 - Never edit `scenarios/expected/baseline.txt` from a pattern task.
 - Never edit `prompts/`, `.github/copilot-instructions.md` or `.github/instructions/`. Propose changes in the change record.
-- Never push, tag, or create releases. Stop and hand back to the human for anything externally visible. Exception: during the automatic run in `prompts/05-run-all.md`, local commits and local tags are allowed as that brief describes. Pushing is never allowed.
+- Never push, tag, or create releases. Stop and hand back to the human for anything externally visible. Exception: during `prompts/05-run-all.md` (local commits and tags) and `prompts/07-capstone.md` (local commits only), the agent may commit as that brief describes. Pushing is never allowed.
 - Prose in READMEs and docs: plain, direct, no em dashes.
