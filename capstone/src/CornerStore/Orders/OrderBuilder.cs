@@ -103,7 +103,7 @@ internal sealed class OrderBuilder
         return new Order(
             id,
             customer,
-            "Pending",
+            new PendingOrderState(),
             lines,
             quote,
             paymentType,

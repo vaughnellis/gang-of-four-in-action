@@ -3,7 +3,7 @@ namespace CornerStore;
 internal class Order(
     string id,
     Customer customer,
-    string status,
+    OrderState state,
     List<CartLine> lines,
     Quote quote,
     string paymentType,
@@ -17,7 +17,9 @@ internal class Order(
 
     public Customer Customer { get; } = customer;
 
-    public string Status { get; set; } = status;
+    public OrderState State { get; set; } = state;
+
+    public string Status => State.Name;
 
     public List<CartLine> Lines { get; } = lines;
 

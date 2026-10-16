@@ -57,6 +57,6 @@ public class AdapterTests
             Address = address,
             CreditLimit = 500m,
         };
-        return new Order("o-1001", customer, "Pending", [], new Quote { Total = 12.34m }, "card", null, null, null, null, null);
+        return new Order("o-1001", customer, new PendingOrderState(), [], new Quote { Total = 12.34m }, "card", null, null, null, null, null);
     }
 }
