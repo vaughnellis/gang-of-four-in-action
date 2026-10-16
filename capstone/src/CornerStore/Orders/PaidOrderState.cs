@@ -8,7 +8,7 @@ internal sealed class PaidOrderState : OrderState
     {
         order.State = new ShippedOrderState();
         service.AssignTrackingNumber(order);
-        service.RecordStatusChange(order);
+        service.NotifyObservers(order);
         return null;
     }
 
@@ -16,7 +16,7 @@ internal sealed class PaidOrderState : OrderState
     {
         order.State = new CancelledOrderState();
         RestoreStockIfReserved(service, order);
-        service.RecordStatusChange(order);
+        service.NotifyObservers(order);
         return null;
     }
 
@@ -24,7 +24,7 @@ internal sealed class PaidOrderState : OrderState
     {
         order.State = new RefundedOrderState();
         RestoreStockIfReserved(service, order);
-        service.RecordStatusChange(order);
+        service.NotifyObservers(order);
         return null;
     }
 

@@ -7,7 +7,7 @@ internal sealed class ShippedOrderState : OrderState
     public override string? Deliver(OrderService service, Order order)
     {
         order.State = new DeliveredOrderState();
-        service.RecordStatusChange(order);
+        service.NotifyObservers(order);
         return null;
     }
 
@@ -15,7 +15,7 @@ internal sealed class ShippedOrderState : OrderState
     {
         order.State = new RefundedOrderState();
         RestoreStockIfReserved(service, order);
-        service.RecordStatusChange(order);
+        service.NotifyObservers(order);
         return null;
     }
 

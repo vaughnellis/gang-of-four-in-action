@@ -8,7 +8,7 @@ internal sealed class DeliveredOrderState : OrderState
     {
         order.State = new RefundedOrderState();
         RestoreStockIfReserved(service, order);
-        service.RecordStatusChange(order);
+        service.NotifyObservers(order);
         return null;
     }
 

@@ -104,15 +104,17 @@ public class CheckoutFacadeTests
     {
         var inventory = new InventoryService();
         var ids = new IdSequence();
-        var orderService = new OrderService(
-            ids,
-            inventory,
-            new OrderConfirmedEmail(new EmailSender()),
-            new OrderConfirmedSms(new SmsSender()),
-            new OrderShippedEmail(new EmailSender()),
-            new OrderShippedSms(new SmsSender()),
-            new LoyaltyService(),
-            new AnalyticsService());
+        var emailSender = new EmailSender();
+        var smsSender = new SmsSender();
+        var orderService = new OrderService(ids, inventory);
+        orderService.Subscribe(new InventoryOrderStatusObserver(inventory));
+        orderService.Subscribe(new NotificationOrderStatusObserver(
+            new OrderConfirmedEmail(emailSender),
+            new OrderConfirmedSms(smsSender),
+            new OrderShippedEmail(emailSender),
+            new OrderShippedSms(smsSender)));
+        orderService.Subscribe(new LoyaltyOrderStatusObserver(new LoyaltyService()));
+        orderService.Subscribe(new AnalyticsOrderStatusObserver(new AnalyticsService()));
         var facade = new CheckoutFacade(
             new PricingService(new PromoEngine()),
             new OrderValidator(inventory, new FraudScorer()),
