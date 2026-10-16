@@ -4,7 +4,8 @@ internal sealed class CheckoutFacade(
     PricingService pricing,
     OrderValidator orderValidator,
     OrderService orderService,
-    InventoryService inventory,
+    IInventoryService inventory,
+    IStockRestorer stockRestorer,
     IShippingProvider shippingProvider)
 {
     public string PlaceOrder(Cart cart, Customer customer, string paymentType)
@@ -34,7 +35,7 @@ internal sealed class CheckoutFacade(
             {
                 foreach (var reservedLine in reservedLines)
                 {
-                    inventory.AdjustStock(reservedLine.Product.Sku, reservedLine.Quantity);
+                    stockRestorer.RestoreStock(reservedLine.Product.Sku, reservedLine.Quantity);
                 }
 
                 return "checkout rejected: stock changed for " + line.Product.Sku;
@@ -50,7 +51,7 @@ internal sealed class CheckoutFacade(
         {
             foreach (var reservedLine in reservedLines)
             {
-                inventory.AdjustStock(reservedLine.Product.Sku, reservedLine.Quantity);
+                stockRestorer.RestoreStock(reservedLine.Product.Sku, reservedLine.Quantity);
             }
 
             order.StockReserved = false;

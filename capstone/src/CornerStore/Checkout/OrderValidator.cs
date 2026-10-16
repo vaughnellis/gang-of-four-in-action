@@ -4,7 +4,7 @@ internal sealed class OrderValidator
 {
     private readonly OrderValidationHandler firstHandler;
 
-    public OrderValidator(InventoryService inventory, FraudScorer fraudScorer)
+    public OrderValidator(IInventoryService inventory, FraudScorer fraudScorer)
     {
         firstHandler = new StockValidationHandler(
             inventory,

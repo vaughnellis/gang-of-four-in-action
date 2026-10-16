@@ -1,6 +1,6 @@
 namespace CornerStore;
 
-internal sealed class StockValidationHandler(InventoryService inventory, OrderValidationHandler? next)
+internal sealed class StockValidationHandler(IInventoryService inventory, OrderValidationHandler? next)
     : OrderValidationHandler(next)
 {
     protected override string? Validate(OrderValidationContext context)

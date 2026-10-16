@@ -1,6 +1,6 @@
 namespace CornerStore;
 
-internal sealed class InventoryOrderStatusObserver(InventoryService inventory) : IOrderStatusObserver
+internal sealed class InventoryOrderStatusObserver(IInventoryService inventory) : IOrderStatusObserver
 {
     public void OnStatusChanged(Order order)
     {

@@ -2,7 +2,7 @@ namespace CornerStore;
 
 internal class OrderService(
     IdSequence ids,
-    InventoryService inventory)
+    IStockRestorer stockRestorer)
 {
     private readonly Dictionary<string, Order> orders = new(StringComparer.Ordinal);
     private readonly List<Invoice> invoices = [];
@@ -84,7 +84,7 @@ internal class OrderService(
     {
         foreach (var line in order.Lines)
         {
-            inventory.AdjustStock(line.Product.Sku, line.Quantity);
+            stockRestorer.RestoreStock(line.Product.Sku, line.Quantity);
         }
 
         order.StockReserved = false;

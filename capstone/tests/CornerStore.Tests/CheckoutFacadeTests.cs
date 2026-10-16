@@ -116,6 +116,7 @@ public class CheckoutFacadeTests
             new OrderValidator(inventory, new FraudScorer()),
             orderService,
             inventory,
+            inventory,
             new ShipFastAdapter(new ShipFastClient(ids)));
 
         return new FacadeFixture(facade, orderService, inventory);
