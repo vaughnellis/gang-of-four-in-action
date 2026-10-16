@@ -1,34 +1,25 @@
 namespace CornerStore;
 
 internal sealed class NotificationOrderStatusObserver(
-    OrderConfirmedEmail confirmedEmail,
-    OrderConfirmedSms confirmedSms,
-    OrderShippedEmail shippedEmail,
-    OrderShippedSms shippedSms) : IOrderStatusObserver
+    IChannel emailChannel,
+    IChannel smsChannel) : IOrderStatusObserver
 {
     public void OnStatusChanged(Order order)
     {
         if (order.Status == "Paid")
         {
-            if (order.Customer.Channel == "email")
-            {
-                confirmedEmail.Send(order.Customer, order.Id, order.Quote.Total);
-            }
-            else
-            {
-                confirmedSms.Send(order.Customer, order.Id, order.Quote.Total);
-            }
+            new OrderConfirmedMessage(ChannelFor(order.Customer.Channel))
+                .Send(order.Customer, order.Id, order.Quote.Total);
         }
         else if (order.Status == "Shipped")
         {
-            if (order.Customer.Channel == "email")
-            {
-                shippedEmail.Send(order.Customer, order.Id, order.TrackingNumber ?? "");
-            }
-            else
-            {
-                shippedSms.Send(order.Customer, order.Id, order.TrackingNumber ?? "");
-            }
+            new OrderShippedMessage(ChannelFor(order.Customer.Channel))
+                .Send(order.Customer, order.Id, order.TrackingNumber ?? "");
         }
+    }
+
+    private IChannel ChannelFor(string channel)
+    {
+        return channel == "email" ? emailChannel : smsChannel;
     }
 }

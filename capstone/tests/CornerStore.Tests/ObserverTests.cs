@@ -47,11 +47,7 @@ public class ObserverTests
             var smsSender = new SmsSender();
             var service = new OrderService(new IdSequence(), inventory);
             service.Subscribe(new InventoryOrderStatusObserver(inventory));
-            service.Subscribe(new NotificationOrderStatusObserver(
-                new OrderConfirmedEmail(emailSender),
-                new OrderConfirmedSms(smsSender),
-                new OrderShippedEmail(emailSender),
-                new OrderShippedSms(smsSender)));
+            service.Subscribe(new NotificationOrderStatusObserver(emailSender, smsSender));
             service.Subscribe(new LoyaltyOrderStatusObserver(new LoyaltyService()));
             service.Subscribe(new AnalyticsOrderStatusObserver(new AnalyticsService()));
             var order = CreateOrder(service);

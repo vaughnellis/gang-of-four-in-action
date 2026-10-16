@@ -34,11 +34,7 @@ internal class StoreConsole
         pricing = new PricingService(promos);
         orderService = new OrderService(Ids, inventory);
         orderService.Subscribe(new InventoryOrderStatusObserver(inventory));
-        orderService.Subscribe(new NotificationOrderStatusObserver(
-            new OrderConfirmedEmail(emailSender),
-            new OrderConfirmedSms(smsSender),
-            new OrderShippedEmail(emailSender),
-            new OrderShippedSms(smsSender)));
+        orderService.Subscribe(new NotificationOrderStatusObserver(emailSender, smsSender));
         orderService.Subscribe(new LoyaltyOrderStatusObserver(loyalty));
         orderService.Subscribe(new AnalyticsOrderStatusObserver(analytics));
         backOffice = new BackOffice(inventory, orderService);

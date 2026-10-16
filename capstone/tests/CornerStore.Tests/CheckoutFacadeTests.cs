@@ -108,11 +108,7 @@ public class CheckoutFacadeTests
         var smsSender = new SmsSender();
         var orderService = new OrderService(ids, inventory);
         orderService.Subscribe(new InventoryOrderStatusObserver(inventory));
-        orderService.Subscribe(new NotificationOrderStatusObserver(
-            new OrderConfirmedEmail(emailSender),
-            new OrderConfirmedSms(smsSender),
-            new OrderShippedEmail(emailSender),
-            new OrderShippedSms(smsSender)));
+        orderService.Subscribe(new NotificationOrderStatusObserver(emailSender, smsSender));
         orderService.Subscribe(new LoyaltyOrderStatusObserver(new LoyaltyService()));
         orderService.Subscribe(new AnalyticsOrderStatusObserver(new AnalyticsService()));
         var facade = new CheckoutFacade(

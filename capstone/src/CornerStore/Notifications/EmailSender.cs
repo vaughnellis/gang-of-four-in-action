@@ -1,6 +1,6 @@
 namespace CornerStore;
 
-internal class EmailSender
+internal class EmailSender : IChannel
 {
     public void Send(string recipient, string message)
     {

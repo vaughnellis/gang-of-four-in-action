@@ -1,6 +1,6 @@
 namespace CornerStore;
 
-internal class SmsSender
+internal class SmsSender : IChannel
 {
     public void Send(string recipient, string message)
     {
