@@ -126,27 +126,27 @@ internal class Catalog
 
     public void PrintTree(Category category, int depth)
     {
-        // SMELL S16: manual recursion over the category tree, first copy
-        var pad = new string(' ', depth * 2);
-        Log.Instance.Info(pad + category.Name);
-        foreach (var product in category.Products)
+        using var iterator = new DepthFirstCategoryIterator(category, depth);
+        while (iterator.MoveNext())
         {
-            Log.Instance.Info(pad + "  - " + product.Sku + " " + product.Name + " " + FormatPrice(PriceOf(product.Sku)));
-        }
+            var current = iterator.Current;
+            var pad = new string(' ', iterator.CurrentDepth * 2);
+            Log.Instance.Info(pad + current.Name);
+            foreach (var product in current.Products)
+            {
+                Log.Instance.Info(pad + "  - " + product.Sku + " " + product.Name + " " + FormatPrice(PriceOf(product.Sku)));
+            }
 
-        foreach (var child in category.Children)
-        {
-            PrintTree(child, depth + 1);
         }
     }
 
     public int CountProducts(Category category)
     {
-        // SMELL S16: manual recursion over the category tree, second copy
-        var count = category.Products.Count;
-        foreach (var child in category.Children)
+        var count = 0;
+        using var iterator = new DepthFirstCategoryIterator(category);
+        while (iterator.MoveNext())
         {
-            count += CountProducts(child);
+            count += iterator.Current.Products.Count;
         }
 
         return count;
@@ -154,15 +154,13 @@ internal class Catalog
 
     public void CollectSkus(Category category, List<string> skus)
     {
-        // SMELL S16: manual recursion over the category tree, third copy
-        foreach (var product in category.Products)
+        using var iterator = new DepthFirstCategoryIterator(category);
+        while (iterator.MoveNext())
         {
-            skus.Add(product.Sku);
-        }
-
-        foreach (var child in category.Children)
-        {
-            CollectSkus(child, skus);
+            foreach (var product in iterator.Current.Products)
+            {
+                skus.Add(product.Sku);
+            }
         }
     }
 
