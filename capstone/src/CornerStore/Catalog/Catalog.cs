@@ -35,8 +35,8 @@ internal class Catalog
         Register(giftCards, new GiftCardProduct { Sku = "GC-50", Name = "Gift Card 50", Price = 50.00m, CategoryName = giftCards.Name });
 
         var runKit = new Bundle("BUN-RUN-KIT", "Runner Kit");
-        runKit.ComponentSkus.Add("SHOE-RUN-42");
-        runKit.ComponentSkus.Add("SOCK-WOOL");
+        runKit.AddComponent(products["SHOE-RUN-42"]);
+        runKit.AddComponent(products["SOCK-WOOL"]);
         bundles[runKit.Sku] = runKit;
     }
 
@@ -52,7 +52,7 @@ internal class Catalog
         return categories.GetValueOrDefault(name);
     }
 
-    public object? Lookup(string sku)
+    public ICatalogItem? Lookup(string sku)
     {
         if (products.TryGetValue(sku, out var product))
         {
@@ -65,25 +65,7 @@ internal class Catalog
     public decimal PriceOf(string sku)
     {
         var item = Lookup(sku);
-
-        // SMELL S08: bundles take a separate pricing path picked with an is-check
-        if (item is Bundle bundle)
-        {
-            var total = 0m;
-            foreach (var componentSku in bundle.ComponentSkus)
-            {
-                total += products[componentSku].Price;
-            }
-
-            return Math.Round(total * (100 - bundle.DiscountPercent) / 100m, 2, MidpointRounding.AwayFromZero);
-        }
-
-        if (item is Product product)
-        {
-            return product.Price;
-        }
-
-        throw new KeyNotFoundException("unknown sku " + sku);
+        return item?.Price ?? throw new KeyNotFoundException("unknown sku " + sku);
     }
 
     public string? CreateBundle(string sku, string name)
@@ -99,25 +81,23 @@ internal class Catalog
 
     public string? AddToBundle(string bundleSku, string sku)
     {
-        if (Lookup(bundleSku) is not Bundle bundle)
+        if (!bundles.TryGetValue(bundleSku, out var bundle))
         {
             return "unknown bundle " + bundleSku;
         }
 
         var item = Lookup(sku);
+        if (item is null)
+        {
+            return "unknown sku " + sku;
+        }
 
-        // SMELL S08: a bundle is told apart from a product with is-checks and cannot hold another bundle
         if (item is Bundle)
         {
             return sku + " is a bundle and bundles cannot nest";
         }
 
-        if (item is not Product)
-        {
-            return "unknown sku " + sku;
-        }
-
-        bundle.ComponentSkus.Add(sku);
+        bundle.AddComponent(item);
         return null;
     }
 

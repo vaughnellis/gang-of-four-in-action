@@ -1,6 +1,6 @@
 namespace CornerStore;
 
-internal abstract class Product
+internal abstract class Product : ICatalogItem
 {
     public string Sku { get; init; } = "";
 
@@ -9,4 +9,12 @@ internal abstract class Product
     public decimal Price { get; init; }
 
     public string CategoryName { get; init; } = "";
+
+    public IReadOnlyList<ICatalogItem> Components => Array.Empty<ICatalogItem>();
+
+    public string? AddToCart(Cart cart, int quantity, string fromBundle, decimal? unitPrice)
+    {
+        CartService.AddLine(cart, this, quantity, unitPrice ?? Price, fromBundle);
+        return null;
+    }
 }
