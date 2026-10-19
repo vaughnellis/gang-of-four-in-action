@@ -3,7 +3,9 @@ title: Capstone
 description: An integrated CornerStore application showing how all 23 Gang of Four patterns work together.
 ---
 
-## Overview
+# Capstone
+
+## At a glance
 
 The capstone is one CornerStore copy with all 23 patterns applied in the required order. Each pattern folder starts from the baseline and changes one seam. The capstone preserves those individual refactors while integrating their shared workflows. Its golden-master test checks that the trading-day transcript still matches the baseline.
 
@@ -18,29 +20,29 @@ dotnet test capstone\Capstone.slnx -c Release
 
 | Smell | Pattern | Capstone implementation | Standalone pattern |
 | --- | --- | --- | --- |
-| S05 | Singleton | `src/CornerStore/Log.cs`, `src/CornerStore/Config.cs`, `src/CornerStore/IdSequence.cs` | [Singleton](../patterns/creational/singleton/) |
-| S04 | Prototype | `src/CornerStore/Catalog/Product.cs`, `src/CornerStore/Catalog/Catalog.cs` | [Prototype](../patterns/creational/prototype/) |
-| S08 | Composite | `src/CornerStore/Catalog/ICatalogItem.cs`, `src/CornerStore/Catalog/Bundle.cs`, `src/CornerStore/Catalog/Category.cs` | [Composite](../patterns/structural/composite/) |
-| S16 | Iterator | `src/CornerStore/Catalog/ICategoryIterator.cs`, `src/CornerStore/Catalog/DepthFirstCategoryIterator.cs`, `src/CornerStore/Catalog/BreadthFirstCategoryIterator.cs`, `src/CornerStore/Catalog/Catalog.cs` | [Iterator](../patterns/behavioral/iterator/) |
-| S11 | Flyweight | `src/CornerStore/Catalog/ProductSpec.cs`, `src/CornerStore/Catalog/ProductSpecFactory.cs`, `src/CornerStore/Catalog/Listing.cs` | [Flyweight](../patterns/structural/flyweight/) |
-| S01 | Abstract Factory | `src/CornerStore/Pricing/IRegionFactory.cs`, `src/CornerStore/Pricing/AustraliaRegionFactory.cs`, `src/CornerStore/Pricing/NewZealandRegionFactory.cs`, `src/CornerStore/Pricing/RegionalPricing.cs`, `src/CornerStore/Pricing/RegionFactoryProvider.cs` | [Abstract Factory](../patterns/creational/abstract-factory/) |
-| S21 | Strategy | `src/CornerStore/Pricing/IShippingCostStrategy.cs`, `src/CornerStore/Pricing/StandardShippingCostStrategy.cs`, `src/CornerStore/Pricing/ExpressShippingCostStrategy.cs`, `src/CornerStore/Pricing/PickupShippingCostStrategy.cs`, `src/CornerStore/Pricing/PricingService.cs` | [Strategy](../patterns/behavioral/strategy/) |
-| S09 | Decorator | `src/CornerStore/Pricing/IAddOnPriceComponent.cs`, `src/CornerStore/Pricing/BaseAddOnPriceComponent.cs`, `src/CornerStore/Pricing/GiftWrapPriceDecorator.cs`, `src/CornerStore/Pricing/InsurancePriceDecorator.cs` | [Decorator](../patterns/structural/decorator/) |
-| S15 | Interpreter | `src/CornerStore/Pricing/PromoExpression.cs`, `src/CornerStore/Pricing/PromoRuleParser.cs`, `src/CornerStore/Pricing/PromoEngine.cs` | [Interpreter](../patterns/behavioral/interpreter/) |
-| S03 | Factory Method | `src/CornerStore/Checkout/PaymentProcessorCreator.cs`, `src/CornerStore/Checkout/CardProcessorCreator.cs`, `src/CornerStore/Checkout/PayPalProcessorCreator.cs`, `src/CornerStore/Checkout/AfterpayProcessorCreator.cs` | [Factory Method](../patterns/creational/factory-method/) |
-| S06 | Adapter | `src/CornerStore/Checkout/IShippingProvider.cs`, `src/CornerStore/Checkout/ShipFastAdapter.cs` | [Adapter](../patterns/structural/adapter/) |
-| S02 | Builder | `src/CornerStore/Orders/OrderBuilder.cs`, `src/CornerStore/Orders/InvoiceBuilder.cs` | [Builder](../patterns/creational/builder/) |
-| S13 | Chain of Responsibility | `src/CornerStore/Checkout/OrderValidationHandler.cs`, `src/CornerStore/Checkout/StockValidationHandler.cs`, `src/CornerStore/Checkout/AddressValidationHandler.cs`, `src/CornerStore/Checkout/FraudValidationHandler.cs`, `src/CornerStore/Checkout/CreditLimitValidationHandler.cs` | [Chain of Responsibility](../patterns/behavioral/chain-of-responsibility/) |
-| S10 | Facade | `src/CornerStore/Checkout/CheckoutFacade.cs` | [Facade](../patterns/structural/facade/) |
-| S18 | Memento | `src/CornerStore/Cart/CartMemento.cs`, `src/CornerStore/Cart/Cart.cs` | [Memento](../patterns/behavioral/memento/) |
-| S17 | Mediator | `src/CornerStore/Widgets/CartMediator.cs`, `src/CornerStore/Widgets/ItemListWidget.cs`, `src/CornerStore/Widgets/PromoBoxWidget.cs`, `src/CornerStore/Widgets/ShippingSelectorWidget.cs`, `src/CornerStore/Widgets/TotalsPanelWidget.cs` | [Mediator](../patterns/behavioral/mediator/) |
-| S20 | State | `src/CornerStore/Orders/OrderState.cs`, `src/CornerStore/Orders/PendingOrderState.cs`, `src/CornerStore/Orders/PaidOrderState.cs`, `src/CornerStore/Orders/ShippedOrderState.cs`, `src/CornerStore/Orders/DeliveredOrderState.cs`, `src/CornerStore/Orders/CancelledOrderState.cs`, `src/CornerStore/Orders/RefundedOrderState.cs` | [State](../patterns/behavioral/state/) |
-| S19 | Observer | `src/CornerStore/Orders/IOrderStatusObserver.cs`, `src/CornerStore/Orders/InventoryOrderStatusObserver.cs`, `src/CornerStore/Orders/NotificationOrderStatusObserver.cs`, `src/CornerStore/Orders/LoyaltyOrderStatusObserver.cs`, `src/CornerStore/Orders/AnalyticsOrderStatusObserver.cs`, `src/CornerStore/Orders/OrderService.cs`, `src/CornerStore/StoreConsole.cs` | [Observer](../patterns/behavioral/observer/) |
-| S07 | Bridge | `src/CornerStore/Notifications/IChannel.cs`, `src/CornerStore/Notifications/OrderMessage.cs`, `src/CornerStore/Notifications/OrderConfirmedMessage.cs`, `src/CornerStore/Notifications/OrderShippedMessage.cs`, `src/CornerStore/Notifications/EmailSender.cs`, `src/CornerStore/Notifications/SmsSender.cs` | [Bridge](../patterns/structural/bridge/) |
-| S12 | Proxy | `src/CornerStore/Inventory/IInventoryService.cs`, `src/CornerStore/Inventory/CachingInventoryProxy.cs`, `src/CornerStore/Inventory/ProtectionInventoryProxy.cs`, `src/CornerStore/Inventory/InventoryService.cs` | [Proxy](../patterns/structural/proxy/) |
-| S14 | Command | `src/CornerStore/Orders/ICommand.cs`, `src/CornerStore/Orders/CommandInvoker.cs`, `src/CornerStore/Orders/AdjustStockCommand.cs`, `src/CornerStore/Orders/LookupStockCommand.cs`, `src/CornerStore/Orders/RefundCommand.cs`, `src/CornerStore/Orders/CancelCommand.cs`, `src/CornerStore/Orders/BackOffice.cs` | [Command](../patterns/behavioral/command/) |
-| S22 | Template Method | `src/CornerStore/Reporting/ReportExporter.cs`, `src/CornerStore/Reporting/CsvReportExporter.cs`, `src/CornerStore/Reporting/JsonReportExporter.cs` | [Template Method](../patterns/behavioral/template-method/) |
-| S23 | Visitor | `src/CornerStore/Catalog/ILineItemVisitor.cs`, `src/CornerStore/Catalog/Product.cs`, `src/CornerStore/Pricing/TaxVisitor.cs`, `src/CornerStore/Pricing/WeightVisitor.cs`, `src/CornerStore/Reporting/ReportTotalsVisitor.cs` | [Visitor](../patterns/behavioral/visitor/) |
+| S05 | Singleton | `src/CornerStore/Log.cs`, `src/CornerStore/Config.cs`, `src/CornerStore/IdSequence.cs` | [Singleton](../patterns/creational/singleton/README.md) |
+| S04 | Prototype | `src/CornerStore/Catalog/Product.cs`, `src/CornerStore/Catalog/Catalog.cs` | [Prototype](../patterns/creational/prototype/README.md) |
+| S08 | Composite | `src/CornerStore/Catalog/ICatalogItem.cs`, `src/CornerStore/Catalog/Bundle.cs`, `src/CornerStore/Catalog/Category.cs` | [Composite](../patterns/structural/composite/README.md) |
+| S16 | Iterator | `src/CornerStore/Catalog/ICategoryIterator.cs`, `src/CornerStore/Catalog/DepthFirstCategoryIterator.cs`, `src/CornerStore/Catalog/BreadthFirstCategoryIterator.cs`, `src/CornerStore/Catalog/Catalog.cs` | [Iterator](../patterns/behavioral/iterator/README.md) |
+| S11 | Flyweight | `src/CornerStore/Catalog/ProductSpec.cs`, `src/CornerStore/Catalog/ProductSpecFactory.cs`, `src/CornerStore/Catalog/Listing.cs` | [Flyweight](../patterns/structural/flyweight/README.md) |
+| S01 | Abstract Factory | `src/CornerStore/Pricing/IRegionFactory.cs`, `src/CornerStore/Pricing/AustraliaRegionFactory.cs`, `src/CornerStore/Pricing/NewZealandRegionFactory.cs`, `src/CornerStore/Pricing/RegionalPricing.cs`, `src/CornerStore/Pricing/RegionFactoryProvider.cs` | [Abstract Factory](../patterns/creational/abstract-factory/README.md) |
+| S21 | Strategy | `src/CornerStore/Pricing/IShippingCostStrategy.cs`, `src/CornerStore/Pricing/StandardShippingCostStrategy.cs`, `src/CornerStore/Pricing/ExpressShippingCostStrategy.cs`, `src/CornerStore/Pricing/PickupShippingCostStrategy.cs`, `src/CornerStore/Pricing/PricingService.cs` | [Strategy](../patterns/behavioral/strategy/README.md) |
+| S09 | Decorator | `src/CornerStore/Pricing/IAddOnPriceComponent.cs`, `src/CornerStore/Pricing/BaseAddOnPriceComponent.cs`, `src/CornerStore/Pricing/GiftWrapPriceDecorator.cs`, `src/CornerStore/Pricing/InsurancePriceDecorator.cs` | [Decorator](../patterns/structural/decorator/README.md) |
+| S15 | Interpreter | `src/CornerStore/Pricing/PromoExpression.cs`, `src/CornerStore/Pricing/PromoRuleParser.cs`, `src/CornerStore/Pricing/PromoEngine.cs` | [Interpreter](../patterns/behavioral/interpreter/README.md) |
+| S03 | Factory Method | `src/CornerStore/Checkout/PaymentProcessorCreator.cs`, `src/CornerStore/Checkout/CardProcessorCreator.cs`, `src/CornerStore/Checkout/PayPalProcessorCreator.cs`, `src/CornerStore/Checkout/AfterpayProcessorCreator.cs` | [Factory Method](../patterns/creational/factory-method/README.md) |
+| S06 | Adapter | `src/CornerStore/Checkout/IShippingProvider.cs`, `src/CornerStore/Checkout/ShipFastAdapter.cs` | [Adapter](../patterns/structural/adapter/README.md) |
+| S02 | Builder | `src/CornerStore/Orders/OrderBuilder.cs`, `src/CornerStore/Orders/InvoiceBuilder.cs` | [Builder](../patterns/creational/builder/README.md) |
+| S13 | Chain of Responsibility | `src/CornerStore/Checkout/OrderValidationHandler.cs`, `src/CornerStore/Checkout/StockValidationHandler.cs`, `src/CornerStore/Checkout/AddressValidationHandler.cs`, `src/CornerStore/Checkout/FraudValidationHandler.cs`, `src/CornerStore/Checkout/CreditLimitValidationHandler.cs` | [Chain of Responsibility](../patterns/behavioral/chain-of-responsibility/README.md) |
+| S10 | Facade | `src/CornerStore/Checkout/CheckoutFacade.cs` | [Facade](../patterns/structural/facade/README.md) |
+| S18 | Memento | `src/CornerStore/Cart/CartMemento.cs`, `src/CornerStore/Cart/Cart.cs` | [Memento](../patterns/behavioral/memento/README.md) |
+| S17 | Mediator | `src/CornerStore/Widgets/CartMediator.cs`, `src/CornerStore/Widgets/ItemListWidget.cs`, `src/CornerStore/Widgets/PromoBoxWidget.cs`, `src/CornerStore/Widgets/ShippingSelectorWidget.cs`, `src/CornerStore/Widgets/TotalsPanelWidget.cs` | [Mediator](../patterns/behavioral/mediator/README.md) |
+| S20 | State | `src/CornerStore/Orders/OrderState.cs`, `src/CornerStore/Orders/PendingOrderState.cs`, `src/CornerStore/Orders/PaidOrderState.cs`, `src/CornerStore/Orders/ShippedOrderState.cs`, `src/CornerStore/Orders/DeliveredOrderState.cs`, `src/CornerStore/Orders/CancelledOrderState.cs`, `src/CornerStore/Orders/RefundedOrderState.cs` | [State](../patterns/behavioral/state/README.md) |
+| S19 | Observer | `src/CornerStore/Orders/IOrderStatusObserver.cs`, `src/CornerStore/Orders/InventoryOrderStatusObserver.cs`, `src/CornerStore/Orders/NotificationOrderStatusObserver.cs`, `src/CornerStore/Orders/LoyaltyOrderStatusObserver.cs`, `src/CornerStore/Orders/AnalyticsOrderStatusObserver.cs`, `src/CornerStore/Orders/OrderService.cs`, `src/CornerStore/StoreConsole.cs` | [Observer](../patterns/behavioral/observer/README.md) |
+| S07 | Bridge | `src/CornerStore/Notifications/IChannel.cs`, `src/CornerStore/Notifications/OrderMessage.cs`, `src/CornerStore/Notifications/OrderConfirmedMessage.cs`, `src/CornerStore/Notifications/OrderShippedMessage.cs`, `src/CornerStore/Notifications/EmailSender.cs`, `src/CornerStore/Notifications/SmsSender.cs` | [Bridge](../patterns/structural/bridge/README.md) |
+| S12 | Proxy | `src/CornerStore/Inventory/IInventoryService.cs`, `src/CornerStore/Inventory/CachingInventoryProxy.cs`, `src/CornerStore/Inventory/ProtectionInventoryProxy.cs`, `src/CornerStore/Inventory/InventoryService.cs` | [Proxy](../patterns/structural/proxy/README.md) |
+| S14 | Command | `src/CornerStore/Orders/ICommand.cs`, `src/CornerStore/Orders/CommandInvoker.cs`, `src/CornerStore/Orders/AdjustStockCommand.cs`, `src/CornerStore/Orders/LookupStockCommand.cs`, `src/CornerStore/Orders/RefundCommand.cs`, `src/CornerStore/Orders/CancelCommand.cs`, `src/CornerStore/Orders/BackOffice.cs` | [Command](../patterns/behavioral/command/README.md) |
+| S22 | Template Method | `src/CornerStore/Reporting/ReportExporter.cs`, `src/CornerStore/Reporting/CsvReportExporter.cs`, `src/CornerStore/Reporting/JsonReportExporter.cs` | [Template Method](../patterns/behavioral/template-method/README.md) |
+| S23 | Visitor | `src/CornerStore/Catalog/ILineItemVisitor.cs`, `src/CornerStore/Catalog/Product.cs`, `src/CornerStore/Pricing/TaxVisitor.cs`, `src/CornerStore/Pricing/WeightVisitor.cs`, `src/CornerStore/Reporting/ReportTotalsVisitor.cs` | [Visitor](../patterns/behavioral/visitor/README.md) |
 
 ## Where patterns meet
 
@@ -106,3 +108,9 @@ The capstone history has one baseline-copy commit followed by one commit for eac
 22. `refactor(capstone): encapsulate back-office actions as commands`: record actions and support stock adjustment undo.
 23. `refactor(capstone): share report export workflow`: centralize report filtering and aggregation.
 24. `refactor(capstone): dispatch product behavior through visitors`: dispatch tax, weight, and report calculations by product type.
+
+## Further reading
+
+GoF, Chapters 3-5, on creational, structural, and behavioral patterns.
+
+Blog post: coming soon <!-- blog-link -->

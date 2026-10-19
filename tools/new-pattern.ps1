@@ -232,7 +232,7 @@ function Add-ProjectsToSolution {
 function New-PatternReadme {
     <#
     .SYNOPSIS
-        Writes the standard pattern README headings.
+        Writes the standard pattern README section structure.
     .PARAMETER Path
         README file path.
     .PARAMETER PatternName
@@ -246,46 +246,58 @@ function New-PatternReadme {
         [Parameter(Mandatory = $true)]
         [string]$PatternName
     )
-
     $lines = @(
         "# $PatternName",
         '',
-        '## Intent',
+        '## At a glance',
         '',
-        'Describe the pattern in your own words and cite the GoF chapter.',
+        '| | |',
+        '| --- | --- |',
+        '| Intent | Describe the pattern in one sentence. |',
+        '| Category | Creational, structural or behavioral. |',
+        '| Smell fixed | Sxx: name the baseline smell. |',
+        '| GoF chapter | Chapter and pattern name. |',
+        '| Files changed | List source and test files from `DIFF.md`. |',
+        '| Previous pattern | Link to the previous pattern in book order. |',
+        '| Next pattern | Link to the next pattern in book order. |',
         '',
-        '## The smell',
+        '## The problem',
         '',
-        'Describe the baseline smell and link to its `SMELL` marker.',
+        'Describe what goes wrong in the baseline and include a short excerpt linked to its source file.',
+        '',
+        '## The pattern',
+        '',
+        'Explain the pattern in plain words and map its roles to CornerStore participants.',
         '',
         '## The refactor',
         '',
-        'Explain the participants and include a Mermaid class diagram.',
+        'Describe what changed. Include linked before and after excerpts and a Mermaid class diagram.',
         '',
-        '## Diff highlights',
+        '## How it runs',
         '',
-        'Summarize the changes and link to [DIFF.md](DIFF.md).',
+        'Trace one concrete path through the code. Add a Mermaid sequence diagram where it helps.',
+        '',
+        '## Run it',
+        '',
+        'List the exact build, test and scenario commands. Run each command successfully.',
         '',
         '## Trade-offs',
         '',
         'Explain the costs and when not to use this pattern.',
         '',
-        '## Related patterns and common confusions',
+        '## Related patterns',
         '',
-        'Compare this pattern with its nearest neighbors.',
+        'Link relevant comparisons and related pattern folders.',
         '',
         '## Modern .NET notes',
         '',
-        'Describe relevant platform features.',
+        'Describe where .NET or C# already provides this pattern.',
         '',
-        '## Files changed',
+        '## Further reading',
         '',
-        '* `src/CornerStore/`',
-        '* `tests/CornerStore.Tests/`',
+        'GoF, Chapter N, "Pattern chapter title."',
         '',
-        '## Blog post link',
-        '',
-        'To be published.'
+        'Blog post: coming soon <!-- blog-link -->'
     )
     [System.IO.File]::WriteAllText($Path, ($lines -join "`n") + "`n", [System.Text.UTF8Encoding]::new($false))
 }

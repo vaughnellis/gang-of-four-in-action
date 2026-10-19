@@ -1,73 +1,108 @@
 # Strategy
 
-## Intent
+## At a glance
 
-Strategy defines interchangeable algorithms behind a common interface so a
-caller can select behavior without embedding each algorithm's rules in its own
-code (GoF, chapter 5).
+| | |
+| --- | --- |
+| Intent | Encapsulate interchangeable algorithms behind a shared contract so a service can select the one needed for an operation. |
+| Category | Behavioral |
+| Smell fixed | S21: pricing selected shipping cost with a switch on the shipping method string. |
+| GoF chapter | Chapter 5, "Behavioral Patterns." |
+| Files changed | `src/CornerStore/CornerStore.csproj`, `src/CornerStore/Pricing/ExpressShippingCostStrategy.cs`, `src/CornerStore/Pricing/IShippingCostStrategy.cs`, `src/CornerStore/Pricing/PickupShippingCostStrategy.cs`, `src/CornerStore/Pricing/PricingService.cs`, `src/CornerStore/Pricing/StandardShippingCostStrategy.cs`, `tests/CornerStore.Tests/StrategyTests.cs` ([DIFF.md](DIFF.md)) |
+| Previous pattern | [State](../state/README.md) |
+| Next pattern | [Template Method](../template-method/README.md) |
 
-## The smell
+## The problem
 
-`PricingService.ShippingCost` used a `switch` to calculate standard, express,
-and pickup shipping costs. Adding a method meant changing pricing code, and
-the method rules were not independently replaceable. The baseline marker is in
-[`PricingService.cs`](../../../baseline/src/CornerStore/Pricing/PricingService.cs).
+In the baseline, `PricingService.ShippingCost` switches on a string to calculate standard, express, or pickup costs. Adding another method requires changing the pricing method, where its algorithm is mixed with the selection logic. The smell is in [baseline `PricingService.cs`](../../../baseline/src/CornerStore/Pricing/PricingService.cs).
+
+```csharp
+switch (method)
+{
+    case "standard":
+        return Math.Round(5.00m + 2.00m * weightKg, 2, MidpointRounding.AwayFromZero);
+```
+
+## The pattern
+
+Each shipping calculation implements the same strategy interface. `PricingService` looks up the strategy for the selected method and delegates the calculation.
+
+| Role | CornerStore participant |
+| --- | --- |
+| Context and strategy selector | `PricingService` |
+| Strategy contract | `IShippingCostStrategy` |
+| Concrete strategies | `StandardShippingCostStrategy`, `ExpressShippingCostStrategy`, `PickupShippingCostStrategy` |
+| Separate regional adjustment | `ShippingCalculator` |
 
 ## The refactor
 
-`PricingService` looks up the selected method in an injected strategy registry
-and calls `IShippingCostStrategy.Calculate`. Standard, express, and pickup
-implementations own their respective method costs. Regional surcharges remain
-in `ShippingCalculator` and are applied after the selected strategy.
+`PricingService` uses a strategy registry keyed by the shipping method. The strategy calculates the method cost; the existing regional surcharge is still applied afterward by `ShippingCalculator`. The standard, express, and pickup costs and unknown-method rejection remain unchanged. A test-only strategy can be injected without changing pricing code.
+
+Before, [`baseline PricingService.cs`](../../../baseline/src/CornerStore/Pricing/PricingService.cs) selected the calculation with a switch:
+
+```csharp
+case "express":
+    return Math.Round(12.00m + 4.00m * weightKg, 2, MidpointRounding.AwayFromZero);
+```
+
+After, [`PricingService.cs`](src/CornerStore/Pricing/PricingService.cs) looks up and invokes the strategy:
+
+```csharp
+return shippingStrategies.TryGetValue(method, out var strategy)
+    ? strategy.Calculate(weightKg)
+    : null;
+```
 
 ```mermaid
 classDiagram
-	PricingService --> IShippingCostStrategy : selects and calculates
-	IShippingCostStrategy <|.. StandardShippingCostStrategy
-	IShippingCostStrategy <|.. ExpressShippingCostStrategy
-	IShippingCostStrategy <|.. PickupShippingCostStrategy
-	PricingService --> ShippingCalculator : adds regional surcharge
+    PricingService --> IShippingCostStrategy : selects and calculates
+    IShippingCostStrategy <|.. StandardShippingCostStrategy
+    IShippingCostStrategy <|.. ExpressShippingCostStrategy
+    IShippingCostStrategy <|.. PickupShippingCostStrategy
+    PricingService --> ShippingCalculator : adds regional surcharge
 ```
 
-## Diff highlights
+## How it runs
 
-The shipping-method switch is replaced with an injectable registry. The
-existing method costs, unknown-method rejection, and separate AU/NZ surcharge
-are preserved. A test-only strategy can be supplied without changing pricing
-code. See [DIFF.md](DIFF.md) for the source and test changes.
+While building a quote, `PricingService` asks for the method cost using the cart's shipping method and calculated weight. It looks up the matching strategy and calls `Calculate`. If no strategy is registered for that method, it returns no cost and quote construction rejects the unknown method.
+
+```mermaid
+sequenceDiagram
+    participant Pricing as PricingService
+    participant Strategy as IShippingCostStrategy
+    participant Shipping as ShippingCalculator
+    Pricing->>Pricing: ShippingCost(method, weight)
+    Pricing->>Strategy: Calculate(weight)
+    Strategy-->>Pricing: method cost
+    Pricing->>Shipping: RegionSurcharge(region)
+    Shipping-->>Pricing: regional surcharge
+    Pricing->>Pricing: combine method cost and surcharge
+```
+
+## Run it
+
+Run these commands from the repository root. All three were verified for this solution.
+
+```powershell
+dotnet build .\patterns\behavioral\strategy\Strategy.slnx
+dotnet test .\patterns\behavioral\strategy\Strategy.slnx
+dotnet run --project .\patterns\behavioral\strategy\src\CornerStore\CornerStore.csproj -- .\scenarios\trading-day.json
+```
 
 ## Trade-offs
 
-Each method adds a strategy type and selection entry. Strategy is overkill for
-two branches that are stable and unlikely to vary; a small conditional can be
-clearer when there is no need to replace or extend the algorithms.
+Each shipping method adds a strategy type and a selection entry. Strategy can be excessive for a couple of stable branches with no need for replacement or extension; a simple conditional may be clearer.
 
-## Related patterns and common confusions
+## Related patterns
 
-Strategy selects an algorithm for a particular operation. State models an
-object's lifecycle: its current state controls behavior and may transition to
-another state. Strategy objects are normally selected by the caller, while
-state transitions belong to the stateful object or its state objects.
-
-See [Strategy vs State](../../../docs/comparisons.md#strategy-vs-state) for a side-by-side comparison.
+[Strategy vs State](../../../docs/comparisons.md#strategy-vs-state) distinguishes selecting an algorithm from modeling lifecycle behavior. [Template Method vs Strategy](../../../docs/comparisons.md#template-method-vs-strategy) contrasts a composed algorithm with a fixed inheritance-based sequence. See [State](../state/README.md) and [Template Method](../template-method/README.md) for the corresponding examples.
 
 ## Modern .NET notes
 
-The .NET dependency-injection container can register and provide strategy
-implementations, but the pattern does not require a framework. The pricing
-service accepts the strategy registry directly so tests and other compositions
-can supply their own implementations.
+The .NET dependency-injection container can register and provide strategy implementations, but the pattern does not require a framework. This service accepts a strategy registry so a composition can provide its own implementations.
 
-## Files changed
+## Further reading
 
-* `src/CornerStore/Pricing/IShippingCostStrategy.cs`
-* `src/CornerStore/Pricing/StandardShippingCostStrategy.cs`
-* `src/CornerStore/Pricing/ExpressShippingCostStrategy.cs`
-* `src/CornerStore/Pricing/PickupShippingCostStrategy.cs`
-* `src/CornerStore/Pricing/PricingService.cs`
-* `src/CornerStore/CornerStore.csproj`
-* `tests/CornerStore.Tests/StrategyTests.cs`
+GoF, Chapter 5, "Behavioral Patterns."
 
-## Blog post link
-
-To be published.
+Blog post: coming soon <!-- blog-link -->

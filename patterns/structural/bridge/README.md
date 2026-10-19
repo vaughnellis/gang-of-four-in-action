@@ -1,82 +1,122 @@
 # Bridge
 
-## Intent
+## At a glance
 
-Bridge separates an abstraction from the implementation that carries out its work. Each side can vary without creating a class for every combination. This example follows the Bridge chapter in *Design Patterns: Elements of Reusable Object-Oriented Software*.
+| | |
+| --- | --- |
+| Intent | Separate order-message wording from the channel that delivers it. |
+| Category | Structural |
+| Smell fixed | S07: each order-message class combines a message type with a delivery channel. |
+| GoF chapter | Chapter 4, "Structural Patterns: Bridge." |
+| Files changed | `src/CornerStore/CornerStore.csproj`; `src/CornerStore/Notifications/EmailSender.cs`; `src/CornerStore/Notifications/IChannel.cs`; `src/CornerStore/Notifications/OrderConfirmedEmail.cs` (removed); `src/CornerStore/Notifications/OrderConfirmedMessage.cs`; `src/CornerStore/Notifications/OrderConfirmedSms.cs` (removed); `src/CornerStore/Notifications/OrderMessage.cs`; `src/CornerStore/Notifications/OrderShippedEmail.cs` (removed); `src/CornerStore/Notifications/OrderShippedMessage.cs`; `src/CornerStore/Notifications/OrderShippedSms.cs` (removed); `src/CornerStore/Notifications/SmsSender.cs`; `src/CornerStore/Orders/OrderService.cs`; `src/CornerStore/StoreConsole.cs`; `tests/CornerStore.Tests/BridgeTests.cs` ([DIFF.md](DIFF.md)) |
+| Previous pattern | [Adapter](../adapter/README.md) |
+| Next pattern | [Composite](../composite/README.md) |
 
-## The smell
+## The problem
 
-S07 combined each order message with a delivery channel. Confirmation email, confirmation SMS, shipping email and shipping SMS were four separate classes. The markers were in the four notification classes under `Notifications/`.
+The baseline has separate classes for confirmation email, confirmation SMS, shipping email and shipping SMS. Each class combines message wording with a particular sender, so adding another message or channel creates more combinations. The S07 markers appear in the baseline notification classes, including [`OrderConfirmedEmail.cs`](../../../baseline/src/CornerStore/Notifications/OrderConfirmedEmail.cs).
+
+```csharp
+internal class OrderConfirmedEmail(EmailSender sender)
+{
+    // SMELL S07: confirmation email owns the email-specific wording and sender call
+    public void Send(Customer customer, string orderId, decimal total)
+    {
+        sender.Send(customer.Name, "order " + orderId + " confirmed, total " + MoneyFormatter.Format(total, customer.Region));
+    }
+}
+```
+
+## The pattern
+
+Bridge separates an abstraction from the implementation that carries out its work. Here, message classes decide what to say and channel implementations decide how to deliver it. Either dimension can be extended without adding a class for every combination.
+
+| Role | CornerStore participant |
+| --- | --- |
+| Abstraction | `OrderMessage` |
+| Refined abstractions | `OrderConfirmedMessage`, `OrderShippedMessage` |
+| Implementor | `IChannel` |
+| Concrete implementors | `EmailSender`, `SmsSender` |
+| Client and composition point | `OrderService` |
 
 ## The refactor
 
-`OrderMessage` holds an `IChannel` implementation. `OrderConfirmedMessage` and `OrderShippedMessage` define the message-specific wording, while `EmailSender` and `SmsSender` deliver it. `OrderService` chooses a channel using the customer's existing preference and can combine either message with either channel.
+`OrderMessage` holds an `IChannel` and uses it to deliver formatted text. Concrete message types provide message-specific wording; the email and SMS senders implement the channel interface. `OrderService` selects the channel using the customer's existing preference.
+
+Before, [`OrderConfirmedEmail.cs`](../../../baseline/src/CornerStore/Notifications/OrderConfirmedEmail.cs) combined both dimensions:
+
+```csharp
+sender.Send(customer.Name, "order " + orderId + " confirmed, total " + MoneyFormatter.Format(total, customer.Region));
+```
+
+After, [`OrderConfirmedMessage.cs`](src/CornerStore/Notifications/OrderConfirmedMessage.cs) provides the message, while [`OrderMessage.cs`](src/CornerStore/Notifications/OrderMessage.cs) delegates delivery:
+
+```csharp
+Deliver(customer, "order " + orderId + " confirmed, total " + MoneyFormatter.Format(total, customer.Region));
+```
 
 ```mermaid
 classDiagram
     class OrderMessage {
         <<abstract>>
-        #Deliver(customer, message)
-    }
-    class OrderConfirmedMessage {
-        +Send(customer, orderId, total)
-    }
-    class OrderShippedMessage {
-        +Send(customer, orderId, trackingNumber)
+        +Deliver(customer, message)
     }
     class IChannel {
         <<interface>>
         +Send(recipient, message)
     }
-    class EmailSender
-    class SmsSender
-    class OrderService
-
     OrderMessage <|-- OrderConfirmedMessage
     OrderMessage <|-- OrderShippedMessage
-    OrderMessage o--> IChannel : delegates delivery to
+    OrderMessage o--> IChannel : delegates delivery
     IChannel <|.. EmailSender
     IChannel <|.. SmsSender
-    OrderService --> OrderConfirmedMessage
-    OrderService --> OrderShippedMessage
+    OrderService --> OrderMessage : creates
     OrderService --> IChannel : selects by preference
 ```
 
-## Diff highlights
+## How it runs
 
-The four message-channel classes are replaced by two message abstractions and a shared channel interface. The channel implementations now satisfy that interface. The customer preference and all emitted business text remain unchanged. See [DIFF.md](DIFF.md).
+When an order is paid, `OrderService` records the status change, chooses an `IChannel` from the customer's preference and creates an `OrderConfirmedMessage`. That message formats the confirmation and delegates delivery through the channel. A shipping transition follows the same structure with `OrderShippedMessage`.
+
+```mermaid
+sequenceDiagram
+    participant Orders as OrderService
+    participant Message as OrderConfirmedMessage
+    participant Channel as IChannel
+    participant Sender as EmailSender or SmsSender
+
+    Orders->>Orders: Pay(order)
+    Orders->>Channel: select from customer preference
+    Orders->>Message: create with channel
+    Orders->>Message: Send(customer, orderId, total)
+    Message->>Channel: Send(recipient, message)
+    Channel->>Sender: deliver message
+```
+
+## Run it
+
+Run these commands from the repository root. The build, tests and scenario command were verified for this solution.
+
+```powershell
+dotnet build patterns/structural/bridge/Bridge.slnx
+dotnet test patterns/structural/bridge/Bridge.slnx
+dotnet run --project patterns/structural/bridge/src/CornerStore/CornerStore.csproj -- scenarios/trading-day.json
+```
 
 ## Trade-offs
 
-Bridge reduces combination-specific classes but adds an abstraction layer and explicit composition. It is unnecessary when there is only one message type or one channel and neither dimension is expected to change.
+Bridge reduces classes that represent every message-channel combination, but introduces an abstraction layer and explicit composition. It is unnecessary when only one message type or one channel exists and neither dimension is expected to vary.
 
-## Related patterns and common confusions
+## Related patterns
 
-Adapter makes an existing incompatible interface usable by a client. Bridge separates two dimensions before they vary independently. `IChannel` is the delivery implementation behind the message abstraction, not an adapter for a third-party API.
-
-See [Adapter vs Bridge](../../../docs/comparisons.md#adapter-vs-bridge) for a side-by-side comparison.
+[Adapter vs Bridge](../../../docs/comparisons.md#adapter-vs-bridge) compares interface translation with separating independent dimensions. [Adapter](../adapter/README.md) translates an existing incompatible API. [Strategy](../../behavioral/strategy/) also composes interchangeable implementations, but chooses an algorithm rather than separating an abstraction from its implementation.
 
 ## Modern .NET notes
 
-Interfaces and dependency injection make the channel dimension easy to compose. The example wires email and SMS channels explicitly in `StoreConsole`; a larger application could register channel implementations with its service container.
+Interfaces and dependency injection make the channel dimension straightforward to compose. This example wires the email and SMS implementations explicitly in `StoreConsole`; a larger application could register them with its service container.
 
-## Files changed
+## Further reading
 
-* `src/CornerStore/CornerStore.csproj`
-* `src/CornerStore/Notifications/EmailSender.cs`
-* `src/CornerStore/Notifications/IChannel.cs`
-* `src/CornerStore/Notifications/OrderConfirmedEmail.cs` (removed)
-* `src/CornerStore/Notifications/OrderConfirmedMessage.cs`
-* `src/CornerStore/Notifications/OrderConfirmedSms.cs` (removed)
-* `src/CornerStore/Notifications/OrderMessage.cs`
-* `src/CornerStore/Notifications/OrderShippedEmail.cs` (removed)
-* `src/CornerStore/Notifications/OrderShippedMessage.cs`
-* `src/CornerStore/Notifications/OrderShippedSms.cs` (removed)
-* `src/CornerStore/Notifications/SmsSender.cs`
-* `src/CornerStore/Orders/OrderService.cs`
-* `src/CornerStore/StoreConsole.cs`
-* `tests/CornerStore.Tests/BridgeTests.cs`
+GoF, Chapter 4, "Structural Patterns: Bridge."
 
-## Blog post link
-
-To be published.
+Blog post: coming soon <!-- blog-link -->

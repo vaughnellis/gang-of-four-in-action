@@ -1,18 +1,42 @@
 # Interpreter
 
-## Intent
+## At a glance
 
-Interpreter represents a small language with grammar rules and expression objects that evaluate those rules. The pattern is described in Chapter 5, "Behavioral Patterns," of *Design Patterns: Elements of Reusable Object-Oriented Software*.
+| | |
+| --- | --- |
+| Intent | Represent a small grammar as expressions that can be parsed and evaluated against domain data. |
+| Category | Behavioral |
+| Smell fixed | S15: promo rule strings were parsed with `Split` and `IndexOf` every time they were evaluated. |
+| GoF chapter | Chapter 5, "Behavioral Patterns." |
+| Files changed | `src/CornerStore/CornerStore.csproj`, `src/CornerStore/Pricing/PromoEngine.cs`, `src/CornerStore/Pricing/PromoEvaluationContext.cs`, `src/CornerStore/Pricing/PromoExpression.cs`, `src/CornerStore/Pricing/PromoRuleParser.cs`, `tests/CornerStore.Tests/InterpreterTests.cs` ([DIFF.md](DIFF.md)) |
+| Previous pattern | [Command](../command/README.md) |
+| Next pattern | [Iterator](../iterator/README.md) |
 
-## The smell
+## The problem
 
-S15 parses promo rules such as `SPEND>100 AND CATEGORY=Shoes` with `Split` and `IndexOf` whenever a promotion is evaluated.
+The baseline parses configured promo rules such as `SPEND>100 AND CATEGORY=Shoes` with string splitting and character searches on every evaluation. The parsing logic and the meaning of each rule are interleaved in `PromoEngine`. The smell is in [baseline `PromoEngine.cs`](../../../baseline/src/CornerStore/Pricing/PromoEngine.cs).
 
-## The refactor
+```csharp
+var terms = Promos[code].Rule.Split(" AND ");
+foreach (var term in terms)
+{
+    var greater = term.IndexOf('>');
+```
 
-`PromoRuleParser` reads the configured rule grammar and builds an expression tree once when the promo definitions are initialized. `AndExpression` composes predicate expressions for spending threshold, quantity, category and customer region. The tree interprets a `PromoEvaluationContext` containing the cart, customer and subtotal. Original rule strings remain available to the transcript.
+## The pattern
 
-The grammar accepts one or more predicates separated by `AND`:
+Interpreter turns each rule into expression objects that implement the grammar. A parser builds the expression tree once when promo definitions are initialized. The engine later evaluates that tree using a context containing the cart, customer, and subtotal.
+
+| Role | CornerStore participant |
+| --- | --- |
+| Client and expression context provider | `PromoEngine` |
+| Grammar parser | `PromoRuleParser` |
+| Expression contract | `PromoExpression` |
+| Composite expression | `AndExpression` |
+| Terminal expressions | `SpendGreaterThanExpression`, `QuantityGreaterThanExpression`, `CategoryEqualsExpression`, `RegionEqualsExpression` |
+| Evaluation data | `PromoEvaluationContext` |
+
+The supported grammar is a sequence of predicates joined by `AND`:
 
 ```text
 rule       ::= predicate (whitespace "AND" whitespace predicate)*
@@ -22,14 +46,30 @@ predicate  ::= "SPEND>" number
              | "REGION=" identifier
 number     ::= digits ("." digits)?
 identifier ::= letter (letter | digit | "_" | "-")*
-whitespace ::= one or more whitespace characters
 ```
 
-Whitespace may also surround a predicate operator and operand. The numeric grammar uses invariant-culture decimal notation. `SPEND` and `QTY` use strict greater-than comparisons. Quantity is summed across cart lines, category succeeds when any line matches, and region must equal the customer's region.
+Whitespace may surround a predicate operator and operand. Numbers use invariant-culture decimal notation. `SPEND` and `QTY` use strict greater-than comparisons; quantity is summed across cart lines, category succeeds when any line matches, and region must equal the customer's region. The parser preserves the original rule string for display.
+
+## The refactor
+
+`PromoRuleParser` converts configured rule text to an expression tree during promo initialization. `PromoEngine.Evaluate` builds a `PromoEvaluationContext` and asks the stored expression to interpret it. The original text remains available for display.
+
+Before, [`baseline PromoEngine.cs`](../../../baseline/src/CornerStore/Pricing/PromoEngine.cs) split the rule on each evaluation:
+
+```csharp
+var terms = Promos[code].Rule.Split(" AND ");
+```
+
+After, [`PromoEngine.cs`](src/CornerStore/Pricing/PromoEngine.cs) evaluates the stored expression:
+
+```csharp
+var context = new PromoEvaluationContext(cart, customer, subtotal);
+return Promos[code].Expression.Interpret(context);
+```
 
 ```mermaid
 classDiagram
-    PromoEngine --> PromoRuleParser : parses configured rules once
+    PromoEngine --> PromoRuleParser : parses rules during setup
     PromoRuleParser ..> PromoExpression : builds
     PromoExpression <|-- AndExpression
     PromoExpression <|-- SpendGreaterThanExpression
@@ -41,31 +81,48 @@ classDiagram
     PromoEvaluationContext --> Customer
 ```
 
-## Diff highlights
+## How it runs
 
-Promo definitions now store both their original display text and a parsed expression. Evaluation interprets the existing expression tree instead of splitting and inspecting rule text on each call. See [DIFF.md](DIFF.md) for the source and test changes.
+When pricing evaluates a promo, the engine creates the context and calls `Interpret` on the stored root expression. An `AndExpression` evaluates both predicates with short-circuiting. A terminal expression reads the relevant subtotal, cart, or customer property and returns whether that predicate matches.
+
+```mermaid
+sequenceDiagram
+    participant Pricing as PricingService
+    participant Engine as PromoEngine
+    participant Expression as PromoExpression
+    participant Context as PromoEvaluationContext
+    Pricing->>Engine: Evaluate(code, cart, customer, subtotal)
+    Engine->>Context: create context
+    Engine->>Expression: Interpret(context)
+    Expression->>Context: read cart, customer, or subtotal
+    Expression-->>Engine: true or false
+    Engine-->>Pricing: promo applies
+```
+
+## Run it
+
+Run these commands from the repository root. All three were verified for this solution.
+
+```powershell
+dotnet build .\patterns\behavioral\interpreter\Interpreter.slnx
+dotnet test .\patterns\behavioral\interpreter\Interpreter.slnx
+dotnet run --project .\patterns\behavioral\interpreter\src\CornerStore\CornerStore.csproj -- .\scenarios\trading-day.json
+```
 
 ## Trade-offs
 
-Each grammar rule needs a parser path and an expression type, and new language features add both. Interpreter is unnecessary for a few fixed rules that are clearer as ordinary code. It is also a poor fit for a large or frequently changing language, where a dedicated parser or rules engine is more suitable.
+Each grammar rule needs parsing logic and an expression type. Interpreter is unnecessary for a few fixed rules that read more clearly as ordinary code, and it is a poor fit for a large or frequently changing language that needs a dedicated parser or rules engine.
 
-## Related patterns and common confusions
+## Related patterns
 
-Interpreter evaluates sentences in a defined language. Command packages an operation to execute, while Interpreter focuses on the meaning of expressions in a grammar. The expressions form a small tree because the current rules support conjunction, not a general-purpose logical language.
+[Composite](../../structural/composite/README.md) represents individual objects and groups through one component contract; the expression tree here uses composition to represent grammar structure. [Strategy](../strategy/README.md) selects an algorithm for an operation, while Interpreter evaluates expressions in a language.
 
 ## Modern .NET notes
 
-The expression objects here are ordinary domain types. `System.Linq.Expressions` provides expression trees for building and inspecting executable code, but it is not needed for this small promo-rule grammar.
+These expression objects are ordinary domain types. `System.Linq.Expressions` provides expression trees for building and inspecting executable code, but it is not needed for this small promo-rule grammar.
 
-## Files changed
+## Further reading
 
-* `src/CornerStore/CornerStore.csproj`
-* `src/CornerStore/Pricing/PromoEngine.cs`
-* `src/CornerStore/Pricing/PromoEvaluationContext.cs`
-* `src/CornerStore/Pricing/PromoExpression.cs`
-* `src/CornerStore/Pricing/PromoRuleParser.cs`
-* `tests/CornerStore.Tests/InterpreterTests.cs`
+GoF, Chapter 5, "Behavioral Patterns."
 
-## Blog post link
-
-To be published.
+Blog post: coming soon <!-- blog-link -->

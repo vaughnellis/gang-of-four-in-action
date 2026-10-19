@@ -1,97 +1,86 @@
 ---
 title: Gang of Four in Action
-description: A C# showcase of 23 Gang of Four design patterns, from baseline refactors to an integrated capstone.
+description: A C# showcase of the 23 Gang of Four design patterns, from baseline refactors to an integrated capstone.
 ---
 
-## Overview
+# Gang of Four in Action
 
-A showcase of the 23 Gang of Four design patterns in C# on .NET 10, built as an homage to *Design Patterns: Elements of Reusable Object-Oriented Software* by Gamma, Helm, Johnson and Vlissides.
+This repository is a C# and .NET 10 homage to *Design Patterns: Elements of Reusable Object-Oriented Software* by Gamma, Helm, Johnson and Vlissides. It uses CornerStore, a fictional online shop, to show the 23 patterns against the same working baseline. Each standalone pattern solution changes one code seam, and the capstone brings all 23 refactors together.
 
-The repository holds one deliberately messy console app and one solution per pattern. The app is CornerStore, a small fictional online store with 23 catalogued code smells. Each pattern solution is a copy of the baseline in which exactly one smell is refactored with that pattern, and every solution produces the same transcript as the baseline. The [capstone](capstone/README.md) applies all 23 patterns together and describes how their seams fit.
+## Start here
 
-A companion blog explains each pattern using its folder in this repository.
+Follow the code from its original shape through each refactor:
 
-## Status
+1. Read the [CornerStore baseline](baseline/README.md) and its 23 smells.
+2. Explore the [creational](patterns/creational/README.md), [structural](patterns/structural/README.md) and [behavioral](patterns/behavioral/README.md) patterns in book order.
+3. Compare commonly confused patterns in [Pattern Comparisons](docs/comparisons.md).
+4. See how the patterns meet in the [capstone](capstone/README.md).
 
-The baseline, approved trading-day transcript and copy/diff tooling are complete. Pattern solutions are added one at a time by their tasks; the index below tracks all 23.
+## Quick start
 
-## How the repository is organised
-
-```text
-gang-of-four-in-action/
-├── baseline/        the messy CornerStore app and its tests
-├── patterns/
-│   ├── creational/  one folder per creational pattern
-│   ├── structural/  one folder per structural pattern
-│   └── behavioral/  one folder per behavioral pattern
-├── capstone/        integrated CornerStore app and pattern walkthrough
-├── scenarios/       the scripted trading day and the approved transcript
-├── tools/           scripts to create a pattern folder and diff it against the baseline
-├── docs/            smells catalog, pattern map and [pattern comparisons](docs/comparisons.md)
-├── prompts/         the task briefs used to build this repository
-└── GangOfFour.slnx  umbrella solution used by CI
-```
-
-Shared settings live in `Directory.Build.props` and package versions in `Directory.Packages.props`. The SDK version is pinned in `global.json`.
-
-## How to run a solution
-
-You need the .NET SDK version named in `global.json`.
+Clone the repository, then restore, build and test the umbrella solution from its root:
 
 ```powershell
-dotnet build GangOfFour.slnx
-dotnet test GangOfFour.slnx
+git clone https://github.com/vaughnellis/gang-of-four-in-action.git
+cd gang-of-four-in-action
+dotnet restore GangOfFour.slnx
+dotnet build GangOfFour.slnx --no-restore -c Release
+dotnet test GangOfFour.slnx --no-build -c Release
 ```
 
-Each pattern folder holds its own solution, such as `patterns/structural/facade/Facade.slnx`. Build and test it the same way by passing that file to `dotnet build` and `dotnet test`.
+Install the .NET SDK version pinned in [`global.json`](global.json). The umbrella solution includes the baseline and all 23 standalone pattern solutions. To run the scripted trading day, use:
 
-The umbrella solution includes the baseline and all 23 patterns (24 test projects). Each copy has its own nested solution folder, such as `/baseline/` or `/patterns/behavioral/strategy/`, so project and namespace names stay `CornerStore` and `CornerStore.Tests` in every copy. `tools/new-pattern.ps1` adds new patterns to their own solution folders. Build outputs remain in each project's local `bin` and `obj` directories.
+```powershell
+dotnet run --project baseline/src/CornerStore/CornerStore.csproj -- scenarios/trading-day.json
+```
+
+Each individual pattern and the capstone also has its own solution file. The relevant README gives its build, test and scenario commands.
 
 ## Pattern index
 
-Smell IDs match [docs/pattern-map.md](docs/pattern-map.md), which also tracks progress.
+The smell IDs refer to the entries in the [smells catalog](docs/smells-catalog.md). Intents are paraphrased for this CornerStore example.
 
 ### Creational
 
-| Smell | Pattern | Folder |
+| Smell | Pattern | Intent |
 | --- | --- | --- |
-| S01 | Abstract Factory | [patterns/creational/abstract-factory](patterns/creational/abstract-factory/) |
-| S02 | Builder | [patterns/creational/builder](patterns/creational/builder/) |
-| S03 | Factory Method | [patterns/creational/factory-method](patterns/creational/factory-method/) |
-| S04 | Prototype | [patterns/creational/prototype](patterns/creational/prototype/) |
-| S05 | Singleton | [patterns/creational/singleton](patterns/creational/singleton/) |
+| S01 | [Abstract Factory](patterns/creational/abstract-factory/README.md) | Create matched services for each storefront region. |
+| S02 | [Builder](patterns/creational/builder/README.md) | Assemble orders and invoices through validated steps. |
+| S03 | [Factory Method](patterns/creational/factory-method/README.md) | Let payment creators choose which processor to construct. |
+| S04 | [Prototype](patterns/creational/prototype/README.md) | Create product variants by copying an existing product. |
+| S05 | [Singleton](patterns/creational/singleton/README.md) | Share one instance of application-wide services. |
 
 ### Structural
 
-| Smell | Pattern | Folder |
+| Smell | Pattern | Intent |
 | --- | --- | --- |
-| S06 | Adapter | [patterns/structural/adapter](patterns/structural/adapter/) |
-| S07 | Bridge | [patterns/structural/bridge](patterns/structural/bridge/) |
-| S08 | Composite | [patterns/structural/composite](patterns/structural/composite/) |
-| S09 | Decorator | [patterns/structural/decorator](patterns/structural/decorator/) |
-| S10 | Facade | [patterns/structural/facade](patterns/structural/facade/) |
-| S11 | Flyweight | [patterns/structural/flyweight](patterns/structural/flyweight/) |
-| S12 | Proxy | [patterns/structural/proxy](patterns/structural/proxy/) |
+| S06 | [Adapter](patterns/structural/adapter/README.md) | Translate the courier API to the store's shipping contract. |
+| S07 | [Bridge](patterns/structural/bridge/README.md) | Vary order messages separately from delivery channels. |
+| S08 | [Composite](patterns/structural/composite/README.md) | Treat products and nested bundles through one contract. |
+| S09 | [Decorator](patterns/structural/decorator/README.md) | Compose optional charges around a base price. |
+| S10 | [Facade](patterns/structural/facade/README.md) | Give checkout one entry point for coordinating services. |
+| S11 | [Flyweight](patterns/structural/flyweight/README.md) | Share repeated product specifications across listings. |
+| S12 | [Proxy](patterns/structural/proxy/README.md) | Cache inventory reads and guard stock changes. |
 
 ### Behavioral
 
-| Smell | Pattern | Folder |
+| Smell | Pattern | Intent |
 | --- | --- | --- |
-| S13 | Chain of Responsibility | [patterns/behavioral/chain-of-responsibility](patterns/behavioral/chain-of-responsibility/) |
-| S14 | Command | [patterns/behavioral/command](patterns/behavioral/command/) |
-| S15 | Interpreter | [patterns/behavioral/interpreter](patterns/behavioral/interpreter/) |
-| S16 | Iterator | [patterns/behavioral/iterator](patterns/behavioral/iterator/) |
-| S17 | Mediator | [patterns/behavioral/mediator](patterns/behavioral/mediator/) |
-| S18 | Memento | [patterns/behavioral/memento](patterns/behavioral/memento/) |
-| S19 | Observer | [patterns/behavioral/observer](patterns/behavioral/observer/) |
-| S20 | State | [patterns/behavioral/state](patterns/behavioral/state/) |
-| S21 | Strategy | [patterns/behavioral/strategy](patterns/behavioral/strategy/) |
-| S22 | Template Method | [patterns/behavioral/template-method](patterns/behavioral/template-method/) |
-| S23 | Visitor | [patterns/behavioral/visitor](patterns/behavioral/visitor/) |
+| S13 | [Chain of Responsibility](patterns/behavioral/chain-of-responsibility/README.md) | Pass checkout through ordered validation handlers. |
+| S14 | [Command](patterns/behavioral/command/README.md) | Represent back-office actions as executable objects. |
+| S15 | [Interpreter](patterns/behavioral/interpreter/README.md) | Parse and evaluate promotion rules as expressions. |
+| S16 | [Iterator](patterns/behavioral/iterator/README.md) | Traverse the category tree through reusable iterators. |
+| S17 | [Mediator](patterns/behavioral/mediator/README.md) | Coordinate cart widget updates through a mediator. |
+| S18 | [Memento](patterns/behavioral/memento/README.md) | Capture and restore cart state without exposing internals. |
+| S19 | [Observer](patterns/behavioral/observer/README.md) | Notify subscribers when an order status changes. |
+| S20 | [State](patterns/behavioral/state/README.md) | Delegate legal order transitions to state-specific behavior. |
+| S21 | [Strategy](patterns/behavioral/strategy/README.md) | Select a shipping-cost algorithm for the chosen method. |
+| S22 | [Template Method](patterns/behavioral/template-method/README.md) | Share report processing while customizing output formats. |
+| S23 | [Visitor](patterns/behavioral/visitor/README.md) | Add operations across the store's line-item types. |
 
-## Built with HVE Core
+## How this was built
 
-Every task in this repository is planned, implemented and reviewed with Microsoft HVE Core using the Research, Plan, Implement, Review loop. The task briefs are in [prompts/README.md](prompts/README.md), and the plans, change records and reviews they produce are kept in [.copilot-tracking/](.copilot-tracking/).
+The repository was planned, implemented and reviewed with Microsoft HVE Core's Research, Plan, Implement, Review workflow. The [task briefs](prompts/README.md) describe the work. The `.copilot-tracking/` records document the plans, changes and reviews. The run-all progress record lists 24 completed tasks, the baseline and its 23 pattern solutions. The capstone progress record lists 24 completed steps and reaches 131 tests.
 
 ## License
 
