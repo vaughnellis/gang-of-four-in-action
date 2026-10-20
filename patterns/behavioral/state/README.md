@@ -9,6 +9,7 @@
 | Smell fixed | S20: order lifecycle methods checked the status string to decide which transitions were allowed. |
 | GoF chapter | Chapter 5, "Behavioral Patterns." |
 | Files changed | `src/CornerStore/CornerStore.csproj`, `src/CornerStore/Orders/CancelledOrderState.cs`, `src/CornerStore/Orders/DeliveredOrderState.cs`, `src/CornerStore/Orders/Order.cs`, `src/CornerStore/Orders/OrderService.cs`, `src/CornerStore/Orders/OrderState.cs`, `src/CornerStore/Orders/PaidOrderState.cs`, `src/CornerStore/Orders/PendingOrderState.cs`, `src/CornerStore/Orders/RefundedOrderState.cs`, `src/CornerStore/Orders/ShippedOrderState.cs`, `tests/CornerStore.Tests/StateTests.cs` ([DIFF.md](DIFF.md)) |
+| File count | 11 files ([DIFF.md](DIFF.md)) |
 | Previous pattern | [Observer](../observer/README.md) |
 | Next pattern | [Strategy](../strategy/README.md) |
 

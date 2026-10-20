@@ -9,6 +9,7 @@
 | Smell fixed | S03: inline payment-processor construction. |
 | GoF chapter | Chapter 3, "Creational Patterns," section "Factory Method." |
 | Files changed | `src/CornerStore/Checkout/AfterpayProcessorCreator.cs`; `src/CornerStore/Checkout/CardProcessorCreator.cs`; `src/CornerStore/Checkout/PaymentProcessorCreator.cs`; `src/CornerStore/Checkout/PayPalProcessorCreator.cs`; `src/CornerStore/CornerStore.csproj`; `src/CornerStore/StoreConsole.cs`; `tests/CornerStore.Tests/FactoryMethodTests.cs` ([DIFF.md](DIFF.md)) |
+| File count | 7 files ([DIFF.md](DIFF.md)) |
 | Previous pattern | [Builder](../builder/README.md) |
 | Next pattern | [Prototype](../prototype/README.md) |
 

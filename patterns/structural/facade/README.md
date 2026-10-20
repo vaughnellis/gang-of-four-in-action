@@ -9,6 +9,7 @@
 | Smell fixed | S10: the console coordinates checkout subsystems in a fixed order. |
 | GoF chapter | Chapter 4, "Structural Patterns: Facade." |
 | Files changed | `src/CornerStore/Checkout/CheckoutFacade.cs`; `src/CornerStore/StoreConsole.cs`; `src/CornerStore/CornerStore.csproj`; `tests/CornerStore.Tests/CheckoutFacadeTests.cs` ([DIFF.md](DIFF.md)) |
+| File count | 4 files ([DIFF.md](DIFF.md)) |
 | Previous pattern | [Decorator](../decorator/README.md) |
 | Next pattern | [Flyweight](../flyweight/README.md) |
 

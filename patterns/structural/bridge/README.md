@@ -9,6 +9,7 @@
 | Smell fixed | S07: each order-message class combines a message type with a delivery channel. |
 | GoF chapter | Chapter 4, "Structural Patterns: Bridge." |
 | Files changed | `src/CornerStore/CornerStore.csproj`; `src/CornerStore/Notifications/EmailSender.cs`; `src/CornerStore/Notifications/IChannel.cs`; `src/CornerStore/Notifications/OrderConfirmedEmail.cs` (removed); `src/CornerStore/Notifications/OrderConfirmedMessage.cs`; `src/CornerStore/Notifications/OrderConfirmedSms.cs` (removed); `src/CornerStore/Notifications/OrderMessage.cs`; `src/CornerStore/Notifications/OrderShippedEmail.cs` (removed); `src/CornerStore/Notifications/OrderShippedMessage.cs`; `src/CornerStore/Notifications/OrderShippedSms.cs` (removed); `src/CornerStore/Notifications/SmsSender.cs`; `src/CornerStore/Orders/OrderService.cs`; `src/CornerStore/StoreConsole.cs`; `tests/CornerStore.Tests/BridgeTests.cs` ([DIFF.md](DIFF.md)) |
+| File count | 14 files ([DIFF.md](DIFF.md)) |
 | Previous pattern | [Adapter](../adapter/README.md) |
 | Next pattern | [Composite](../composite/README.md) |
 

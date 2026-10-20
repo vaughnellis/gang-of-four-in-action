@@ -9,6 +9,7 @@
 | Smell fixed | S05: mutable static global state. |
 | GoF chapter | Chapter 3, "Creational Patterns," section "Singleton." |
 | Files changed | `src/CornerStore/Catalog/Catalog.cs`; `src/CornerStore/Checkout/AfterpayProcessor.cs`; `src/CornerStore/Checkout/CardProcessor.cs`; `src/CornerStore/Checkout/FraudScorer.cs`; `src/CornerStore/Checkout/OrderValidator.cs`; `src/CornerStore/Checkout/PayPalProcessor.cs`; `src/CornerStore/Checkout/ShipFastClient.cs`; `src/CornerStore/Config.cs`; `src/CornerStore/CornerStore.csproj`; `src/CornerStore/Log.cs`; `src/CornerStore/Notifications/EmailSender.cs`; `src/CornerStore/Notifications/SmsSender.cs`; `src/CornerStore/Orders/AnalyticsService.cs`; `src/CornerStore/Orders/LoyaltyService.cs`; `src/CornerStore/ScenarioRunner.cs`; `src/CornerStore/StoreConsole.cs`; `src/CornerStore/Widgets/ItemListWidget.cs`; `src/CornerStore/Widgets/PromoBoxWidget.cs`; `src/CornerStore/Widgets/ShippingSelectorWidget.cs`; `src/CornerStore/Widgets/TotalsPanelWidget.cs`; `tests/CornerStore.Tests/AssemblyAttributes.cs`; `tests/CornerStore.Tests/SingletonTests.cs` ([DIFF.md](DIFF.md)) |
+| File count | 22 files ([DIFF.md](DIFF.md)) |
 | Previous pattern | [Prototype](../prototype/README.md) |
 | Next pattern | [Adapter](../../structural/adapter/README.md) |
 
@@ -53,11 +54,13 @@ private static readonly Lazy<Config> singleton =
     new(static () => new Config(), LazyThreadSafetyMode.ExecutionAndPublication);
 ```
 
-The instance is accessed through a property, and configuration changes go through methods:
+The instance in [`Config.cs`](src/CornerStore/Config.cs) is accessed through a property:
 
 ```csharp
 public static Config Instance => singleton.Value;
 ```
+
+Configuration changes go through methods in [`Config.cs`](src/CornerStore/Config.cs):
 
 ```csharp
 public void SetSeed(int value)

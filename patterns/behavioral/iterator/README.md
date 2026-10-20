@@ -9,6 +9,7 @@
 | Smell fixed | S16: several catalog operations repeated manual recursion through category children. |
 | GoF chapter | Chapter 5, "Behavioral Patterns." |
 | Files changed | `src/CornerStore/Catalog/BreadthFirstCategoryIterator.cs`, `src/CornerStore/Catalog/Catalog.cs`, `src/CornerStore/Catalog/DepthFirstCategoryIterator.cs`, `src/CornerStore/Catalog/ICategoryIterator.cs`, `src/CornerStore/CornerStore.csproj`, `tests/CornerStore.Tests/IteratorTests.cs` ([DIFF.md](DIFF.md)) |
+| File count | 6 files ([DIFF.md](DIFF.md)) |
 | Previous pattern | [Interpreter](../interpreter/README.md) |
 | Next pattern | [Mediator](../mediator/README.md) |
 

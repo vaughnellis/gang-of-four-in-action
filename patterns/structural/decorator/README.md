@@ -9,6 +9,7 @@
 | Smell fixed | S09: add-on costs are calculated in an if-chain from cart flags. |
 | GoF chapter | Chapter 4, "Structural Patterns: Decorator." |
 | Files changed | `src/CornerStore/Cart/Cart.cs`; `src/CornerStore/CornerStore.csproj`; `src/CornerStore/Pricing/BaseAddOnPriceComponent.cs`; `src/CornerStore/Pricing/GiftWrapPriceDecorator.cs`; `src/CornerStore/Pricing/IAddOnPriceComponent.cs`; `src/CornerStore/Pricing/InsurancePriceDecorator.cs`; `src/CornerStore/Pricing/PricingService.cs`; `src/CornerStore/StoreConsole.cs`; `tests/CornerStore.Tests/DecoratorTests.cs` ([DIFF.md](DIFF.md)) |
+| File count | 9 files ([DIFF.md](DIFF.md)) |
 | Previous pattern | [Composite](../composite/README.md) |
 | Next pattern | [Facade](../facade/README.md) |
 

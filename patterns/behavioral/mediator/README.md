@@ -9,6 +9,7 @@
 | Smell fixed | S17: cart widgets directly referenced peers and refreshed them after changes. |
 | GoF chapter | Chapter 5, "Behavioral Patterns." |
 | Files changed | `src/CornerStore/CornerStore.csproj`, `src/CornerStore/StoreConsole.cs`, `src/CornerStore/Widgets/CartMediator.cs`, `src/CornerStore/Widgets/ItemListWidget.cs`, `src/CornerStore/Widgets/PromoBoxWidget.cs`, `src/CornerStore/Widgets/ShippingSelectorWidget.cs`, `src/CornerStore/Widgets/TotalsPanelWidget.cs`, `tests/CornerStore.Tests/MediatorTests.cs` ([DIFF.md](DIFF.md)) |
+| File count | 8 files ([DIFF.md](DIFF.md)) |
 | Previous pattern | [Iterator](../iterator/README.md) |
 | Next pattern | [Memento](../memento/README.md) |
 

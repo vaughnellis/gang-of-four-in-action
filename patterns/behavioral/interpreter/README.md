@@ -9,6 +9,7 @@
 | Smell fixed | S15: promo rule strings were parsed with `Split` and `IndexOf` every time they were evaluated. |
 | GoF chapter | Chapter 5, "Behavioral Patterns." |
 | Files changed | `src/CornerStore/CornerStore.csproj`, `src/CornerStore/Pricing/PromoEngine.cs`, `src/CornerStore/Pricing/PromoEvaluationContext.cs`, `src/CornerStore/Pricing/PromoExpression.cs`, `src/CornerStore/Pricing/PromoRuleParser.cs`, `tests/CornerStore.Tests/InterpreterTests.cs` ([DIFF.md](DIFF.md)) |
+| File count | 6 files ([DIFF.md](DIFF.md)) |
 | Previous pattern | [Command](../command/README.md) |
 | Next pattern | [Iterator](../iterator/README.md) |
 

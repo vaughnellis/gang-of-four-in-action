@@ -9,6 +9,7 @@
 | Smell fixed | S08: catalog and cart code branch on bundles instead of treating items uniformly. |
 | GoF chapter | Chapter 4, "Structural Patterns: Composite." |
 | Files changed | `src/CornerStore/Cart/CartService.cs`; `src/CornerStore/Catalog/Bundle.cs`; `src/CornerStore/Catalog/Catalog.cs`; `src/CornerStore/Catalog/ICatalogItem.cs`; `src/CornerStore/Catalog/Product.cs`; `tests/CornerStore.Tests/CompositeTests.cs` ([DIFF.md](DIFF.md)) |
+| File count | 6 files ([DIFF.md](DIFF.md)) |
 | Previous pattern | [Bridge](../bridge/README.md) |
 | Next pattern | [Decorator](../decorator/README.md) |
 
@@ -58,6 +59,7 @@ if (item is Bundle bundle)
 
     return Math.Round(total * (100 - bundle.DiscountPercent) / 100m, 2, MidpointRounding.AwayFromZero);
 }
+
 if (item is Product product)
 {
     return product.Price;

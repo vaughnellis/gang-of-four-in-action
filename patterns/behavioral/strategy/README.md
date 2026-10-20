@@ -9,6 +9,7 @@
 | Smell fixed | S21: pricing selected shipping cost with a switch on the shipping method string. |
 | GoF chapter | Chapter 5, "Behavioral Patterns." |
 | Files changed | `src/CornerStore/CornerStore.csproj`, `src/CornerStore/Pricing/ExpressShippingCostStrategy.cs`, `src/CornerStore/Pricing/IShippingCostStrategy.cs`, `src/CornerStore/Pricing/PickupShippingCostStrategy.cs`, `src/CornerStore/Pricing/PricingService.cs`, `src/CornerStore/Pricing/StandardShippingCostStrategy.cs`, `tests/CornerStore.Tests/StrategyTests.cs` ([DIFF.md](DIFF.md)) |
+| File count | 7 files ([DIFF.md](DIFF.md)) |
 | Previous pattern | [State](../state/README.md) |
 | Next pattern | [Template Method](../template-method/README.md) |
 

@@ -9,6 +9,7 @@
 | Smell fixed | S02: long positional order and invoice constructors. |
 | GoF chapter | Chapter 3, "Creational Patterns," section "Builder." |
 | Files changed | `src/CornerStore/CornerStore.csproj`; `src/CornerStore/Orders/InvoiceBuilder.cs`; `src/CornerStore/Orders/OrderBuilder.cs`; `src/CornerStore/Orders/OrderService.cs`; `tests/CornerStore.Tests/BuilderTests.cs` ([DIFF.md](DIFF.md)) |
+| File count | 5 files ([DIFF.md](DIFF.md)) |
 | Previous pattern | [Abstract Factory](../abstract-factory/README.md) |
 | Next pattern | [Factory Method](../factory-method/README.md) |
 

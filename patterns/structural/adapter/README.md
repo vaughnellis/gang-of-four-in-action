@@ -9,6 +9,7 @@
 | Smell fixed | S06: checkout depends directly on the courier's XML protocol and money units. |
 | GoF chapter | Chapter 4, "Structural Patterns: Adapter." |
 | Files changed | `src/CornerStore/Checkout/IShippingProvider.cs`; `src/CornerStore/Checkout/ShipFastAdapter.cs`; `src/CornerStore/CornerStore.csproj`; `src/CornerStore/StoreConsole.cs`; `tests/CornerStore.Tests/AdapterTests.cs` ([DIFF.md](DIFF.md)) |
+| File count | 5 files ([DIFF.md](DIFF.md)) |
 | Previous pattern | [Singleton](../../creational/singleton/README.md) |
 | Next pattern | [Bridge](../bridge/README.md) |
 

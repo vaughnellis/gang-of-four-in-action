@@ -9,6 +9,7 @@
 | Smell fixed | S13: stock, address, fraud, and credit checks were nested in one validation method. |
 | GoF chapter | Chapter 5, "Behavioral Patterns." |
 | Files changed | `src/CornerStore/Checkout/AddressValidationHandler.cs`, `src/CornerStore/Checkout/CreditLimitValidationHandler.cs`, `src/CornerStore/Checkout/FraudValidationHandler.cs`, `src/CornerStore/Checkout/OrderValidationContext.cs`, `src/CornerStore/Checkout/OrderValidationHandler.cs`, `src/CornerStore/Checkout/OrderValidator.cs`, `src/CornerStore/Checkout/StockValidationHandler.cs`, `src/CornerStore/CornerStore.csproj`, `tests/CornerStore.Tests/ChainOfResponsibilityTests.cs` ([DIFF.md](DIFF.md)) |
+| File count | 9 files ([DIFF.md](DIFF.md)) |
 | Previous pattern | [Proxy](../../structural/proxy/README.md) |
 | Next pattern | [Command](../command/README.md) |
 

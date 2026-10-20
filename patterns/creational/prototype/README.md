@@ -9,6 +9,7 @@
 | Smell fixed | S04: manual field-by-field variant copying. |
 | GoF chapter | Chapter 3, "Creational Patterns," section "Prototype." |
 | Files changed | `src/CornerStore/Catalog/Catalog.cs`; `src/CornerStore/Catalog/PhysicalProduct.cs`; `src/CornerStore/CornerStore.csproj`; `tests/CornerStore.Tests/PrototypeTests.cs` ([DIFF.md](DIFF.md)) |
+| File count | 4 files ([DIFF.md](DIFF.md)) |
 | Previous pattern | [Factory Method](../factory-method/README.md) |
 | Next pattern | [Singleton](../singleton/README.md) |
 

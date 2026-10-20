@@ -1,8 +1,3 @@
----
-title: Gang of Four in Action
-description: A C# showcase of the 23 Gang of Four design patterns, from baseline refactors to an integrated capstone.
----
-
 # Gang of Four in Action
 
 This repository is a C# and .NET 10 homage to *Design Patterns: Elements of Reusable Object-Oriented Software* by Gamma, Helm, Johnson and Vlissides. It uses CornerStore, a fictional online shop, to show the 23 patterns against the same working baseline. Each standalone pattern solution changes one code seam, and the capstone brings all 23 refactors together.
@@ -80,7 +75,7 @@ The smell IDs refer to the entries in the [smells catalog](docs/smells-catalog.m
 
 ## How this was built
 
-The repository was planned, implemented and reviewed with Microsoft HVE Core's Research, Plan, Implement, Review workflow. The [task briefs](prompts/README.md) describe the work. The `.copilot-tracking/` records document the plans, changes and reviews. The run-all progress record lists 24 completed tasks, the baseline and its 23 pattern solutions. The capstone progress record lists 24 completed steps and reaches 131 tests.
+The repository was planned, implemented and reviewed with [Microsoft HVE Core](https://github.com/microsoft/hve-core)'s Research, Plan, Implement, Review workflow. The [task briefs](prompts/README.md) describe the work. The [tracking records](.copilot-tracking/) document the plans, changes and reviews. The [run-all progress record](.copilot-tracking/run-all-progress.md) lists 24 completed tasks, the baseline and its 23 pattern solutions. The [capstone progress record](.copilot-tracking/capstone-progress.md) lists 24 completed steps and reaches 131 tests.
 
 ## License
 

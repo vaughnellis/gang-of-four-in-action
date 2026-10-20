@@ -9,6 +9,7 @@
 | Smell fixed | S12: inventory reads are uncached and staff authorization is repeated at callers. |
 | GoF chapter | Chapter 4, "Structural Patterns: Proxy." |
 | Files changed | `src/CornerStore/Checkout/OrderValidator.cs`; `src/CornerStore/CornerStore.csproj`; `src/CornerStore/Inventory/CachingInventoryProxy.cs`; `src/CornerStore/Inventory/IInventoryService.cs`; `src/CornerStore/Inventory/InventoryService.cs`; `src/CornerStore/Inventory/ProtectionInventoryProxy.cs`; `src/CornerStore/Orders/BackOffice.cs`; `src/CornerStore/Orders/OrderService.cs`; `src/CornerStore/StoreConsole.cs`; `tests/CornerStore.Tests/ProxyTests.cs` ([DIFF.md](DIFF.md)) |
+| File count | 10 files ([DIFF.md](DIFF.md)) |
 | Previous pattern | [Flyweight](../flyweight/README.md) |
 | Next pattern | [Chain of Responsibility](../../behavioral/chain-of-responsibility/) |
 

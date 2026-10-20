@@ -9,6 +9,7 @@
 | Smell fixed | S18: `StoreConsole` copied and restored individual cart fields to implement undo. |
 | GoF chapter | Chapter 5, "Behavioral Patterns." |
 | Files changed | `src/CornerStore/Cart/Cart.cs`, `src/CornerStore/Cart/CartMemento.cs`, `src/CornerStore/CornerStore.csproj`, `src/CornerStore/StoreConsole.cs`, `tests/CornerStore.Tests/MementoTests.cs` ([DIFF.md](DIFF.md)) |
+| File count | 5 files ([DIFF.md](DIFF.md)) |
 | Previous pattern | [Mediator](../mediator/README.md) |
 | Next pattern | [Observer](../observer/README.md) |
 

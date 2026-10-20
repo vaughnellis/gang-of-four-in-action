@@ -9,6 +9,7 @@
 | Smell fixed | S11: each imported listing owns copies of repeated brand, manufacturer and specification strings. |
 | GoF chapter | Chapter 4, "Structural Patterns: Flyweight." |
 | Files changed | `src/CornerStore/Catalog/Listing.cs`; `src/CornerStore/Catalog/ListingImporter.cs`; `src/CornerStore/Catalog/ProductSpec.cs`; `src/CornerStore/Catalog/ProductSpecFactory.cs`; `src/CornerStore/CornerStore.csproj`; `tests/CornerStore.Tests/FlyweightTests.cs` ([DIFF.md](DIFF.md)) |
+| File count | 6 files ([DIFF.md](DIFF.md)) |
 | Previous pattern | [Facade](../facade/README.md) |
 | Next pattern | [Proxy](../proxy/README.md) |
 
@@ -56,6 +57,7 @@ After, [`ListingImporter.cs`](src/CornerStore/Catalog/ListingImporter.cs) obtain
 
 ```csharp
 var spec = productSpecFactory.Get(brand, material, origin);
+
 listings.Add(new Listing(spec)
 {
     Sku = string.Concat(skus[i % skus.Count], "-L", i.ToString(CultureInfo.InvariantCulture)),

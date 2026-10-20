@@ -9,6 +9,7 @@
 | Smell fixed | S14: back-office operations ran inline without command objects, an audit trail, or undo. |
 | GoF chapter | Chapter 5, "Behavioral Patterns." |
 | Files changed | `src/CornerStore/CornerStore.csproj`, `src/CornerStore/Orders/AdjustStockCommand.cs`, `src/CornerStore/Orders/BackOffice.cs`, `src/CornerStore/Orders/CancelCommand.cs`, `src/CornerStore/Orders/CommandAuditEntry.cs`, `src/CornerStore/Orders/CommandInvoker.cs`, `src/CornerStore/Orders/ICommand.cs`, `src/CornerStore/Orders/LookupStockCommand.cs`, `src/CornerStore/Orders/RefundCommand.cs`, `tests/CornerStore.Tests/CommandTests.cs` ([DIFF.md](DIFF.md)) |
+| File count | 10 files ([DIFF.md](DIFF.md)) |
 | Previous pattern | [Chain of Responsibility](../chain-of-responsibility/README.md) |
 | Next pattern | [Interpreter](../interpreter/README.md) |
 

@@ -9,8 +9,9 @@
 | Smell fixed | S23: tax, weight, and report code used type switches for physical, digital, and gift card products. |
 | GoF chapter | Chapter 5, "Behavioral Patterns." |
 | Files changed | `src/CornerStore/Catalog/DigitalProduct.cs`, `src/CornerStore/Catalog/GiftCardProduct.cs`, `src/CornerStore/Catalog/ILineItemVisitor.cs`, `src/CornerStore/Catalog/PhysicalProduct.cs`, `src/CornerStore/Catalog/Product.cs`, `src/CornerStore/CornerStore.csproj`, `src/CornerStore/Pricing/TaxCalculator.cs`, `src/CornerStore/Pricing/TaxVisitor.cs`, `src/CornerStore/Pricing/WeightCalculator.cs`, `src/CornerStore/Pricing/WeightVisitor.cs`, `src/CornerStore/Reporting/CsvReportExporter.cs`, `src/CornerStore/Reporting/JsonReportExporter.cs`, `src/CornerStore/Reporting/ReportTotalsVisitor.cs`, `tests/CornerStore.Tests/VisitorTests.cs` ([DIFF.md](DIFF.md)) |
+| File count | 14 files ([DIFF.md](DIFF.md)) |
 | Previous pattern | [Template Method](../template-method/README.md) |
-| Next pattern | [Abstract Factory](../../creational/abstract-factory/README.md) |
+| Next pattern | None. Last pattern in book order. |
 
 ## The problem
 

@@ -9,6 +9,7 @@
 | Smell fixed | S19: `OrderService` directly called inventory, notification, loyalty, and analytics reactions after status changes. |
 | GoF chapter | Chapter 5, "Behavioral Patterns." |
 | Files changed | `src/CornerStore/CornerStore.csproj`, `src/CornerStore/Orders/AnalyticsOrderStatusObserver.cs`, `src/CornerStore/Orders/InventoryOrderStatusObserver.cs`, `src/CornerStore/Orders/IOrderStatusObserver.cs`, `src/CornerStore/Orders/LoyaltyOrderStatusObserver.cs`, `src/CornerStore/Orders/NotificationOrderStatusObserver.cs`, `src/CornerStore/Orders/OrderService.cs`, `src/CornerStore/StoreConsole.cs`, `tests/CornerStore.Tests/ObserverTests.cs` ([DIFF.md](DIFF.md)) |
+| File count | 9 files ([DIFF.md](DIFF.md)) |
 | Previous pattern | [Memento](../memento/README.md) |
 | Next pattern | [State](../state/README.md) |
 

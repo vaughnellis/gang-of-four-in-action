@@ -9,6 +9,7 @@
 | Smell fixed | S22: CSV and JSON exporters duplicated the same report-processing sequence. |
 | GoF chapter | Chapter 5, "Behavioral Patterns." |
 | Files changed | `src/CornerStore/CornerStore.csproj`, `src/CornerStore/Reporting/CsvReportExporter.cs`, `src/CornerStore/Reporting/JsonReportExporter.cs`, `src/CornerStore/Reporting/ReportExporter.cs`, `src/CornerStore/Reporting/ReportTotals.cs`, `tests/CornerStore.Tests/TemplateMethodTests.cs` ([DIFF.md](DIFF.md)) |
+| File count | 6 files ([DIFF.md](DIFF.md)) |
 | Previous pattern | [Strategy](../strategy/README.md) |
 | Next pattern | [Visitor](../visitor/README.md) |
 

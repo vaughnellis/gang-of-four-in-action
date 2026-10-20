@@ -9,7 +9,8 @@
 | Smell fixed | S01: scattered regional pricing branches. |
 | GoF chapter | Chapter 3, "Creational Patterns," section "Abstract Factory." |
 | Files changed | `src/CornerStore/CornerStore.csproj`; `src/CornerStore/Pricing/AustraliaRegionFactory.cs`; `src/CornerStore/Pricing/DefaultRegionFactory.cs`; `src/CornerStore/Pricing/IMoneyFormatter.cs`; `src/CornerStore/Pricing/IRegionFactory.cs`; `src/CornerStore/Pricing/IRegionalPricing.cs`; `src/CornerStore/Pricing/MoneyFormatter.cs`; `src/CornerStore/Pricing/NewZealandRegionFactory.cs`; `src/CornerStore/Pricing/PricingService.cs`; `src/CornerStore/Pricing/RegionalMoneyFormatter.cs`; `src/CornerStore/Pricing/RegionalPricing.cs`; `src/CornerStore/Pricing/RegionFactoryProvider.cs`; `src/CornerStore/Pricing/ShippingCalculator.cs` (removed); `src/CornerStore/Pricing/TaxCalculator.cs`; `tests/CornerStore.Tests/AbstractFactoryTests.cs` ([DIFF.md](DIFF.md)) |
-| Previous pattern | [Start of book order](../README.md) |
+| File count | 15 files ([DIFF.md](DIFF.md)) |
+| Previous pattern | None. First pattern in book order. |
 | Next pattern | [Builder](../builder/README.md) |
 
 ## The problem

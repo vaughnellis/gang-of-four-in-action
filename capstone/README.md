@@ -1,8 +1,3 @@
----
-title: Capstone
-description: An integrated CornerStore application showing how all 23 Gang of Four patterns work together.
----
-
 # Capstone
 
 ## At a glance
